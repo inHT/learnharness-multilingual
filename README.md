@@ -9,18 +9,53 @@
 <p align="center"><strong>An agent harness for learning.</strong></p>
 
 <p align="center">
-  <a href="https://learnharness.ai">Download</a> ·
-  <a href="#how-it-works">How it works</a> ·
-  <a href="docs/README.md">Documentation</a> ·
-  <a href="https://github.com/amosblomqvist/learnharness/issues">Issues</a> ·
-  <a href="https://discord.gg/5tCHHQEB2e">Discord</a>
+  <strong>English</strong> · <a href="README.zh-CN.md">简体中文</a>
 </p>
+
+> **This is the Simplified Chinese translation edition of LearnHarness.**
+> The original project is **[amosblomqvist/learnharness](https://github.com/amosblomqvist/learnharness)**.
+> This repository adds a multilingual interface layer and a Simplified Chinese catalog. It is
+> maintained independently and is not affiliated with or endorsed by the original author.
+> It keeps the original license, [AGPL-3.0](LICENSE).
 
 LearnHarness uses AI agents to plan and teach lessons from your current understanding to your goal. It builds a detailed picture of what you understand and how you reason. That picture is updated as you learn.
 
 Instead of just giving you an explanation, it uses your answers and thinking to decide what you need next. Teaching builds understanding one reasoning step at a time. Practice makes it usable. A persistent knowledge graph carries it across sessions.
 
 ![LearnHarness teaching session](docs/assets/teaching-session.png)
+
+## Multilingual support (added in this edition)
+
+The app now has a real interface-language layer instead of hard-coded English. English remains the default and the source of truth for the message catalog; **Simplified Chinese (简体中文)** ships as the first complete translation.
+
+- **Switch it in the app:** Settings → General → **Language** (interface) and **Teaching language**.
+- **Defaults:** Language follows the operating system. Teaching language follows the interface.
+- **Mapping:** `zh`, `zh-CN`, and `zh-Hans` resolve to Simplified Chinese. Traditional-Chinese tags (`zh-TW`, `zh-HK`, `zh-Hant`) fall back to English until a Traditional catalog exists, so no one is shown the wrong script.
+- **No restart:** switching the interface language re-renders immediately. In the desktop app the native menu's custom items are rebuilt on the spot; role items such as Undo or Copy are localized by the operating system itself.
+- **Teaching language is frozen per session.** Each session records the language in force when it was created. Changing the setting later affects new sessions only — one conversation never mixes languages, and existing records are never rewritten.
+- **Dictation stays separate.** Dictation language is its own setting under Settings → Providers and is never derived from the interface language.
+- **User data is never translated.** Chat history, notes, and existing knowledge-graph propositions keep the language they were written in.
+- **System prompts stay English.** The teaching doctrine is English by design (overrides are stored on English paths). A fixed `## Learner language` block is appended at run time to tell the model which language to write learner-facing output in — including for the researcher, demo-builder, visual-maker, PDF-reader, extractor, and auditor sub-agents.
+
+### What is translated
+
+| Layer | Status |
+|---|---|
+| Interface (sidebar, chat, questions, practice, graph, settings, dialogs, artifact cards, plugin chrome) | ✅ Simplified Chinese |
+| Native menu and startup-failure dialog (desktop) | ✅ Simplified Chinese |
+| Message catalog, glossary, preserve list | ✅ `messages/`, `i18n/` |
+| Teaching output | ✅ via the learner-language block (per session) |
+| Dictation language names | English language names (treated as proper nouns) |
+| `README` / `docs/` | Upstream English docs; this README has a Chinese pair |
+
+### Adding another language
+
+1. Copy `messages/en.json` to `messages/<locale>.json` and translate the values only — keys, ICU placeholders, code spans, and link targets stay untouched.
+2. Add the locale id to `APP_LOCALES` in `src/core/locales.ts` (and to `CATALOG_LOCALES` in `src/i18n/index.ts`).
+3. Record terminology in `i18n/glossary.<locale>.json`; list intentional English words (brands, protocols, file extensions) in `i18n/preserve.json`.
+4. Run `npm run check:i18n` — it verifies key parity, placeholder parity, empty values, untranslated sentences, and that every key referenced from source exists.
+
+No route prefixes and no duplicated repository: a language is one catalog file plus a glossary entry.
 
 ## How it works
 
@@ -45,7 +80,9 @@ Future teaching sessions can read the graph instead of starting from scratch. Pr
 
 ## Download and get started
 
-**[Download from learnharness.ai](https://learnharness.ai)** · [GitHub Releases](https://github.com/amosblomqvist/learnharness/releases)
+**[Download from learnharness.ai](https://learnharness.ai)** — [GitHub Releases](https://github.com/amosblomqvist/learnharness/releases)
+
+Those downloads are the **original project's** builds and are in English. This translation edition is built from source (see below); no prebuilt binaries are published in this repository.
 
 - **macOS (Apple Silicon):** signed and notarized DMG. Drag the app to Applications.
 - **Windows (x64):** run the installer. It is currently unsigned; Windows may show an “unknown publisher” or SmartScreen warning.
@@ -70,19 +107,30 @@ All three platforms support in-app updates.
 npm ci
 npm run plugins:setup
 npm run dev        # http://localhost:3000
-npm test           # fixtures and fake providers
+npm test           # translation check + fixtures and fake providers
+npm run check:i18n # catalog checks only
 ```
+
+On Windows, the `NODE_ENV=test` prefix in `npm test` does not work in `cmd`; use:
+
+```cmd
+cmd /c "set NODE_ENV=test&& npx tsx --test --test-timeout=90000 tests\*.test.ts tests\*.test.tsx"
+```
+
+Configuration lives in `data/settings.json` (or `LH_DATA_DIR`): `general.locale` is the interface language (`"system"` or a catalog id), and `general.teachingLocale` is the teaching language (`"follow"` or a catalog id).
 
 See the [documentation index](docs/README.md) for all guides, [development](docs/development.md) for setup and checks, [architecture](docs/architecture.md) for the runtime, [keyboard shortcuts](docs/keyboard.md), [themes](docs/themes.md) for the theme file format, and [desktop builds and releases](docs/desktop-release.md).
 
 For trusted local plugins, start with the [authoring guide and capability map](docs/plugin-authoring.md). It links the question, practice-problem, submission, view-context and UI contracts. Use [`examples/plugins/`](examples/plugins/) for small runnable templates, [`plugins/`](plugins/) for feature source projects, and the [host architecture](docs/plugin-architecture.md) for internals.
 
-Questions, bug reports, and feature requests: [GitHub Issues](https://github.com/amosblomqvist/learnharness/issues).
+Questions, bug reports, and feature requests about this **translation edition**: open an issue in this repository.
+
+Upstream questions and bug reports: [amosblomqvist/learnharness issues](https://github.com/amosblomqvist/learnharness/issues).
 
 Security vulnerabilities: report privately as described in [SECURITY.md](SECURITY.md), not in public issues.
 
 ## License
 
-[AGPL-3.0](LICENSE)
+[AGPL-3.0](LICENSE) — retained from the original project, as the license requires.
 
-The app is free and open forever. If we ever charge for anything, it will be for convenience — managed keys, hosting — never for features you can run locally.
+The app is free and open forever. If the upstream project ever charges for anything, it will be for convenience — managed keys, hosting — never for features you can run locally.
