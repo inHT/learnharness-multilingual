@@ -14,6 +14,8 @@ import {
 } from "../../core/settings.ts";
 import type { PiEngine } from "../models.ts";
 import { runSubagent } from "./pi-run.ts";
+import { withLearnerLanguage } from "./language.ts";
+import type { AppLocale } from "../../core/locales.ts";
 import type {
 	AuditVerdicts,
 	CallUsage,
@@ -497,6 +499,7 @@ function runExtractor(
 	batchIds: ReadonlySet<string>,
 	signal: AbortSignal | undefined,
 	onStep: (usage: Usage, model: string, step: number, finishReason: string, tools: string) => void,
+	teachingLocale?: AppLocale,
 ): Promise<SessionFindings> {
 	// Chains in (the wire), chains out (the store) — no translation seam
 	// since chains-primary. Validation runs at the submit seam (error-back)
@@ -512,7 +515,7 @@ function runExtractor(
 		parameters: sessionFindingsSchema,
 		fill: fillFindings,
 		validate: (value) => validateSessionAnchors(value, batchIds) ?? validateFindingsChains(value, existingIds),
-		systemPrompt: EXTRACTOR_INSTRUCTIONS,
+		systemPrompt: withLearnerLanguage(EXTRACTOR_INSTRUCTIONS, teachingLocale),
 		prompt,
 		engine,
 		signal,
@@ -533,6 +536,7 @@ function runNotesExtractor(
 	existingIds: ReadonlySet<string>,
 	signal: AbortSignal | undefined,
 	onStep: (usage: Usage, model: string, step: number, finishReason: string, tools: string) => void,
+	teachingLocale?: AppLocale,
 ): Promise<NotesFindings> {
 	return runSubmitAgent<FindingsSubmit>({
 		role: "extractor",
@@ -543,7 +547,7 @@ function runNotesExtractor(
 		parameters: findingsSchema,
 		fill: fillNotesFindings,
 		validate: (value) => validateFindingsChains(value, existingIds),
-		systemPrompt: NOTES_EXTRACTOR_INSTRUCTIONS,
+		systemPrompt: withLearnerLanguage(NOTES_EXTRACTOR_INSTRUCTIONS, teachingLocale),
 		prompt,
 		engine,
 		signal,
@@ -591,6 +595,7 @@ function runAuditor(
 	signal: AbortSignal | undefined,
 	onStep: (usage: Usage, model: string, step: number, finishReason: string, tools: string) => void,
 	tools: Record<string, AgentTool<any>>,
+	teachingLocale?: AppLocale,
 ): Promise<AuditVerdicts> {
 	return runSubmitAgent({
 		role: "auditor",
@@ -600,7 +605,7 @@ function runAuditor(
 		toolDescription: "Submit the identity verdicts ONLY (links) — never the propositions themselves.",
 		parameters: auditSchema,
 		fill: fillAudit,
-		systemPrompt: AUDITOR_INSTRUCTIONS,
+		systemPrompt: withLearnerLanguage(AUDITOR_INSTRUCTIONS, teachingLocale),
 		prompt,
 		engine,
 		signal,
@@ -741,6 +746,10 @@ export interface ExtractionPipelineDeps extends GraphDeps, ExtractionModels {
 	 *  callers wire the live effective settings (extraction-UX redesign,
 	 *  2026-09-24). */
 	getChunkTokens?: () => number;
+	/** The teaching language for sources with no chat record (imported
+	 *  notes): the settings-resolved locale at run time. Chat runs read
+	 *  their own frozen record instead. Absent = English. */
+	teachingLocale?: () => AppLocale;
 }
 
 export interface NotesImportInput {
@@ -802,6 +811,11 @@ export function createExtractionPipeline(deps: ExtractionPipelineDeps): Extracti
 	// an honest refusal.
 	const stageEngine = (role: ModelRole, override?: PiEngine): PiEngine | undefined =>
 		override ?? deps.engineFor?.(role);
+	/** The source's teaching language (i18n wave): a chat run reads its own
+	 *  frozen record; imported notes have no record, so the composition
+	 *  root's current settings answer. English when neither is known. */
+	const teachingLocaleFor = (sourceId: string): AppLocale =>
+		chatStore.getChat(sourceId)?.teachingLocale ?? deps.teachingLocale?.() ?? "en";
 	/** The per-need refusal guard: which slot tiers the pipeline's stages
 	 *  found unset (test values count as configured — they ARE engines),
 	 *  and whether a configured stage's provider key is gone (provider-key
@@ -951,6 +965,7 @@ export function createExtractionPipeline(deps: ExtractionPipelineDeps): Extracti
 				recordStep(jobKey, "extractor", callUsage(usage), model);
 				console.info(`[extraction] extractor step ${step}: ${finishReason}, tools: ${tools}`);
 			},
+			teachingLocaleFor(sourceId),
 		);
 		console.info(`[extraction ${jobKey}] extractor done in ${Math.round(performance.now() - t0)}ms`);
 		return findings;
@@ -996,6 +1011,7 @@ export function createExtractionPipeline(deps: ExtractionPipelineDeps): Extracti
 				console.info(`[extraction] auditor step ${step}: ${finishReason}, tools: ${tools}`);
 			},
 			review.tools,
+			teachingLocaleFor(sourceId),
 		);
 		console.info(
 			`[extraction ${jobKey}] audit: ${findings.propositions.length} propositions through, ` +
@@ -1288,6 +1304,7 @@ export function createExtractionPipeline(deps: ExtractionPipelineDeps): Extracti
 				recordStep(jobKey, "extractor", callUsage(usage), model);
 				console.info(`[extraction] extractor step ${step}: ${finishReason}, tools: ${tools}`);
 			},
+			teachingLocaleFor(input.id),
 		);
 		console.info(`[extraction ${jobKey}] notes extractor done in ${Math.round(performance.now() - t0)}ms`);
 		return findings;

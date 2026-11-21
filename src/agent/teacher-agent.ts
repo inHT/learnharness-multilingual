@@ -22,6 +22,7 @@ import { makeNarrationGuard, narrationGuardApplies, SEND_TO_USER_DELIVERY_RULE }
 import { createReadTool, readTool } from "./tools/read.ts";
 import { quizInputObject, quizInputProblems } from "../core/question-core.ts";
 import { QUESTION_TOOLS, TOGGLEABLE_TOOLS, type EnabledTools } from "../core/pending.ts";
+import { learnerLanguageInstruction, type AppLocale } from "../core/locales.ts";
 import type { PluginToolContext } from "../core/plugins.ts";
 import { toLlmMessages, nativeInputCause, PRACTICE_PROBLEM_TOOL } from "../core/native-messages.ts";
 import type { ChatGPTRequestCycle } from "./chatgpt-request-cycle.ts";
@@ -84,24 +85,47 @@ export const CONVERSATION_TOOL_NAMES = Object.freeze([
  *  tests/prompt-overrides.test.ts). Overrides are a static-file read
  *  through config paths, not request state — the store import carries no
  *  chat/job machinery. */
-export function composeInstructions(kind: AgentKind, switches?: Record<string, boolean>): string {
+export function composeInstructions(kind: AgentKind, switches?: Record<string, boolean>, teachingLocale?: AppLocale): string {
 	const segments = effectivePromptSegments(kind, switches ?? {});
-	return segments
+	const doctrine = segments
 		.map((s) => (s.enabled ? s.overrideText! : s.sourceText))
 		.map((t) => t.trim())
 		.filter(Boolean)
 		.join("\n\n---\n\n");
+	// THE LEARNER-LANGUAGE BLOCK (i18n wave, 2026-11-21): appended AFTER
+	// composition, never written into the overridable markdown — switching a
+	// segment override off must never drop the language rule. The doctrine
+	// itself stays English (the model follows it more reliably, and user
+	// overrides are stored on English paths). A locale-less call composes
+	// the bare doctrine (the pre-i18n bytes; pure-composition tests pin it).
+	if (teachingLocale === undefined) return doctrine;
+	return `${doctrine}\n\n---\n\n${learnerLanguageInstruction(teachingLocale)}`;
 }
 
-// The switch-free source composition, cached per kind (module-load once).
-// With promptSwitches provided, baseAgentOptions composes FRESH per turn —
-// an override file written while its switch is ON must flip the next
-// turn's composition; the cache serves only the switches-less path.
+// The switch-free source composition, cached per kind (module-load once) and
+// per kind+locale for the agent build path. With promptSwitches provided,
+// baseAgentOptions composes FRESH per turn — an override file written while
+// its switch is ON must flip the next turn's composition; the cache serves
+// only the switches-less path.
 const composedInstructions: Record<AgentKind, string> = {
 	prober: composeInstructions("prober"),
 	teacher: composeInstructions("teacher"),
 	practice: composeInstructions("practice"),
 };
+const composedInstructionsByLocale: Record<AgentKind, Map<AppLocale, string>> = {
+	prober: new Map(),
+	teacher: new Map(),
+	practice: new Map(),
+};
+function cachedInstructions(kind: AgentKind, locale: AppLocale): string {
+	const cache = composedInstructionsByLocale[kind]!;
+	let composed = cache.get(locale);
+	if (composed === undefined) {
+		composed = composeInstructions(kind, undefined, locale);
+		cache.set(locale, composed);
+	}
+	return composed;
+}
 
 // Money channel (wave 4): the chat-handler passes a per-turn collector;
 // every model call's usage lands in the chat record's turns log
@@ -148,6 +172,10 @@ export interface AgentBuildOptions {
 	 *  fresh per turn, honoring enabled overrides (switch on + file
 	 *  exists); absent → the cached pure-source composition. */
 	promptSwitches?: Record<string, boolean>;
+	/** The session's frozen teaching language (i18n wave): the
+	 *  learner-language block appended after composition. Absent = English
+	 *  (pre-i18n sessions and test seams). */
+	teachingLocale?: AppLocale;
 	/** Native conversation identity: the existing persisted chat id, reused
 	 * across reconstructed prober, teacher, and practice Agents.
 	 * Debug: when set AND LH_PROVIDER_EVENTS=1, raw provider stream events
@@ -212,8 +240,10 @@ function baseAgentOptions(kind: AgentKind, opts: AgentBuildOptions, tools: Agent
 	const narrationGuard = narrationGuardApplies(kind, engine.model, opts.tools !== undefined);
 	const narrationHooks = narrationGuard ? makeNarrationGuard() : undefined;
 	const composedPrompt = opts.promptSwitches
-		? composeInstructions(kind, opts.promptSwitches)
-		: composedInstructions[kind]!;
+		? composeInstructions(kind, opts.promptSwitches, opts.teachingLocale)
+		: opts.teachingLocale
+			? cachedInstructions(kind, opts.teachingLocale)
+			: composedInstructions[kind]!;
 	const builtinPrompt = narrationGuard ? `${composedPrompt}\n\n---\n\n${SEND_TO_USER_DELIVERY_RULE}` : composedPrompt;
 	// Bind native read and preserve the kind/model-aware Claude output gate
 	// before resolving additive plugins. Explicit registries remain caller-owned.

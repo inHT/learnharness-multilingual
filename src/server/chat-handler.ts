@@ -33,6 +33,8 @@ import { fileAccessPolicy } from "./file-access.ts";
 import { collectToolCallIds } from "./pi/call-ids.ts";
 import { providerEventNote } from "../agent/provider-events.ts";
 import { effectiveSettings, stores } from "./stores.ts";
+import { resolveLocale, resolveTeachingLocale, systemLocaleTag } from "../core/locales.ts";
+import { readSettings as readSettingsRecord } from "../store/settings.ts";
 import { getPluginAgentContributions, getPluginHost } from "./plugins.ts";
 import { preparePluginQuestionSubmission, reconcilePluginQuestionCompatibility, type QuestionTypeResolver } from "./plugin-questions.ts";
 import { searchAvailable, searchProvider } from "./search.ts";
@@ -145,6 +147,12 @@ export const extraction = createExtractionPipeline({
 	// refuses BEFORE any batch runs (the typed throw), never mid-run.
 	providerKeyMissing: (provider, tier) =>
 		providerKeyPresent(provider) ? null : providerKeyMissingEnvelope(provider, [tier]),
+	// The teaching language for sources with no chat record (imported
+	// notes): read fresh per run from the settings record (i18n wave).
+	teachingLocale: () => {
+		const general = readSettingsRecord()?.general;
+		return resolveTeachingLocale(general?.teachingLocale, resolveLocale(general?.locale, systemLocaleTag()));
+	},
 });
 
 
@@ -725,6 +733,11 @@ export async function handleChatInput(
 		// point as the tool delta — the agent layer composes the system
 		// prompt fresh per turn, swapping in any enabled override segments.
 		promptSwitches: effective.agent.prompts,
+		// The session's FROZEN teaching language (i18n wave): pre-i18n
+		// records have no field and read as English. New sessions stamped
+		// theirs at birth, so a settings change never mixes languages
+		// inside one conversation.
+		teachingLocale: record.teachingLocale ?? "en",
 	};
 	// PRACTICE BRANCH (owner design, 2026-10-04): a kind:"practice"
 	// session builds the practitioner from turn 1 — no prober→teacher

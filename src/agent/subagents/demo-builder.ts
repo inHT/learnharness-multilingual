@@ -7,6 +7,8 @@ import { runSubagent } from "./pi-run.ts";
 import type { DemoResult } from "../../core/contracts.ts";
 import { getHeadless, type DemoRunResult, type HeadlessApi } from "./headless.ts";
 import { healToolRecord } from "../tools/heal.ts";
+import { withLearnerLanguage } from "./language.ts";
+import type { AppLocale } from "../../core/locales.ts";
 
 /**
  * The demo-builder sub-agent (vision §2 interactive demos + §2.5 "sub-agents
@@ -44,6 +46,9 @@ export interface DemoBuilderOptions {
 	onUsage?: (usage: Usage) => void;
 	/** Debug: raw provider-event recording key (LH_PROVIDER_EVENTS=1). */
 	chatId?: string;
+	/** The session's frozen teaching language (i18n wave): appended as the
+	 *  learner-language block. Absent = no block. */
+	teachingLocale?: AppLocale;
 }
 
 const INSTRUCTIONS = `You are a demo builder — a specialist sub-agent inside a learning application. You
@@ -207,7 +212,7 @@ export async function runDemoBuilder(input: DemoBuilderInput, opts: DemoBuilderO
 		const result = await runSubagent(Object.values(createDemoBuilderTools(state, headless, opts.onActivity)), {
 			role: "demoBuilder",
 			engine: opts.engine,
-			systemPrompt: INSTRUCTIONS,
+			systemPrompt: withLearnerLanguage(INSTRUCTIONS, opts.teachingLocale),
 			prompt,
 			maxTurns: opts.maxSteps,
 			abortSignal: opts.abortSignal,

@@ -11,6 +11,8 @@ import { createWorkerRequestScope } from "../worker-request-admission.ts";
 import type { PdfResult, PdfToolInput } from "../../core/contracts.ts";
 import { getHeadless, type HeadlessApi } from "./headless.ts";
 import { pdfExtract, pdfInfo, pdfProbe, pdfSearch, type PdfSearchHit } from "./pdf-ops.ts";
+import { withLearnerLanguage } from "./language.ts";
+import type { AppLocale } from "../../core/locales.ts";
 
 /**
  * The pdf-reader sub-agent (sources v0, 2026-09): reads a learner-provided
@@ -74,6 +76,9 @@ export interface PdfReaderOptions {
 	maxIterations?: number;
 	/** Debug: raw provider-event recording key (LH_PROVIDER_EVENTS=1). */
 	chatId?: string;
+	/** The session's frozen teaching language (i18n wave): appended as the
+	 *  learner-language block. Absent = no block. */
+	teachingLocale?: AppLocale;
 }
 
 export interface PdfReaderInput extends PdfToolInput {}
@@ -219,7 +224,7 @@ export async function runPdfReaderAgent(
 		for (let iteration = 0; maxIterations === undefined || iteration < maxIterations; iteration++) {
 			const result = await streamOnce(
 				streamEngine,
-				INSTRUCTIONS,
+				withLearnerLanguage(INSTRUCTIONS, opts.teachingLocale),
 				messages,
 				toolDeclarations,
 				sessionId,

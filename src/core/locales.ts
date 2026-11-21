@@ -82,3 +82,37 @@ export function resolveTeachingLocale(setting: TeachingLocaleSetting | undefined
 	if (!setting || setting === "follow") return uiLocale;
 	return setting;
 }
+
+/** The OS language tag: LH_OS_LOCALE when the desktop shell provides it
+ *  (Electron's app.getLocale()), else the runtime's ICU default. Browser-
+ *  and Node-safe (Intl only); `env` is a parameter so tests can pin it. */
+export function systemLocaleTag(env: Record<string, string | undefined> = process.env): string {
+	return env.LH_OS_LOCALE || Intl.DateTimeFormat().resolvedOptions().locale;
+}
+
+// ─── The learner-language instruction (teaching layer) ──────────────────────
+// System prompts stay English (the model follows English doctrine more
+// reliably, and user overrides are stored on English paths). What the
+// LEARNER sees is steered by this block, appended after composition — never
+// baked into the overridable markdown, so turning a segment override off
+// never drops the language rule.
+
+/** The language name the instruction states, per catalog locale. */
+const LEARNER_LANGUAGE_NAME: Record<AppLocale, { full: string; short: string }> = {
+	en: { full: "English", short: "English" },
+	"zh-CN": { full: "Simplified Chinese (zh-Hans)", short: "Chinese" },
+};
+
+/** The fixed English preamble — same wording for every locale so the model
+ *  reads one stable instruction shape; only the language name changes. */
+export function learnerLanguageInstruction(locale: AppLocale): string {
+	const { full, short } = LEARNER_LANGUAGE_NAME[locale];
+	return [
+		"## Learner language",
+		`Write every learner-facing utterance in ${full}.`,
+		"This includes questions, explanations, feedback, hints, and session titles.",
+		"Keep tool names, JSON field names, file paths, code, and mathematical notation unchanged.",
+		"If the learner writes in another language, follow the learner's language for that turn.",
+		`On first use, gloss an established English technical term in ${short}.`,
+	].join("\n");
+}

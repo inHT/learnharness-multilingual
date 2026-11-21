@@ -19,6 +19,8 @@ import type { LhMessage } from "../core/native-messages.ts";
 import { activeProblemOf, danglingQuestionOf } from "../core/native-messages.ts";
 import { phaseAt3Lh } from "../core/phases.ts";
 import { removeLeftoverTemps, writeFileAtomicSync } from "./atomic-write.ts";
+import { resolveLocale, resolveTeachingLocale, systemLocaleTag } from "../core/locales.ts";
+import { readSettings } from "./settings.ts";
 
 function chatFile(id: string): string {
 	if (!/^[A-Za-z0-9_-]+$/.test(id)) throw new Error(`Invalid chat id: ${id}`);
@@ -36,12 +38,18 @@ function chatFile(id: string): string {
  *  not oversight. */
 function createChat(title: string, kind?: "practice"): ChatRecord {
 	const now = new Date().toISOString();
+	// THE LANGUAGE FREEZE (i18n wave, 2026-11-21): the session records the
+	// teaching language in force at birth — a concrete catalog id, so later
+	// settings changes never mix languages inside one conversation.
+	const general = readSettings()?.general;
+	const teachingLocale = resolveTeachingLocale(general?.teachingLocale, resolveLocale(general?.locale, systemLocaleTag()));
 	const record: ChatRecord = {
 		id: `chat_${Date.now().toString(36)}_${crypto.randomUUID().slice(0, 8)}`,
 		title: title.trim() || "Untitled session",
 		createdAt: now,
 		updatedAt: now,
 		messages: [],
+		teachingLocale,
 		// Practice sessions carry the marker; teach stays ABSENT (absence
 		// reads as teach — pre-practice records never migrate).
 		...(kind === "practice" ? { kind: "practice" as const } : {}),

@@ -8,6 +8,7 @@
 import type { ThinkingLevel } from "@earendil-works/pi-agent-core";
 import type { LhMessage } from "../native-messages.ts";
 import type { Phase3 } from "../phases.ts";
+import type { AppLocale } from "../locales.ts";
 import type { PlanNodeStatus, PlanTree } from "./plan.ts";
 import type { EmissionStats } from "./graph.ts";
 
@@ -31,6 +32,12 @@ export interface ChatRecord {
 	imageSnapshots?: Record<string, ImageSnapshot>;
 	/** The session's kind; an absent field reads as teach. */
 	kind?: ChatKind;
+	/** The teaching language FROZEN at session birth (i18n wave,
+	 *  2026-11-21): a concrete catalog id, resolved from the settings at
+	 *  creation. Later settings changes affect new sessions only — one
+	 *  conversation never mixes languages. Absent (pre-i18n records) reads
+	 *  as English. */
+	teachingLocale?: AppLocale;
 	/** The session's plan tree, written by the native plan tools. */
 	tree?: PlanTree;
 	/** Append-only usage log, separate from message history: one entry per billed

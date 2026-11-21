@@ -5,6 +5,8 @@ import { createPdfReadTools } from "../tools/pdf-read.ts";
 import type { SearchProvider } from "../../core/search.ts";
 import type { PiEngine } from "../models.ts";
 import { runSubagent } from "./pi-run.ts";
+import { withLearnerLanguage } from "./language.ts";
+import type { AppLocale } from "../../core/locales.ts";
 
 /**
  * The researcher sub-agent (vision §2.5): a SEPARATE ToolLoopAgent instance
@@ -84,6 +86,9 @@ export interface ResearcherRunOptions {
 	onToolStart?: (toolName: string, args: unknown) => void;
 	/** Debug: raw provider-event recording key (LH_PROVIDER_EVENTS=1). */
 	chatId?: string;
+	/** The session's frozen teaching language — appended as the
+	 *  learner-language block (i18n wave). Absent = no block. */
+	teachingLocale?: AppLocale;
 }
 
 /**
@@ -98,7 +103,7 @@ export async function runResearcherAgent(prompt: string, opts: ResearcherRunOpti
 		role: "researcher",
 		prompt,
 		engine: opts.engine,
-		systemPrompt: INSTRUCTIONS,
+		systemPrompt: withLearnerLanguage(INSTRUCTIONS, opts.teachingLocale),
 		abortSignal: opts.abortSignal,
 		onUsage: opts.onUsage,
 		onToolStart: opts.onToolStart,

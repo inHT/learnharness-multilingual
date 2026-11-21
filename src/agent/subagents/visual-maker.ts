@@ -13,6 +13,8 @@ import type { PdfFigureImage, PdfFigureSource } from "../tools/pdf-figure.ts";
 import { embedLearnerImage, LEARNER_IMAGE_HREF } from "../../core/learner-image-svg.ts";
 import { annotationPlacementProblem } from "./annotation-svg.ts";
 import { getHeadless, type HeadlessApi } from "./headless.ts";
+import { withLearnerLanguage } from "./language.ts";
+import type { AppLocale } from "../../core/locales.ts";
 
 /**
  * The visual-maker sub-agent (vision §2.5): authors ONE precise SVG from a
@@ -73,6 +75,9 @@ export interface VisualMakerOptions {
 	onUsage?: (usage: Usage) => void;
 	/** Debug: raw provider-event recording key (LH_PROVIDER_EVENTS=1). */
 	chatId?: string;
+	/** The session's frozen teaching language (i18n wave): appended as the
+	 *  learner-language block. Absent = no block. */
+	teachingLocale?: AppLocale;
 }
 
 const INSTRUCTIONS = `You are a visual maker — a diagram author + renderer for precise, spatial figures. You
@@ -223,11 +228,11 @@ export async function runVisualMaker(input: VisualMakerInput, opts: VisualMakerO
 	const capture = createBackgroundCapture({ role: "visualMaker", runId: sessionId, sourceId: opts.chatId });
 	/** The picture being annotated; in PDF mode crop_page replaces it. */
 	let learnerImage: LearnerImage | PdfFigureImage | undefined = input.image ?? pdf?.pageImage;
-	const systemPrompt = pdf
+	const systemPrompt = withLearnerLanguage(pdf
 		? `${INSTRUCTIONS}\n\n${IMAGE_INSTRUCTIONS}\n\n${PDF_INSTRUCTIONS}`
 		: learnerImage
 			? `${INSTRUCTIONS}\n\n${IMAGE_INSTRUCTIONS}`
-			: INSTRUCTIONS;
+			: INSTRUCTIONS, opts.teachingLocale);
 	const prompt = [
 		pdf
 			? "Brief for ONE annotated figure from the learner's PDF (from the teacher, verbatim — it is everything you know):"

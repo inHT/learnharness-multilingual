@@ -11,19 +11,17 @@
  * "system" pick resolves identically client-side.
  */
 
-import { resolveLocale, resolveTeachingLocale, type AppLocale } from "../core/locales.ts";
+import { resolveLocale, resolveTeachingLocale, systemLocaleTag, type AppLocale } from "../core/locales.ts";
 import { readSettings } from "../store/settings.ts";
+
+/** Re-exported for callers that only import the boot module. */
+export { systemLocaleTag };
 
 /** Everything the layout needs: the two resolved locales + the tag they resolved against. */
 export interface LocaleBoot {
 	locale: AppLocale;
 	teachingLocale: AppLocale;
 	systemTag: string;
-}
-
-/** The OS language tag (LH_OS_LOCALE when the desktop shell provides it). */
-export function systemLocaleTag(env: Record<string, string | undefined> = process.env): string {
-	return env.LH_OS_LOCALE || Intl.DateTimeFormat().resolvedOptions().locale;
 }
 
 /** Read the record and resolve both locales. Missing record (first boot) →

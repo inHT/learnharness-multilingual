@@ -1,5 +1,6 @@
 import type { PiEngine } from "../models.ts";
 import type { SearchProvider } from "../../core/search.ts";
+import type { AppLocale } from "../../core/locales.ts";
 import {
 	accumulateJobUsage,
 	buildSubagentSteer,
@@ -325,8 +326,11 @@ export function createJobRunner(deps: JobRunnerDeps): JobRunner {
 		});
 	}
 
-	/** Chat-record + input resolution shared by all three runners. */
-	function jobContext(jobId: string): { job: JobRecord; chatId: string } | null {
+	/** Chat-record + input resolution shared by all three runners. The
+	 *  chat's frozen teaching language rides along (i18n wave,
+	 *  2026-11-21): every learner-facing sub-agent output speaks the
+	 *  session's language. */
+	function jobContext(jobId: string): { job: JobRecord; chatId: string; teachingLocale: AppLocale } | null {
 		const job = jobStore.getJob(jobId);
 		if (!job || job.status !== "running") return null;
 		const chat = chatStore.getChat(job.chatId);
@@ -334,7 +338,7 @@ export function createJobRunner(deps: JobRunnerDeps): JobRunner {
 			jobStore.updateJob(jobId, { status: "error", error: `Chat not found: ${job.chatId}`, activity: "failed" });
 			return null;
 		}
-		return { job, chatId: job.chatId };
+		return { job, chatId: job.chatId, teachingLocale: chat.teachingLocale ?? "en" };
 	}
 
 	// ─── research ───────────────────────────────────────────────────────────
@@ -380,6 +384,7 @@ export function createJobRunner(deps: JobRunnerDeps): JobRunner {
 				pdfDir,
 				abortSignal: loop.abortSignal,
 				chatId: loop.chatId,
+				teachingLocale: ctx.teachingLocale,
 				// Money channel: each agent step is one model call — fold its
 				// usage into the record as it completes (progress write).
 				onUsage: (usage) => loop.onUsage(piUsageToStep(usage)),
@@ -431,6 +436,7 @@ export function createJobRunner(deps: JobRunnerDeps): JobRunner {
 					engine: model,
 					abortSignal: loop.abortSignal,
 					chatId: loop.chatId,
+					teachingLocale: ctx.teachingLocale,
 					onUsage: (usage) => loop.onUsage(piUsageToStep(usage)),
 					onActivity: (line) => jobStore.updateJob(jobId, { activity: line }),
 				},
@@ -486,6 +492,7 @@ export function createJobRunner(deps: JobRunnerDeps): JobRunner {
 						engine: model,
 						abortSignal: loop.abortSignal,
 						chatId: loop.chatId,
+						teachingLocale: ctx.teachingLocale,
 						onUsage: (usage) => loop.onUsage(piUsageToStep(usage)),
 						onActivity: (line) => jobStore.updateJob(jobId, { activity: line }),
 					},
@@ -532,6 +539,7 @@ export function createJobRunner(deps: JobRunnerDeps): JobRunner {
 				engine: model,
 				abortSignal: loop.abortSignal,
 				chatId: loop.chatId,
+				teachingLocale: ctx.teachingLocale,
 				onUsage: (usage) => loop.onUsage(piUsageToStep(usage)),
 				onActivity: (line) => jobStore.updateJob(jobId, { activity: line }),
 			},
