@@ -252,7 +252,7 @@
 		"readingComplete": "reading complete",
 		"complete": "complete",
 		"researchLabel": "Research",
-		"pagesRead": "· read {count} pages",
+		"pagesRead": "· read {count, plural, one {# page} other {# pages}}",
 		"sourcesCount": "· {count} sources"
 	},
 	"pluginChrome": {
