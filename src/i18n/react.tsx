@@ -43,9 +43,12 @@ export function I18nProvider({
 }) {
 	const [locale, setLocale] = useState(initialLocale);
 	// The layout sets <html lang> server-side; this keeps it honest through
-	// every live switch (screen readers + Intl consumers read it).
+	// every live switch (screen readers + Intl consumers read it). The
+	// desktop shell's native menu follows the same report (Electron rebuilds
+	// its custom labels; role items stay OS-localized).
 	useEffect(() => {
 		document.documentElement.lang = locale;
+		window.lh?.setLocale?.(locale);
 	}, [locale]);
 	const value = useMemo<I18nContextValue>(
 		() => ({

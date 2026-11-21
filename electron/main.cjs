@@ -616,16 +616,35 @@ function applyZoom(win, factor) {
 	win.webContents.send("lh:zoom", factor);
 }
 
+/** The renderer's resolved interface locale (i18n wave): null = resolve
+ *  from the record + OS tag; a string = the live switcher's answer. */
+let currentLocale = null;
+
 /** macOS needs an application menu with the Edit roles — without one,
- *  Cmd+C/V/A do nothing in the renderer. Everything else stays minimal. */
+ *  Cmd+C/V/A do nothing in the renderer. Everything else stays minimal.
+ *  Custom labels read the i18n catalog (i18n wave); role items are
+ *  localized by the OS itself. */
+function menuI18n() {
+	const { createMenuI18n } = require("./i18n.cjs");
+	return createMenuI18n({
+		dataDir: DATA_DIR(),
+		messagesDir: path.join(app.getAppPath(), "messages"),
+		tag: app.getLocale(),
+		// The renderer reports its resolved locale (live switcher); a null
+		// report re-resolves from the record + OS tag.
+		locale: currentLocale,
+	});
+}
+
 function installMenu() {
+	const { t } = menuI18n();
 	const template = [
 		{
 			label: app.name,
 			submenu: [
 				{ role: "about" },
 				// Manual checks report their result in Settings → General.
-				{ label: "Check for Updates…", click: () => checkForUpdatesFromMenu() },
+				{ label: t("menu.checkForUpdates"), click: () => checkForUpdatesFromMenu() },
 				{ type: "separator" },
 				{ role: "hide" },
 				{ role: "hideOthers" },
@@ -633,9 +652,9 @@ function installMenu() {
 				{ role: "quit" },
 			],
 		},
-		{ label: "Edit", submenu: [{ role: "undo" }, { role: "redo" }, { type: "separator" }, { role: "cut" }, { role: "copy" }, { role: "paste" }, { role: "selectAll" }] },
+		{ label: t("menu.edit"), submenu: [{ role: "undo" }, { role: "redo" }, { type: "separator" }, { role: "cut" }, { role: "copy" }, { role: "paste" }, { role: "selectAll" }] },
 		{
-			label: "View",
+			label: t("menu.view"),
 			submenu: [
 				{ role: "reload" },
 				{ role: "toggleDevTools" },
@@ -645,17 +664,17 @@ function installMenu() {
 				// traffic lights. The renderer's --lh-zoom depends on
 				// hearing every change.
 				{
-					label: "Actual Size",
+					label: t("menu.actualSize"),
 					accelerator: "CommandOrControl+0",
 					click: () => applyZoom(BrowserWindow.getAllWindows()[0], 1),
 				},
 				{
-					label: "Zoom In",
+					label: t("menu.zoomIn"),
 					accelerator: "CommandOrControl+Plus",
 					click: () => zoomStep(BrowserWindow.getAllWindows()[0], +1),
 				},
 				{
-					label: "Zoom Out",
+					label: t("menu.zoomOut"),
 					accelerator: "CommandOrControl+-",
 					click: () => zoomStep(BrowserWindow.getAllWindows()[0], -1),
 				},
@@ -822,6 +841,14 @@ async function main() {
 		appearance = normalizeAppearance(next);
 		nativeTheme.themeSource = themeSourceFor(appearance.mode);
 		for (const win of BrowserWindow.getAllWindows()) applyChrome(win);
+	});
+	// The resolved interface locale (i18n wave): a live switch rebuilds the
+	// native menu without restarting the app (role items stay OS-localized).
+	ipcMain.on("lh:locale", (event, locale) => {
+		if (!trustedAppWindows.has(BrowserWindow.fromWebContents(event.sender)) || !trustedSender(event, new URL(url).origin, BrowserWindow)) return;
+		if (locale !== null && typeof locale !== "string") return;
+		currentLocale = locale;
+		installMenu();
 	});
 	reopenWindow = () => { chatgpt?.resume(); subscriptions?.resume(); return createWindow(url); };
 	app.on("activate", () => {

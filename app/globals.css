@@ -107,8 +107,11 @@
 	   (Source Sans 3 by default). The loading-face variables attach in
 	   app/layout.tsx. Keep the sans alias pointed at the RUNTIME prose token,
 	   not the loading face, so font-sans also honors Appearance changes. */
-	--font-ui: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
-	--font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
+	/* Monospace chrome (i18n wave, 2026-11-21): JetBrains Mono carries the
+	   latin glyphs; CJK-capable monos follow so Chinese labels in mono rows
+	   stay monospaced instead of falling through to a proportional face. */
+	--font-ui: var(--font-jetbrains), "Sarasa Mono SC", "Noto Sans Mono CJK SC", ui-monospace, SFMono-Regular, monospace;
+	--font-mono: var(--font-jetbrains), "Sarasa Mono SC", "Noto Sans Mono CJK SC", ui-monospace, SFMono-Regular, monospace;
 	--font-sans: var(--font-prose);
 	/* The modular type ladder — each size carries its own line-height.
 	   Component sizes must pull from this ladder. (owner, typography
@@ -683,9 +686,15 @@ body {
 
 /* Runtime font contracts: Appearance overrides the reading family and,
    independently, whether titles use serif or the reading family. Non-inline
-   utilities read these vars; Source Sans 3 remains the default/loading face. */
+   utilities read these vars; Source Sans 3 remains the default/loading face.
+
+   CJK fallbacks (i18n wave, 2026-11-21): the bundled faces load the latin
+   subset only, so Chinese would otherwise land on an inconsistent system
+   fallback. The stack asks the platform's own CJK families, in order —
+   PingFang SC (macOS), Microsoft YaHei (Windows), Noto Sans CJK SC (Linux) —
+   and never ships a Noto Sans SC payload. */
 @theme {
-	--font-prose: var(--font-sans3), ui-sans-serif, system-ui, sans-serif;
+	--font-prose: var(--font-sans3), ui-sans-serif, system-ui, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
 	--font-title: "lh-cmu", serif;
 }
 

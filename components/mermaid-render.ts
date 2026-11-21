@@ -28,7 +28,9 @@ export const MERMAID_FONT_SIZE = 16;
 // `mermaid` prop wiring is retired.)
 export function mermaidConfig(mode: RenderedMode): MermaidConfig {
 	return {
-		fontFamily: "ui-sans-serif, system-ui, sans-serif",
+		// The same CJK fallback chain as globals.css (i18n wave): diagram
+		// labels in Chinese must not fall through to a proportional default.
+		fontFamily: 'ui-sans-serif, system-ui, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif',
 		fontSize: MERMAID_FONT_SIZE,
 		securityLevel: "strict",
 		theme: mode === "dark" ? "dark" : "default",

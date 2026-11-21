@@ -6,9 +6,7 @@
 		"delete": "删除",
 		"deleting": "删除中…",
 		"rename": "重命名",
-		"close": "关闭",
-		"back": "返回",
-		"save": "保存"
+		"close": "关闭"
 	},
 	"time": {
 		"justNow": "刚刚",
@@ -230,6 +228,14 @@
 		"chainsButton": "推理链",
 		"chainsHint": "全部推理链"
 	},
+	"menu": {
+		"checkForUpdates": "检查更新…",
+		"edit": "编辑",
+		"view": "视图",
+		"actualSize": "实际大小",
+		"zoomIn": "放大",
+		"zoomOut": "缩小"
+	},
 	"activity": {
 		"title": "后台代理",
 		"totalCostHint": "总运行消耗（推算）",
@@ -402,7 +408,6 @@
 			"compactionAria": "压缩阈值",
 			"includeReasoning": "在 token 估算中包含推理（仅 OpenAI Responses）",
 			"includeReasoningHint": "使用已保存的输出 token 用量来计算匹配的 OpenAI Responses 模型的推理重放。关闭时按原始文本估算。",
-			"includeReasoningAria": "在 token 估算中包含推理（仅 OpenAI Responses）",
 			"systemPrompts": "系统提示",
 			"systemPromptsHint": "用开关在默认提示和你保存的覆盖之间切换。",
 			"promptsFailed": "无法加载提示片段。"
@@ -421,7 +426,6 @@
 			"headingWeight": "标题字重",
 			"headingWeightAria": "标题字重",
 			"transcriptWidth": "记录宽度",
-			"transcriptWidthAria": "记录宽度",
 			"adaptiveQuestions": "自适应题目布局",
 			"full": "全宽",
 			"colors": {

@@ -100,25 +100,30 @@ function walk(dir) {
 		if (entry.name === "node_modules" || entry.name === ".next" || entry.name === "dist" || entry.name.startsWith(".")) continue;
 		const full = path.join(dir, entry.name);
 		if (entry.isDirectory()) walk(full);
-		else if (/\.(ts|tsx)$/.test(entry.name)) sourceFiles.push(full);
+		else if (/\.(ts|tsx|cjs)$/.test(entry.name)) sourceFiles.push(full);
 	}
 }
-for (const dir of ["app", "components", "src", "lib"]) {
+for (const dir of ["app", "components", "src", "lib", "electron"]) {
 	const full = path.join(root, dir);
 	if (fs.existsSync(full)) walk(full);
 }
 
 const KEY_CALL = /\b(?:t|translate|translateOr)\(\s*["'`]([A-Za-z][A-Za-z0-9_.]*)["'`]/g;
+// translate(locale, "key", …) / translateOr(locale, "key", fallback) — the
+// locale is a variable, so the key is the SECOND argument.
+const KEY_CALL_WITH_LOCALE = /\b(?:translate|translateOr)\(\s*[A-Za-z_$][\w$.]*\s*,\s*["'`]([A-Za-z][A-Za-z0-9_.]*)["'`]/g;
 // A literal first argument that is a locale id (translate("en", …)) or a
 // bare word without a dot is not a catalog key.
 const LOCALE_IDS = new Set(["en", "zh-CN"]);
 const referenced = new Set();
 for (const file of sourceFiles) {
 	const source = fs.readFileSync(file, "utf8");
-	for (const match of source.matchAll(KEY_CALL)) {
-		const key = match[1];
-		if (LOCALE_IDS.has(key) || !key.includes(".")) continue;
-		referenced.add(key);
+	for (const pattern of [KEY_CALL, KEY_CALL_WITH_LOCALE]) {
+		for (const match of source.matchAll(pattern)) {
+			const key = match[1];
+			if (LOCALE_IDS.has(key) || !key.includes(".")) continue;
+			referenced.add(key);
+		}
 	}
 }
 for (const key of referenced) {
@@ -139,3 +144,7 @@ console.log(
 	`Translation check passed: ${Object.keys(en).length} keys, ${catalogFiles.length} catalog(s)` +
 		(unused.length ? `; ${unused.length} key(s) not referenced yet` : ""),
 );
+if (unused.length && process.env.LH_I18N_LIST_UNUSED === "1") {
+	console.log("Unreferenced keys:");
+	for (const key of unused) console.log(`  - ${key}`);
+}

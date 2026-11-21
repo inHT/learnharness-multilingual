@@ -6,9 +6,7 @@
 		"delete": "Delete",
 		"deleting": "Deleting…",
 		"rename": "Rename",
-		"close": "Close",
-		"back": "Back",
-		"save": "Save"
+		"close": "Close"
 	},
 	"time": {
 		"justNow": "just now",
@@ -230,6 +228,14 @@
 		"chainsButton": "Chains",
 		"chainsHint": "Every reasoning chain"
 	},
+	"menu": {
+		"checkForUpdates": "Check for Updates…",
+		"edit": "Edit",
+		"view": "View",
+		"actualSize": "Actual Size",
+		"zoomIn": "Zoom In",
+		"zoomOut": "Zoom Out"
+	},
 	"activity": {
 		"title": "Background agents",
 		"totalCostHint": "Total running cost (inferred)",
@@ -402,7 +408,6 @@
 			"compactionAria": "compaction threshold",
 			"includeReasoning": "Include reasoning in token estimates (OpenAI Responses only)",
 			"includeReasoningHint": "Use saved output-token usage to account for replayed reasoning on matching OpenAI Responses models. Off uses the original text-based estimate.",
-			"includeReasoningAria": "Include reasoning in token estimates (OpenAI Responses only)",
 			"systemPrompts": "System prompts",
 			"systemPromptsHint": "Use the switch to choose between the default and your saved override.",
 			"promptsFailed": "Couldn't load prompt segments."
@@ -421,7 +426,6 @@
 			"headingWeight": "Heading weight",
 			"headingWeightAria": "heading weight",
 			"transcriptWidth": "Transcript width",
-			"transcriptWidthAria": "Transcript width",
 			"adaptiveQuestions": "Adapt question layout",
 			"full": "Full",
 			"colors": {

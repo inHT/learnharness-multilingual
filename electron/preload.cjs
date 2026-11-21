@@ -85,6 +85,9 @@ contextBridge.exposeInMainWorld("lh", {
 	},
 	expandWindow: () => ipcRenderer.send("lh:expand-window"),
 	setAppearance: (a) => ipcRenderer.send("lh:appearance", a),
+	// The resolved interface locale (i18n wave): main rebuilds the native
+	// menu's custom labels on every live switch.
+	setLocale: (locale) => ipcRenderer.send("lh:locale", locale),
 	onZoom: (cb) => {
 		const listener = (_event, factor) => cb(factor);
 		ipcRenderer.on("lh:zoom", listener);
