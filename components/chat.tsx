@@ -46,6 +46,7 @@ import { dockContainerMax, layoutFontKey, questionCardGeometry, rootRem, type Qu
 import { QueuedSteersBody, type QueuedSteerLine } from "@/components/queued-steers";
 import { DictationBar, finishDictation, joinDictation, useDictation, type Dictation } from "@/components/dictation";
 import { useFieldCycle } from "@/components/field-cycle";
+import { useT } from "@/src/i18n/react";
 import { useOptionalInteractionLayers } from "./interaction-layers";
 import { isInteractionScopeEligible } from "./plugin-input-focus";
 import { JobsContext } from "@/components/jobs-context";
@@ -313,6 +314,7 @@ export function Chat({
 		useChatSession({ chatId, initialMessages, initialError, initiallyInFlight });
 
 	const controller = useOptionalInteractionLayers();
+	const t = useT();
 	const sessionFindScopeRef = useRef<HTMLDivElement | null>(null);
 	const pathname = usePathname();
 	const surfaceTarget = usePageSurfaceBoundary({ active: pathname === `/chat/${encodeURIComponent(chatId)}`, viewKey: chatId, bodyRef: sessionFindScopeRef });
@@ -1038,8 +1040,8 @@ export function Chat({
 		const hasHistory = sideThread.threads.some((thread) => thread.anchor.messageId === sourceMessageId && thread.messages.length > 0);
 		return <div className="mt-1 flex justify-end">
 			<Button type="button" variant="ghost" size="icon-xs" data-testid="side-conversation-button" data-side-segment-id={sourceMessageId}
-				data-has-history={hasHistory} aria-label={hasHistory ? "Open side conversation" : "Ask a side question"}
-				title={hasHistory ? "Open side conversation" : "Ask a side question"}
+				data-has-history={hasHistory} aria-label={hasHistory ? t("chat.sideConversation.open") : t("chat.sideConversation.ask")}
+				title={hasHistory ? t("chat.sideConversation.open") : t("chat.sideConversation.ask")}
 				className={hasHistory ? "border border-border/60 text-muted-foreground" : "text-muted-foreground/40 hover:text-muted-foreground"}
 				onClick={(event) => openSideThread({ sourceMessageId, anchor: { kind: "element", element: event.currentTarget } })}>
 				<MessageCircleQuestionIcon aria-hidden className="size-3.5" fill="currentColor" fillOpacity={hasHistory ? 0.12 : 0} />
@@ -1678,8 +1680,8 @@ export function Chat({
 								onBlur={() => void commitRename(titleDraft)}
 								spellCheck={false}
 								data-plugin-chrome-title
-								aria-label="Session title"
-								title="Rename this session"
+								aria-label={t("chat.titleAria")}
+								title={t("chat.titleRenameHint")}
 								className="lh-no-drag min-w-[8ch] max-w-[70%] shrink-0 bg-transparent font-title text-3xl tracking-tight caret-current outline-none [field-sizing:content]"
 							/>
 							{/* flex-1 spacer during rename too, so the chips stay at
@@ -1691,7 +1693,7 @@ export function Chat({
 					<>
 						<Hint
 							// F2 renames (registry) — surfaced on the hover.
-							label="Rename session"
+							label={t("sidebar.renameSession")}
 							action="rename-session"
 							side="bottom"
 						>
@@ -1716,7 +1718,7 @@ export function Chat({
 					    structure beside the phase chip — access to the full-DAG popup
 					    at every width; the marginalia is the wide-screen glance view. */}
 					{planTree && (
-						<Hint label="Open the full plan" side="bottom">
+						<Hint label={t("chat.planChipHint")} side="bottom">
 <button
 							type="button"
 							data-testid="plan-chip"
@@ -1727,7 +1729,7 @@ export function Chat({
 							className="lh-no-drag flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full border border-border/80 px-2 py-0.5 text-xs font-medium uppercase tracking-wide text-muted-foreground transition-colors hover:border-border hover:text-foreground"
 						>
 							<WaypointsIcon className="size-3.5 text-primary" aria-hidden />
-							Plan
+							{t("chat.planChip")}
 						</button>
 </Hint>
 					)}
@@ -1749,7 +1751,7 @@ export function Chat({
 							className="pointer-events-none flex shrink-0 select-none items-center gap-1 text-xs font-medium uppercase tracking-wide text-muted-foreground"
 						>
 							<DumbbellIcon className="size-3" />
-							Practice
+							{t("sidebar.practice")}
 						</span>
 					) : (
 						<PhaseChip phase={phases.at(-1) ?? "probe"} />
@@ -1766,8 +1768,8 @@ export function Chat({
 						<div data-session-find-root="" className={`${COLUMN} flex flex-1 flex-col gap-4 pt-4`}>
 							{messages.length === 0 && !busy && (
 								<ConversationEmptyState
-									title="New session"
-									description="The teacher will open by probing what you already know."
+									title={t("newSession.teachTitle")}
+									description={t("newSession.teachDescription")}
 								/>
 							)}
 
@@ -1822,7 +1824,7 @@ export function Chat({
 														className="my-4 flex items-center justify-center gap-1.5 font-ui text-xs font-medium uppercase tracking-wide text-muted-foreground"
 													>
 														<ArrowRightIcon className="size-3" />
-														Next problem
+														{t("chat.practiceNext")}
 													</div>
 												);
 											default:
@@ -1918,7 +1920,7 @@ export function Chat({
 												) {
 													return (
 														<SystemLine key={`retry-${pi}`} testId="tool-retry">
-															Retrying…
+															{t("chat.retrying")}
 														</SystemLine>
 													);
 												}
@@ -2022,13 +2024,13 @@ export function Chat({
 							{(status === "submitted" || turnInFlight) && (
 								<PendingTurnIndicator evaluating={evaluating} />
 							)}
-							{openingError && <p role="alert" className="text-sm text-destructive">{OPENING_PROMPT_FAILURE}</p>}
+							{openingError && <p role="alert" className="text-sm text-destructive">{t("newSession.openingFailed")}</p>}
 							{error && (
 								<div className="flex items-center justify-between gap-3 rounded-lg border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm">
-									<span>Something went wrong: {error.message}</span>
+									<span>{t("chat.error", { message: error.message })}</span>
 									{retryable && (
 										<Button variant="outline" size="xs" data-testid="retry-failed-turn" onClick={retryFailedTurn}>
-											Retry
+											{t("chat.retry")}
 										</Button>
 									)}
 								</div>
@@ -2112,9 +2114,9 @@ export function Chat({
 										data-testid="setup-cta"
 										onClick={() => setSetupOpen(true)}
 										className="rounded-sm border border-border bg-card px-3 py-1.5 font-ui text-xs text-foreground transition-colors hover:border-muted-foreground/50 hover:bg-accent cursor-pointer"
-									>
-										Set up your models
-									</button>
+										>
+											{t("newSession.setupModels")}
+										</button>
 								</div>
 							)
 						)
@@ -2141,7 +2143,7 @@ export function Chat({
 							// applies.
 							nextProblem={nextReady}
 							onNext={sendNext}
-							placeholder={nextReady ? "Ask anything, or press Enter for the next one." : undefined}
+							placeholder={nextReady ? t("chat.nextPlaceholder") : undefined}
 						/>
 					}
 					onSubmitAnswer={(output) => {

@@ -40,7 +40,10 @@ import {
 	type QuizToolInput,
 	type SelectMode,
 	type Phase3,
+	type AppLocale,
 } from "@/src/core";
+import { translate } from "@/src/i18n";
+import { useI18n } from "@/src/i18n/react";
 import type { PrepareBuiltinSubmission } from "./plugin-submission-adapters";
 import { CONFIDENCE_COLORS, confidenceRailStyle } from "@/components/confidence-rail";
 import {
@@ -83,13 +86,15 @@ const QC_CONFIDENCE_TRACK = "relative h-4 min-w-0 flex-1";
 // it, splitting their spare width across both sides.
 const QC_CONFIDENCE_VALUE = "w-[4ch] shrink-0 text-center font-mono text-sm tabular-nums";
 
-/** The question card's label: the tool's own name for probe-phase calls. */
-export function questionCardLabel(tool: string | undefined, kind: string, questionType: string | undefined): string {
-	if (tool === "probe") return "Probe";
-	if (tool === "recall") return "Recall";
-	if (kind === "quiz") return questionType === "predict" ? "Prediction" : "Check";
-	if (kind === "explain") return "Explain";
-	return "Question";
+/** The question card's label: the tool's own name for probe-phase calls.
+ *  `locale` is optional (English default) so the pure callers and tests
+ *  keep their signatures (i18n wave). */
+export function questionCardLabel(tool: string | undefined, kind: string, questionType: string | undefined, locale: AppLocale = "en"): string {
+	if (tool === "probe") return translate(locale, "question.label.probe");
+	if (tool === "recall") return translate(locale, "question.label.recall");
+	if (kind === "quiz") return questionType === "predict" ? translate(locale, "question.label.prediction") : translate(locale, "question.label.check");
+	if (kind === "explain") return translate(locale, "question.label.explain");
+	return translate(locale, "question.label.question");
 }
 
 /** What an answered card knows of the question it answered. Rendered
@@ -399,6 +404,7 @@ function QuestionDockForm({
 	onLayout,
 }: Omit<QuestionDockProps, "expanded" | "onExpand" | "reveal">) {
 	const kind = toolQuestionKind(toolName);
+	const { locale, t } = useI18n();
 	const controller = useOptionalInteractionLayers();
 	const rootRef = useRef<HTMLDivElement>(null);
 	const questionPartRef = useRef<HTMLDivElement>(null);
@@ -815,7 +821,7 @@ function QuestionDockForm({
 							sel.dontKnow ? "text-muted-foreground/50" : "text-muted-foreground",
 						)}
 					>
-						Confidence
+						{t("question.confidence")}
 					</span>
 					<div
 						className={cn(QC_CONFIDENCE_TRACK, sel.dontKnow && "opacity-40")}
@@ -844,9 +850,9 @@ function QuestionDockForm({
 							step={1}
 							value={CONFIDENCE_STOPS[confIdx]}
 							disabled={sel.dontKnow}
-							aria-label="Confidence — the probability your selected answer is correct"
-							aria-valuetext={`${CONFIDENCE_STOPS[confIdx]} percent`}
-							title="The probability your selected answer is correct — 50% is a coin flip. Adjust with ←/→."
+							aria-label={t("question.confidenceAria")}
+							aria-valuetext={t("question.percent", { value: CONFIDENCE_STOPS[confIdx] })}
+							title={t("question.confidenceTitle")}
 							data-testid="confidence-slider"
 							onChange={(e) => {
 								// Snap to the nearest stop; the rendered VALUE is the stop's own
@@ -894,8 +900,8 @@ function QuestionDockForm({
 	const questionPart = (
 		<div ref={questionPartRef} data-question-part="">
 			<div className={QC_LABEL}>
-				{questionCardLabel(toolName, kind, qd.questionType)}
-				{qd.mode === "multi-select" && " · select all that apply"}
+				{questionCardLabel(toolName, kind, qd.questionType, locale)}
+				{qd.mode === "multi-select" && t("question.selectAll")}
 			</div>
 			<div className={QC_QUESTION}>
 				<ToolContentResponse>{qd.question}</ToolContentResponse>
@@ -989,7 +995,7 @@ function QuestionDockForm({
 						>
 							{sel.dontKnow && <span className="size-1.5 rounded-full bg-current" />}
 						</span>
-						<span>I don't know</span>
+						<span>{t("question.dontKnow")}</span>
 					</button>
 				)}
 
@@ -1058,7 +1064,7 @@ function QuestionDockForm({
 										submit();
 									}
 							}}
-							placeholder={OTHER_PLACEHOLDER}
+							placeholder={t("question.otherPlaceholder")}
 							className={QC_OTHER_INPUT}
 							onClick={(e) => e.stopPropagation()}
 						/>
@@ -1125,7 +1131,7 @@ function QuestionDockForm({
 					className="rounded-[10px] border border-border/70 bg-background/60 transition-colors focus-within:border-primary/50"
 				>
 					<div className="px-2.5 pt-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-						{qd.mode === "text" ? "Your answer" : "YOUR THINKING"}
+						{qd.mode === "text" ? t("question.yourAnswer") : t("question.yourThinking")}
 					</div>
 					{qd.mode === "text" ? (
 						<PathInput
@@ -1153,7 +1159,7 @@ function QuestionDockForm({
 									submit();
 								}
 							}}
-							placeholder="Type your answer…"
+							placeholder={t("question.answerPlaceholder")}
 							className="field-sizing-content lh-input max-h-48 min-h-10 w-full resize-none bg-transparent px-2.5 py-2 outline-none placeholder:text-muted-foreground"
 						/>
 					) : (
@@ -1184,7 +1190,7 @@ function QuestionDockForm({
 									submit();
 								}
 							}}
-							placeholder="Why this answer? Whatever comes to mind."
+							placeholder={t("question.thinkingPlaceholder")}
 							className={cn(
 								"field-sizing-content lh-input max-h-48 w-full resize-none bg-transparent px-2.5 py-2 outline-none placeholder:text-muted-foreground/70",
 								// Phase-scaled prominence: teaching invites depth,
@@ -1202,7 +1208,7 @@ function QuestionDockForm({
 							disabled={!canSubmit || compactionRunning || preparing}
 							className="ml-auto h-9 rounded-[6px] px-3.5 text-sm font-medium"
 						>
-							Submit answer
+							{t("question.submit")}
 						</Button>
 					</div>
 				</div>

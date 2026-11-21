@@ -45,6 +45,27 @@
 			"working": "Working…"
 		}
 	},
+	"deleteSource": {
+		"label": "Delete sources",
+		"heading": "Delete selected sources and folders?",
+		"contributions": "Removes these sources’ contributions to propositions and reasoning chains. Knowledge supported by other sources survives; knowledge supported only by these sources is removed.",
+		"filesNote": "Imported source records are removed, but original files on disk are never changed. Selected folders are removed only when empty; folders needed by kept sessions remain.",
+		"sessionsCheckbox": "{count, plural, one {Also delete the # selected session} other {Also delete the # selected sessions}}",
+		"sessionsNote": "Unchecked, conversations stay in their current folders and can be extracted again. Either way, their graph contributions and extraction coverage are cleared. Checking this also permanently deletes their messages and background jobs."
+	},
+	"deleteNode": {
+		"label": "Delete node",
+		"headingOne": "Delete node?",
+		"headingMany": "Delete {count} nodes?",
+		"headingNodesAndFolders": "Delete nodes and remove empty folders?",
+		"headingFolders": "Remove empty folders?",
+		"andMore": ", and {count} more",
+		"emptyFolders": "Empty folders: {names}",
+		"permanenceOne": "This permanently deletes the node — this cannot be undone.",
+		"permanenceMany": "This permanently deletes all {count} nodes — this cannot be undone.",
+		"onlyNamedFolders": "Only the named empty folders are removed. ",
+		"keptLine": "Sessions, imported source records, and non-empty folders are kept."
+	},
 	"delete": {
 		"session": {
 			"label": "Delete session",
@@ -71,7 +92,110 @@
 		"tryAgain": "Try again",
 		"failed": "Delete failed ({status})",
 		"failedNetwork": "Delete failed — network error. Try again.",
-		"folderChanged": "This folder changed. Nothing was deleted."
+		"folderChanged": "This folder changed. Nothing was deleted.",
+		"nodeExtractionRunning": "An extraction is running — try again when the activity dock drains."
+	},
+	"abort": {
+		"turn": {
+			"title": "Abort this turn?",
+			"line": "The partial answer stays in the transcript.",
+			"action": "Abort"
+		},
+		"question": {
+			"title": "Dismiss this question?",
+			"line": "Skipped — the teacher moves on without it.",
+			"action": "Dismiss"
+		},
+		"problem": {
+			"title": "Discard this problem?",
+			"line": "The problem is dropped — no solution is revealed.",
+			"action": "Discard"
+		},
+		"busyTail": "The working turn stops too."
+	},
+	"graph": {
+		"title": "Knowledge graph",
+		"sessions": "Sessions",
+		"noSessions": "No sessions recorded.",
+		"noMatchingNodes": "No matching nodes.",
+		"searchNodes": "Search nodes",
+		"searchPlaceholder": "Search nodes…",
+		"costsHint": "Graph costs — click for details",
+		"display": {
+			"title": "Graph display settings",
+			"nodeSize": "Node size",
+			"edgeWidth": "Edge width",
+			"arrowheadSize": "Arrowhead size",
+			"labelSize": "Label size",
+			"labelsUntilZoom": "Labels until zoom",
+			"backgroundColors": "Background colors",
+			"dilation": "Dilation",
+			"blur": "Blur",
+			"edgeAlpha": "Edge alpha",
+			"bitmapResolution": "Bitmap resolution",
+			"clusterLabels": "Cluster labels",
+			"clusterLabelSize": "Cluster label size",
+			"nodeRepulsion": "Node repulsion",
+			"edgeAttraction": "Edge attraction",
+			"edgeLength": "Edge length",
+			"centralPull": "Central pull",
+			"clusterPull": "Cluster pull",
+			"friction": "Friction",
+			"depthStrength": "Depth strength",
+			"depthSpacing": "Depth spacing",
+			"baseRingRadius": "Base ring radius"
+		}
+	},
+	"practice": {
+		"problem": "Problem",
+		"placeholder": "Work here, think out loud.",
+		"compacting": "compacting session…",
+		"submitHint": "↵ submits · ⇧↵ newline",
+		"submitSubmit": "Submit",
+		"submitThinking": "Submit thinking"
+	},
+	"question": {
+		"label": {
+			"probe": "Probe",
+			"recall": "Recall",
+			"prediction": "Prediction",
+			"check": "Check",
+			"explain": "Explain",
+			"question": "Question"
+		},
+		"selectAll": " · select all that apply",
+		"confidence": "Confidence",
+		"confidenceAria": "Confidence — the probability your selected answer is correct",
+		"confidenceTitle": "The probability your selected answer is correct — 50% is a coin flip. Adjust with ←/→.",
+		"percent": "{value} percent",
+		"dontKnow": "I don't know",
+		"otherPlaceholder": "Type your own answer…",
+		"answerPlaceholder": "Type your answer…",
+		"thinkingPlaceholder": "Why this answer? Whatever comes to mind.",
+		"yourAnswer": "Your answer",
+		"yourThinking": "YOUR THINKING",
+		"submit": "Submit answer"
+	},
+	"chat": {
+		"phase": {
+			"probe": "Probing",
+			"plan": "Planning",
+			"teach": "Teaching"
+		},
+		"planDivider": "Plan · {count, plural, one {# node} other {# nodes}}",
+		"planChip": "Plan",
+		"planChipHint": "Open the full plan",
+		"sideConversation": {
+			"open": "Open side conversation",
+			"ask": "Ask a side question"
+		},
+		"titleAria": "Session title",
+		"titleRenameHint": "Rename this session",
+		"retrying": "Retrying…",
+		"error": "Something went wrong: {message}",
+		"retry": "Retry",
+		"nextPlaceholder": "Ask anything, or press Enter for the next one.",
+		"practiceNext": "Next problem"
 	},
 	"newSession": {
 		"practiceTitle": "New practice session",
