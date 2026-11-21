@@ -233,6 +233,23 @@
 		"startupFailedTitle": "LearnHarness could not start",
 		"startupFailedBody": "The local server did not start. Check the log and try again."
 	},
+	"pluginChrome": {
+		"preparingQuestion": "Preparing question…",
+		"questionUnavailable": "Question unavailable",
+		"preparingProblem": "Preparing problem…",
+		"problemUnavailable": "Problem unavailable",
+		"dismissQuestion": "Dismiss question",
+		"questionDismissed": "Question dismissed",
+		"yourThinking": "Your thinking",
+		"notInstalled": "Plugin is not installed.",
+		"disabled": "This plugin is disabled.",
+		"viewUnavailable": "This plugin view is not available.",
+		"settings": "Plugin settings",
+		"loading": "Loading plugin…",
+		"backHome": "Back to home",
+		"graphActions": "Plugin graph actions",
+		"moreActions": "More plugin actions"
+	},
 	"dictationLanguage": {
 		"aria": "Dictation language: {language}",
 		"searchAria": "Search dictation languages",

@@ -233,6 +233,23 @@
 		"startupFailedTitle": "LearnHarness 无法启动",
 		"startupFailedBody": "本地服务器未能启动。请查看日志后重试。"
 	},
+	"pluginChrome": {
+		"preparingQuestion": "正在准备题目…",
+		"questionUnavailable": "题目不可用",
+		"preparingProblem": "正在准备练习…",
+		"problemUnavailable": "练习不可用",
+		"dismissQuestion": "跳过该问题",
+		"questionDismissed": "问题已跳过",
+		"yourThinking": "你的思路",
+		"notInstalled": "插件未安装。",
+		"disabled": "该插件已禁用。",
+		"viewUnavailable": "该插件视图不可用。",
+		"settings": "插件设置",
+		"loading": "加载插件中…",
+		"backHome": "返回主页",
+		"graphActions": "插件图谱操作",
+		"moreActions": "更多插件操作"
+	},
 	"dictationLanguage": {
 		"aria": "听写语言：{language}",
 		"searchAria": "搜索听写语言",
