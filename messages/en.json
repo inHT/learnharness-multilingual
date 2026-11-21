@@ -233,6 +233,28 @@
 		"startupFailedTitle": "LearnHarness could not start",
 		"startupFailedBody": "The local server did not start. Check the log and try again."
 	},
+	"artifacts": {
+		"failed": "failed",
+		"sources": "Sources",
+		"figure": "Figure",
+		"invertDemo": "Invert demo brightness",
+		"invertFigure": "Invert figure brightness",
+		"invertColors": "Invert colors",
+		"downloadHtml": "Download demo as HTML",
+		"downloadHtmlShort": "Download as HTML",
+		"downloadSvg": "Download figure as SVG",
+		"downloadSvgShort": "Download as SVG",
+		"openFullscreen": "Open figure fullscreen",
+		"openFullscreenShort": "Open fullscreen",
+		"demoError": "This demo threw an error",
+		"recoveryFailed": "Background job recovery/delivery failed",
+		"abortedByLearner": "aborted by the learner",
+		"readingComplete": "reading complete",
+		"complete": "complete",
+		"researchLabel": "Research",
+		"pagesRead": "· read {count} pages",
+		"sourcesCount": "· {count} sources"
+	},
 	"pluginChrome": {
 		"preparingQuestion": "Preparing question…",
 		"questionUnavailable": "Question unavailable",
@@ -336,6 +358,7 @@
 		"title": "Background agents",
 		"totalCostHint": "Total running cost (inferred)",
 		"cost": "Cost",
+		"context": "Context",
 		"model": "Model",
 		"steps": "Steps"
 	},

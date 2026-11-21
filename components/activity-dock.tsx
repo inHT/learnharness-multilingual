@@ -508,7 +508,7 @@ function ActivityBlobRow({
 							</span>
 						</div>
 						<div className="flex justify-between gap-2">
-							<span>{t("stats.context")}</span>
+							<span>{t("activity.context")}</span>
 							<span className="tabular-nums text-card-foreground" data-testid="activity-blob-context">
 								{blob.context === null
 									? "—"

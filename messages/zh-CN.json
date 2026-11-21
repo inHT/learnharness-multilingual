@@ -233,6 +233,28 @@
 		"startupFailedTitle": "LearnHarness 无法启动",
 		"startupFailedBody": "本地服务器未能启动。请查看日志后重试。"
 	},
+	"artifacts": {
+		"failed": "失败",
+		"sources": "来源",
+		"figure": "图像",
+		"invertDemo": "反转演示亮度",
+		"invertFigure": "反转图像亮度",
+		"invertColors": "反转颜色",
+		"downloadHtml": "下载演示 HTML",
+		"downloadHtmlShort": "下载为 HTML",
+		"downloadSvg": "下载图像 SVG",
+		"downloadSvgShort": "下载为 SVG",
+		"openFullscreen": "全屏查看图像",
+		"openFullscreenShort": "全屏",
+		"demoError": "演示出错了",
+		"recoveryFailed": "后台任务恢复/投递失败",
+		"abortedByLearner": "已由学习者中止",
+		"readingComplete": "阅读完成",
+		"complete": "完成",
+		"researchLabel": "研究",
+		"pagesRead": "· 阅读 {count} 页",
+		"sourcesCount": "· {count} 个来源"
+	},
 	"pluginChrome": {
 		"preparingQuestion": "正在准备题目…",
 		"questionUnavailable": "题目不可用",
@@ -336,6 +358,7 @@
 		"title": "后台代理",
 		"totalCostHint": "总运行消耗（推算）",
 		"cost": "消耗",
+		"context": "上下文",
 		"model": "模型",
 		"steps": "步数"
 	},

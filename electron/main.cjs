@@ -231,8 +231,9 @@ function startServer(port) {
 						LH_DATA_DIR: DATA_DIR(),
 						// The OS locale (i18n wave, 2026-11-21): the server resolves the
 						// interface language from the record + this tag — app.getLocale()
-						// is the shell's truth, the child has no window to ask.
-						LH_OS_LOCALE: app.getLocale(),
+						// is the shell's truth, the child has no window to ask. The
+						// absence guard keeps a minimal test shell bootable.
+						LH_OS_LOCALE: typeof app.getLocale === "function" ? app.getLocale() : "",
 					// The auth/keys store — the child reads AND writes this file itself
 					// (no env injection anymore: a spawn-time copy would shadow every
 					// settings-page key change until restart; env wins over file).
