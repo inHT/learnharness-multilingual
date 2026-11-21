@@ -41,6 +41,8 @@ import { dispatchFocusedPluginShortcut, hasLegacyInteractionForeground, isIntera
 import { useSettingsDialog } from "@/components/settings/settings-dialog.tsx";
 import { usePlugins } from "./plugins";
 import { dispatchPluginActionShortcut, pluginShortcutScopeLabel, usePluginShortcutRows } from "./plugin-shortcuts";
+import { useI18n } from "@/src/i18n/react";
+import { translateOr } from "@/src/i18n";
 
 // Re-exported for the contract pin (tests/keyboard-toggle-sidebar.test.ts):
 // the dispatcher composes event names through the ONE helper — a second
@@ -168,12 +170,13 @@ export function KeyboardShortcuts() {
  *  stay discoverable. */
 function CheatSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
 	const headingId = useId();
+	const { locale } = useI18n();
 	const { rows: pluginRows } = usePluginShortcutRows();
 	const scopes = ["global", "chat", "graph"] as const;
 	const scopeLabels: Record<(typeof scopes)[number], string> = {
-		global: "Global",
-		chat: "Chat",
-		graph: "Graph view",
+		global: translateOr(locale, "shortcuts.scope.global", "Global"),
+		chat: translateOr(locale, "shortcuts.scope.chat", "Chat"),
+		graph: translateOr(locale, "shortcuts.scope.graph", "Graph view"),
 	};
 	return (
 		<HostDialog open={open} onClose={() => { onClose(); return "closed"; }} aria-labelledby={headingId}
@@ -187,8 +190,8 @@ function CheatSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
 			/>}
 		>
 				<div className="mb-4 flex items-baseline justify-between">
-					<span id={headingId} role="heading" aria-level={2} className="text-sm font-medium text-card-foreground">Keyboard shortcuts</span>
-					<span className="text-xs text-muted-foreground">Esc to close</span>
+					<span id={headingId} role="heading" aria-level={2} className="text-sm font-medium text-card-foreground">{translateOr(locale, "shortcuts.title", "Keyboard shortcuts")}</span>
+					<span className="text-xs text-muted-foreground">{translateOr(locale, "shortcuts.escToClose", "Esc to close")}</span>
 				</div>
 				{scopes.map((scope) => {
 					const actions = KEYBOARD_ACTIONS.filter((a) => a.scope === scope);
@@ -201,7 +204,7 @@ function CheatSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
 							<div className="flex flex-col gap-1">
 								{actions.map((a) => (
 									<div key={a.id} className="flex items-center justify-between gap-4 text-sm">
-										<span className="text-muted-foreground">{a.label}</span>
+										<span className="text-muted-foreground">{translateOr(locale, `shortcuts.action.${a.id}`, a.label)}</span>
 										<kbd className="rounded-md border border-border bg-background px-1.5 py-0.5 font-mono text-xs text-card-foreground">
 											{formatBinding(bindingForAction(a.id))}
 										</kbd>

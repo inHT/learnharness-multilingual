@@ -22,7 +22,7 @@ import {
 import { FACTORY_SETTINGS, sanitizeUserSettings } from "../src/core/settings.ts";
 import { resolveSettings } from "../src/core/settings-resolution.ts";
 import { parseGeneralSettingsBody } from "../src/server/settings-body.ts";
-import { translate, formatTemplate, DEFAULT_LOCALE, CATALOG_LOCALES } from "../src/i18n/index.ts";
+import { translate, translateOr, formatTemplate, DEFAULT_LOCALE, CATALOG_LOCALES } from "../src/i18n/index.ts";
 
 describe("core/locales: the catalog vocabulary", () => {
 	it("lists en and zh-CN, both accepted as settings values", () => {
@@ -143,9 +143,16 @@ describe("src/i18n: catalog lookup + ICU", () => {
 		assert.equal(translate("en", "settings.general.language.label"), "Language");
 	});
 
-	it("a key missing from a translation falls back to English", () => {
-		// zh-CN.json starts empty in phase 1 — English serves every key.
-		assert.equal(translate("zh-CN", "settings.general.language.label"), "Language");
+	it("a key present in a translation resolves to the translated value", () => {
+		assert.equal(translate("zh-CN", "settings.general.language.label"), "语言");
+	});
+
+	it("the fallback chain (translation → English → key/fallback) stays intact", () => {
+		// Every catalog is complete now, so the English-fallback half is
+		// exercised through translateOr's explicit fallback: a key missing
+		// from every catalog returns the caller's runtime string.
+		assert.equal(translateOr("zh-CN", "no.such.key", "runtime wording"), "runtime wording");
+		assert.equal(translateOr("zh-CN", "settings.general.language.label", "runtime wording"), "语言");
 	});
 
 	it("a key missing everywhere returns the key itself (never blank)", () => {

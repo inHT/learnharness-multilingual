@@ -83,3 +83,12 @@ export function translate(locale: AppLocale, key: string, params?: Record<string
 	if (template === undefined) return key;
 	return formatTemplate(locale, template, params);
 }
+
+/** Like translate, but a key missing from EVERY catalog returns `fallback`
+ *  instead of the key — for wording that already exists as a runtime
+ *  string (the keyboard registry's labels, server error lines). */
+export function translateOr(locale: AppLocale, key: string, fallback: string, params?: Record<string, unknown>): string {
+	const template = lookup(CATALOGS[locale], key) ?? lookup(CATALOGS[DEFAULT_LOCALE], key);
+	if (template === undefined) return fallback;
+	return formatTemplate(locale, template, params);
+}

@@ -1,0 +1,8 @@
+{
+	"note": "允许译名与英文完全相同的词条：品牌、协议名、模型名、OK、文件扩展名、纯标点模板。校验脚本 scripts/check-translations.mjs 跳过这些键的“未翻译”检查。",
+	"keys": [
+		"delete.folder.quotedName",
+		"settings.keys.baseUrlPlaceholder",
+		"settings.plugins.installStep2Middle"
+	]
+}

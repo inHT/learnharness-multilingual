@@ -50,14 +50,17 @@ import { BUNDLED_READING_FONTS, useAppearance } from "./appearance.tsx";
 import { FontMenuList } from "./model-menu";
 import { ThemeCards } from "./theme-cards.tsx";
 import { CommitInput, SettingsMenuTrigger, SettingsRow, Toggle } from "./controls.tsx";
+import { useT } from "@/src/i18n/react";
+import { translate } from "@/src/i18n";
+import type { AppLocale } from "@/src/core";
 
 /** The slider position past the last width step: Full (no cap). */
 const TRANSCRIPT_FULL_POSITION = TRANSCRIPT_WIDTH_MAX_REM + TRANSCRIPT_WIDTH_STEP_REM;
 
 /** The transcript width's label: px at the root's 16px rem, or Full.
- *  Exported for tests. */
-export function transcriptWidthLabel(rem: number | null): string {
-	return rem === null ? "Full" : `${rem * 16}px`;
+ *  Exported for tests; locale optional (English default). */
+export function transcriptWidthLabel(rem: number | null, locale: AppLocale = "en"): string {
+	return rem === null ? translate(locale, "settings.appearance.full") : `${rem * 16}px`;
 }
 
 /**
@@ -66,6 +69,7 @@ export function transcriptWidthLabel(rem: number | null): string {
  * native `change` (release / keyboard step) — not one write per tick.
  */
 function TranscriptWidthSlider({ value, onCommit }: { value: number | null; onCommit: (rem: number | null) => void }) {
+	const t = useT();
 	const position = value ?? TRANSCRIPT_FULL_POSITION;
 	const [draft, setDraft] = useState(position);
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -88,7 +92,7 @@ function TranscriptWidthSlider({ value, onCommit }: { value: number | null; onCo
 			<input
 				ref={inputRef}
 				type="range"
-				aria-label="Transcript width"
+				aria-label={t("settings.appearance.transcriptWidth")}
 				aria-valuetext={transcriptWidthLabel(draftRem)}
 				data-testid="input-transcript-width"
 				min={TRANSCRIPT_WIDTH_MIN_REM}
@@ -149,20 +153,21 @@ export function composeFontFamily(
 	return { ...appearance, fontFamily: value === "" ? null : value };
 }
 
-/** The Colors grid's labels and the one hint that explains a key. */
-const COLOR_LABELS: Record<ThemeColorKey, { label: string; note?: string }> = {
-	background: { label: "Background" },
-	accent: { label: "Accent", note: "Focus rings, toggles, selection" },
-	surface: { label: "Surface", note: "Cards, inputs, sidebar" },
-	bold: { label: "Bold" },
-	border: { label: "Border" },
-	italic: { label: "Italic" },
-	text: { label: "Text" },
-	code: { label: "Inline code" },
-	textMuted: { label: "Muted text" },
-	error: { label: "Error" },
-	success: { label: "Success" },
-	warning: { label: "Warning" },
+/** The Colors grid's labels and the one hint that explains a key.
+ *  Catalog keys (i18n wave); resolved with t() at render. */
+const COLOR_LABELS: Record<ThemeColorKey, { labelKey: string; noteKey?: string }> = {
+	background: { labelKey: "settings.appearance.colors.background" },
+	accent: { labelKey: "settings.appearance.colors.accent", noteKey: "settings.appearance.colors.accentNote" },
+	surface: { labelKey: "settings.appearance.colors.surface", noteKey: "settings.appearance.colors.surfaceNote" },
+	bold: { labelKey: "settings.appearance.colors.bold" },
+	border: { labelKey: "settings.appearance.colors.border" },
+	italic: { labelKey: "settings.appearance.colors.italic" },
+	text: { labelKey: "settings.appearance.colors.text" },
+	code: { labelKey: "settings.appearance.colors.code" },
+	textMuted: { labelKey: "settings.appearance.colors.textMuted" },
+	error: { labelKey: "settings.appearance.colors.error" },
+	success: { labelKey: "settings.appearance.colors.success" },
+	warning: { labelKey: "settings.appearance.colors.warning" },
 };
 
 /** The legacy test ids of the three pre-theme rows (kept stable). */
@@ -220,8 +225,11 @@ function ColorOverrideRow({
 	effective: string;
 	onCommit: (next: string) => boolean | Promise<boolean>;
 }) {
-	const { label, note } = COLOR_LABELS[colorKey];
-	const empty = `Empty = ${themeColor}`;
+	const t = useT();
+	const { labelKey, noteKey } = COLOR_LABELS[colorKey];
+	const label = t(labelKey);
+	const note = noteKey ? t(noteKey) : undefined;
+	const empty = t("settings.appearance.colors.empty", { color: themeColor });
 	return (
 		<SettingsRow label={label} hint={note ? `${note} · ${empty}` : empty} testid={`row-color-${colorKey}`}>
 			<span className="flex items-center gap-2">
@@ -234,7 +242,7 @@ function ColorOverrideRow({
 				<CommitInput
 					value={value}
 					placeholder={themeColor}
-					ariaLabel={`${label.toLowerCase()} hex`}
+					ariaLabel={t("settings.appearance.colors.hexAria", { color: label.toLowerCase() })}
 					testid={LEGACY_TESTIDS[colorKey] ?? `input-color-${colorKey}`}
 					onCommit={onCommit}
 				/>
@@ -252,6 +260,7 @@ export function AppearanceSection({
 	/** PUT the whole appearance section; the page re-applies on success. */
 	onSectionChange: (next: AppearanceSettings) => boolean | Promise<boolean>;
 }) {
+	const t = useT();
 	const { appearance: resolved, activeTheme, colors, themes, refreshThemes } = useAppearance();
 	const md = appearance?.mdRendering;
 
@@ -364,7 +373,7 @@ export function AppearanceSection({
 						onClick={() => onSectionChange(clearColorOverrides(appearance))}
 						className="h-6 shrink-0 rounded-sm px-2 font-ui text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
 					>
-						Reset all
+						{t("settings.appearance.resetAll")}
 					</button>
 				</div>
 				<div className="grid grid-cols-2 gap-x-10 gap-y-2">
@@ -380,10 +389,10 @@ export function AppearanceSection({
 					))}
 				</div>
 			</div>
-			<p className="mt-5 mb-2 text-xs uppercase tracking-widest text-muted-foreground">Typography</p>
+			<p className="mt-5 mb-2 text-xs uppercase tracking-widest text-muted-foreground">{t("settings.appearance.typography")}</p>
 			<SettingsRow
-				label="Reading font"
-				hint={`Empty = ${DEFAULT_READING_FONT}`}
+				label={t("settings.appearance.readingFont")}
+				hint={t("settings.appearance.colors.empty", { color: DEFAULT_READING_FONT })}
 				testid="row-font"
 			>
 				<span ref={fontMenuOpen ? menuAnchorRef : undefined} className="relative flex items-center gap-2">
@@ -397,7 +406,7 @@ export function AppearanceSection({
 						const triggerButton = (
 							<SettingsMenuTrigger
 								value={appearance?.fontFamily || DEFAULT_READING_FONT}
-								aria-label="Reading font"
+								aria-label={t("settings.appearance.readingFont")}
 								aria-expanded={fontMenuOpen}
 								data-testid="font-trigger"
 								onClick={openFontMenu}
@@ -407,7 +416,7 @@ export function AppearanceSection({
 						return fontMenuOpen ? (
 							triggerButton
 						) : (
-							<Hint label="Choose from your installed fonts" side="left">
+							<Hint label={t("settings.appearance.chooseInstalled")} side="left">
 								{triggerButton}
 							</Hint>
 						);
@@ -438,12 +447,12 @@ export function AppearanceSection({
 					)}
 				</span>
 			</SettingsRow>
-			<SettingsRow label="Reading font size" hint={`${resolved.proseFontSize}px`} testid="row-prose-size">
+			<SettingsRow label={t("settings.appearance.fontSize")} hint={`${resolved.proseFontSize}px`} testid="row-prose-size">
 				<CommitInput
 					type="number"
 					value={String(appearance?.proseFontSize ?? "")}
 					placeholder="16"
-					ariaLabel="prose font size"
+					ariaLabel={t("settings.appearance.fontSizeAria")}
 					testid="input-prose-size"
 					onCommit={(v) => {
 						// Empty = factory default (owner, fix wave): omit the key so the record
@@ -458,33 +467,33 @@ export function AppearanceSection({
 					}}
 				/>
 			</SettingsRow>
-			<SettingsRow label="Code ligatures" testid="row-code-ligatures">
+			<SettingsRow label={t("settings.appearance.codeLigatures")} testid="row-code-ligatures">
 				<Toggle
 					checked={resolved.codeLigatures}
-					label="Code ligatures"
+					label={t("settings.appearance.codeLigatures")}
 					onChange={(on) => onSectionChange({ ...appearance, codeLigatures: on })}
 				/>
 			</SettingsRow>
-			<SettingsRow label="Session names in serif" testid="row-session-serif">
+			<SettingsRow label={t("settings.appearance.sessionNamesSerif")} testid="row-session-serif">
 				<Toggle
 					checked={appearance?.sessionNameSerif ?? true}
-					label="session names serif"
+					label={t("settings.appearance.sessionNamesSerifAria")}
 					onChange={(on) => onSectionChange({ ...appearance, sessionNameSerif: on })}
 				/>
 			</SettingsRow>
-			<SettingsRow label="Compact session list" testid="row-compact-session-list">
+			<SettingsRow label={t("settings.appearance.compactSessionList")} testid="row-compact-session-list">
 				<Toggle
 					checked={resolved.compactSessionList}
-					label="Compact session list"
+					label={t("settings.appearance.compactSessionList")}
 					onChange={(on) => onSectionChange({ ...appearance, compactSessionList: on })}
 				/>
 			</SettingsRow>
-			<SettingsRow label="Heading weight" hint={`${resolved.mdRendering.headingWeight}`} testid="row-heading-weight">
+			<SettingsRow label={t("settings.appearance.headingWeight")} hint={`${resolved.mdRendering.headingWeight}`} testid="row-heading-weight">
 				<CommitInput
 					type="number"
 					value={String(md?.headingWeight ?? "")}
 					placeholder="900"
-					ariaLabel="heading weight"
+					ariaLabel={t("settings.appearance.headingWeightAria")}
 					testid="input-heading-weight"
 					onCommit={(v) => {
 						// Empty = factory default (owner, fix wave): Number("") is 0, so
@@ -501,17 +510,17 @@ export function AppearanceSection({
 					}}
 				/>
 			</SettingsRow>
-			<SettingsRow label="Transcript width" testid="row-transcript-width">
+			<SettingsRow label={t("settings.appearance.transcriptWidth")} testid="row-transcript-width">
 				<TranscriptWidthSlider
 					value={resolved.transcriptMaxWidth}
 					// Full = absence (the unset representation for numbers).
 					onCommit={(rem) => { void onSectionChange({ ...appearance, transcriptMaxWidth: rem ?? undefined }); }}
 				/>
 			</SettingsRow>
-			<SettingsRow label="Adapt question layout" testid="row-adaptive-questions">
+			<SettingsRow label={t("settings.appearance.adaptiveQuestions")} testid="row-adaptive-questions">
 				<Toggle
 					checked={resolved.adaptiveQuestions}
-					label="Adapt question layout"
+					label={t("settings.appearance.adaptiveQuestions")}
 					onChange={(on) => onSectionChange({ ...appearance, adaptiveQuestions: on })}
 				/>
 			</SettingsRow>
@@ -526,6 +535,7 @@ export function GraphSection({
 	graph: GraphSettings | undefined;
 	onSectionChange: (next: GraphSettings) => boolean | Promise<boolean>;
 }) {
+	const t = useT();
 	// Wave 7 collapse (owner ruling 2026-09-23): the section is the MASTER
 	// SWITCH — the embedding/clustering/labeling rungs are gone; clustering
 	// is the free birth-session partition derived on read, labels ARE session
@@ -546,10 +556,10 @@ export function GraphSection({
 			    switch below arrived: off ≠ no graph, off = the graph stops
 			    growing. The testid keeps the old name's shape (row-enabled) so
 			    this stays one rename, not a test re-pin. */}
-			<SettingsRow label="Extraction" hint="Off = the graph stops growing" testid="graph-row-enabled">
+			<SettingsRow label={t("settings.graph.extraction")} hint={t("settings.graph.extractionHint")} testid="graph-row-enabled">
 				<Toggle
 					checked={graph?.enabled ?? true}
-					label="extraction enabled"
+					label={t("settings.graph.extractionAria")}
 					onChange={(on) =>
 						// Compose, never replace-whole (the section PUT is, but the
 					// row must not drop its sibling field — fixed with the budget
@@ -562,15 +572,15 @@ export function GraphSection({
 			    round): display-only. Off = the home shows the chains view
 			    instead of the canvas. The ledgers, the pipeline, everything
 			    data keeps working — that is the extraction switch above. */}
-			<SettingsRow label="Graph rendering" hint="Off = home shows the chains view" testid="graph-row-rendering">
+			<SettingsRow label={t("settings.graph.rendering")} hint={t("settings.graph.renderingHint")} testid="graph-row-rendering">
 				<Toggle
 					checked={graph?.rendering ?? true}
-					label="graph rendering enabled"
+					label={t("settings.graph.renderingAria")}
 					onChange={(on) => onSectionChange({ ...graph, rendering: on })}
 				/>
 			</SettingsRow>
 			<SettingsRow
-				label="Extraction chunk budget"
+				label={t("settings.graph.chunkBudget")}
 				hint={`${resolved.extractionChunkTokens} tok`}
 				testid="graph-row-chunk-tokens"
 			>
@@ -578,7 +588,7 @@ export function GraphSection({
 					type="number"
 					value={String(graph?.extractionChunkTokens ?? "")}
 					placeholder={String(resolved.extractionChunkTokens)}
-					ariaLabel="extraction chunk budget"
+					ariaLabel={t("settings.graph.chunkBudgetAria")}
 					testid="input-chunk-tokens"
 					onCommit={(v) => {
 						// Empty = factory default (the fix-wave discipline): absence is

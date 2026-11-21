@@ -1,2 +1,527 @@
 {
+	"common": {
+		"dismiss": "忽略",
+		"loading": "加载中…",
+		"cancel": "取消",
+		"delete": "删除",
+		"deleting": "删除中…",
+		"rename": "重命名",
+		"close": "关闭",
+		"back": "返回",
+		"save": "保存"
+	},
+	"time": {
+		"justNow": "刚刚",
+		"minutesAgo": "{count} 分钟前",
+		"hoursAgo": "{count} 小时前",
+		"daysAgo": "{count} 天前"
+	},
+	"sidebar": {
+		"open": "打开侧边栏",
+		"close": "关闭侧边栏",
+		"home": "主页",
+		"teaching": "教学",
+		"practice": "练习",
+		"newTeachingAria": "新建教学会话",
+		"newPracticeAria": "新建练习会话",
+		"sessions": "会话",
+		"searchSessions": "搜索会话",
+		"searchPlaceholder": "搜索…",
+		"addFolder": "添加文件夹",
+		"filterAll": "全部",
+		"noSessionsMatch": "没有匹配的会话。",
+		"noSessionsYet": "还没有会话。",
+		"moveOutsideFolders": "移出所有文件夹",
+		"settings": "设置",
+		"exportMarkdown": "导出为 Markdown…",
+		"deleteWithEllipsis": "删除…",
+		"newSubfolder": "新建子文件夹",
+		"practiceSession": "练习会话",
+		"renameSession": "重命名会话",
+		"meta": {
+			"waiting": "等待输入 · {time}",
+			"compacting": "正在压缩上下文 · {time}",
+			"problemWaiting": "题目等待作答 · {time}",
+			"working": "处理中…"
+		}
+	},
+	"deleteSource": {
+		"label": "删除来源",
+		"heading": "删除所选来源和文件夹？",
+		"contributions": "删除这些来源对命题和推理链的贡献。其他来源也支持的知识会保留；仅由这些来源支持的知识会被移除。",
+		"filesNote": "已导入的来源记录会被移除，但磁盘上的原始文件不会改动。所选文件夹仅在为空时删除；被保留会话需要的文件夹会留下。",
+		"sessionsCheckbox": "同时删除 {count} 个所选会话",
+		"sessionsNote": "不勾选时，对话会留在当前文件夹中，日后仍可重新抽取。无论是否勾选，它们的图谱贡献和抽取覆盖都会被清除。勾选还会永久删除它们的消息和后台任务。"
+	},
+	"deleteNode": {
+		"label": "删除节点",
+		"headingOne": "删除节点？",
+		"headingMany": "删除 {count} 个节点？",
+		"headingNodesAndFolders": "删除节点并移除空文件夹？",
+		"headingFolders": "移除空文件夹？",
+		"andMore": "，等 {count} 个",
+		"emptyFolders": "空文件夹：{names}",
+		"permanenceOne": "这会永久删除该节点——无法撤销。",
+		"permanenceMany": "这会永久删除全部 {count} 个节点——无法撤销。",
+		"onlyNamedFolders": "只删除列出的空文件夹。",
+		"keptLine": "会话、已导入的来源记录和非空文件夹都会保留。"
+	},
+	"delete": {
+		"session": {
+			"label": "删除会话",
+			"heading": "删除会话？",
+			"body": "这会永久移除该会话——消息、后台任务和抽取记录。它加入图谱的内容会保留，除非勾选下面的选项。此操作无法撤销。"
+		},
+		"traces": {
+			"title": "同时移除它的图谱痕迹",
+			"body": "该会话的话题、关联和事件也会离开图谱。其他会话或导入笔记也覆盖的话题会保留；仅由该会话创建的话题会被完全移除。"
+		},
+		"folder": {
+			"label": "删除文件夹",
+			"heading": "删除文件夹？",
+			"body": "这会永久移除该文件夹及其中的 {what}——会话的消息、后台任务和抽取记录。它们加入图谱的内容会保留，除非勾选下面的选项。{notes}此操作无法撤销。",
+			"sessionCount": "{count} 个会话",
+			"subfolderCount": "{count} 个子文件夹",
+			"and": "和 ",
+			"notesMove": "其中 {count} 个导入笔记文件会移到 {target}。",
+			"topLevel": "顶层",
+			"quotedName": "“{name}”",
+			"tracesTitle": "同时移除它们的图谱痕迹",
+			"tracesBody": "这些会话的话题、关联和事件也会离开图谱。其他会话或导入笔记也覆盖的话题会保留；仅由这些会话创建的话题会被完全移除。"
+		},
+		"tryAgain": "重试",
+		"failed": "删除失败（{status}）",
+		"failedNetwork": "删除失败——网络错误，请重试。",
+		"folderChanged": "该文件夹已变更，未删除任何内容。",
+		"nodeExtractionRunning": "正在执行知识抽取——等活动栏清空后重试。"
+	},
+	"composer": {
+		"placeholder": "提问、作答，或引导这堂课…"
+	},
+	"abort": {
+		"turn": {
+			"title": "中止本回合？",
+			"line": "已生成的部分会留在记录里。",
+			"action": "中止"
+		},
+		"question": {
+			"title": "跳过这个问题？",
+			"line": "已跳过——老师会继续往下讲。",
+			"action": "跳过"
+		},
+		"problem": {
+			"title": "放弃这道题？",
+			"line": "题目将被丢弃，不会揭晓答案。",
+			"action": "放弃"
+		},
+		"busyTail": "正在进行的回合也会停止。"
+	},
+	"graph": {
+		"title": "知识图谱",
+		"sessions": "会话",
+		"noSessions": "还没有会话记录。",
+		"noMatchingNodes": "没有匹配的节点。",
+		"searchNodes": "搜索节点",
+		"searchPlaceholder": "搜索节点…",
+		"costsHint": "图谱消耗——点击查看详情",
+		"display": {
+			"title": "图谱显示设置",
+			"nodeSize": "节点大小",
+			"edgeWidth": "连线宽度",
+			"arrowheadSize": "箭头大小",
+			"labelSize": "标签大小",
+			"labelsUntilZoom": "标签显示至缩放",
+			"backgroundColors": "背景色",
+			"dilation": "膨胀",
+			"blur": "模糊",
+			"edgeAlpha": "连线透明度",
+			"bitmapResolution": "位图分辨率",
+			"clusterLabels": "聚类标签",
+			"clusterLabelSize": "聚类标签大小",
+			"nodeRepulsion": "节点斥力",
+			"edgeAttraction": "连线引力",
+			"edgeLength": "连线长度",
+			"centralPull": "中心引力",
+			"clusterPull": "聚类引力",
+			"friction": "摩擦",
+			"depthStrength": "深度强度",
+			"depthSpacing": "深度间距",
+			"baseRingRadius": "基础环半径"
+		}
+	},
+	"practice": {
+		"problem": "题目",
+		"placeholder": "在这里推演，把想法写出来。",
+		"compacting": "正在压缩会话…",
+		"submitHint": "↵ 提交 · ⇧↵ 换行",
+		"submitSubmit": "提交",
+		"submitThinking": "提交思路"
+	},
+	"question": {
+		"label": {
+			"probe": "摸底",
+			"recall": "回忆",
+			"prediction": "预测",
+			"check": "检测",
+			"explain": "讲解",
+			"question": "问题"
+		},
+		"selectAll": " · 多选",
+		"confidence": "置信度",
+		"confidenceAria": "置信度——所选答案正确的概率",
+		"confidenceTitle": "所选答案正确的概率——50% 等于抛硬币。用 ←/→ 调整。",
+		"percent": "{value}%",
+		"dontKnow": "我不知道",
+		"otherPlaceholder": "输入你自己的答案…",
+		"answerPlaceholder": "输入你的答案…",
+		"thinkingPlaceholder": "为什么选它？想到什么写什么。",
+		"yourAnswer": "你的答案",
+		"yourThinking": "你的思路",
+		"submit": "提交答案"
+	},
+	"chat": {
+		"phase": {
+			"probe": "摸底",
+			"plan": "规划",
+			"teach": "授课"
+		},
+		"planDivider": "计划 · {count} 个节点",
+		"planChip": "计划",
+		"planChipHint": "打开完整计划",
+		"sideConversation": {
+			"open": "打开侧边对话",
+			"ask": "追问侧边对话"
+		},
+		"titleAria": "会话标题",
+		"titleRenameHint": "重命名此会话",
+		"retrying": "重试中…",
+		"error": "出了点问题：{message}",
+		"retry": "重试",
+		"nextPlaceholder": "随便问，或按 Enter 进入下一题。",
+		"practiceNext": "下一题"
+	},
+	"newSession": {
+		"practiceTitle": "新建练习会话",
+		"teachTitle": "新建会话",
+		"practiceDescription": "从知识图谱中选节点、描述你想练习的内容，或带上自己的题目。",
+		"teachDescription": "老师会先摸底你已经掌握的部分。",
+		"practicePlaceholder": "你想练习什么？",
+		"teachPlaceholder": "你想学什么？",
+		"setupModels": "设置你的模型",
+		"addProviderKey": "添加服务商密钥",
+		"startAria": "开始会话",
+		"openingFailed": "无法打开会话。你的消息还在这里，请重新发送。"
+	},
+	"updateBanner": {
+		"ready": "LearnHarness {version} 已就绪",
+		"updateFallback": "更新",
+		"restartHint": "——重启以完成安装。",
+		"restart": "重启",
+		"dismiss": "忽略更新通知"
+	},
+	"minimalHome": {
+		"propositions": "{count} 个命题",
+		"chains": "{count} 条推理链",
+		"teachingSessions": "{count} 个教学会话",
+		"practiceSessions": "{count} 个练习会话",
+		"importedNotes": "{count} 篇导入笔记",
+		"emptyStart": "开始一个会话，进入学习。",
+		"emptyAttach": "用回形针或拖放添加你的材料。",
+		"chainsButton": "推理链",
+		"chainsHint": "全部推理链"
+	},
+	"activity": {
+		"title": "后台代理",
+		"totalCostHint": "总运行消耗（推算）",
+		"cost": "消耗",
+		"model": "模型",
+		"steps": "步数"
+	},
+	"stats": {
+		"title": "会话统计",
+		"context": "上下文（最近一次调用）",
+		"claudeWindowNote": "窗口由 Claude Code 报告；自动压缩时可能更低。",
+		"usage": "用量",
+		"totalCost": "总花费",
+		"cacheHitRate": "缓存命中率",
+		"manageChatGPT": "管理 ChatGPT 用量",
+		"unpricedTurns": "未计价回合"
+	},
+	"chainTable": {
+		"counts": "{chains} 条推理链 · {nodes} 个节点",
+		"close": "关闭推理链",
+		"expandSource": "展开来源 {name}",
+		"unlabeled": "未命名",
+		"notes": "笔记",
+		"deleteSelected": "删除所选来源和文件夹"
+	},
+	"modelPicker": {
+		"thinking": "思考"
+	},
+	"notesImport": {
+		"extract": "抽取文件到图谱",
+		"extracting": "抽取中…",
+		"extractShort": "抽取文件…",
+		"lessonNote": "课程材料请在会话中附加。",
+		"files": "文件",
+		"folder": "文件夹"
+	},
+	"reading": {
+		"placeholder": "阅读时想到什么就写什么。"
+	},
+	"sessionFind": {
+		"region": "会话内查找",
+		"label": "在会话中查找",
+		"placeholder": "在会话中查找…",
+		"previous": "上一个匹配",
+		"previousTitle": "上一个匹配（Shift+Enter）",
+		"next": "下一个匹配",
+		"nextTitle": "下一个匹配（Enter）",
+		"close": "关闭查找",
+		"closeTitle": "关闭查找（Esc）"
+	},
+	"keyboard": {
+		"fixed": "固定——属于本界面",
+		"pressKeys": "按下按键…",
+		"inactive": " · 未启用：",
+		"unbound": "未绑定",
+		"rebind": "重新绑定",
+		"clear": "清除",
+		"reset": "重置",
+		"storedNote": "保存在本机（lh:keymap）——仅覆盖项。"
+	},
+	"shortcuts": {
+		"title": "键盘快捷键",
+		"escToClose": "Esc 关闭",
+		"scope": {
+			"global": "全局",
+			"chat": "会话",
+			"graph": "图谱视图"
+		},
+		"action": {
+			"toggle-dictation": "切换听写",
+			"open-settings": "打开设置",
+			"open-model-picker": "模型选择器",
+			"cycle-thinking": "切换思考强度",
+			"toggle-sidebar": "切换会话侧边栏",
+			"sessions-search": "搜索会话",
+			"jump-graph": "图谱视图",
+			"new-session": "新建会话",
+			"rename-session": "重命名会话",
+			"toggle-user-thinking": "显示/隐藏你的思考",
+			"toggle-question-thread": "问题 · 请求提示（侧边对话）",
+			"find": "查找",
+			"cheat-sheet": "快捷键速查表",
+			"question-focus": "问题 · 在思路与选项间切换焦点",
+			"question-next-row": "问题 · 下一行",
+			"question-prev-row": "问题 · 上一行",
+			"question-pick-row": "问题 · 选择该行",
+			"question-submit": "问题 · 提交"
+		}
+	},
+	"setup": {
+		"slot": {
+			"strongRoster": "出题老师与授课老师",
+			"cheapRoster": "研究、演示构建、抽取、审校",
+			"visionRoster": "绘图与 PDF 阅读"
+		},
+		"chooseProvider": "选择你的 AI 服务商并粘贴 API 密钥。接下来再选模型。",
+		"provider": "服务商",
+		"pickProvider": "选择服务商…",
+		"pickModel": "选择模型…",
+		"needed": "待设置",
+		"close": "关闭设置",
+		"loadingModels": "加载模型中…"
+	},
+	"startupMessage": {
+		"closeAnnouncement": "关闭公告"
+	},
+	"settings": {
+		"title": "设置",
+		"sections": "设置分区",
+		"close": "关闭设置",
+		"nav": {
+			"providers": "服务商",
+			"agent": "代理",
+			"appearance": "外观",
+			"graph": "图谱",
+			"keyboard": "键盘",
+			"general": "通用",
+			"corePlugins": "核心插件",
+			"communityPlugins": "社区插件"
+		},
+		"agent": {
+			"modelCatalog": "模型目录",
+			"refreshCatalog": "刷新模型目录",
+			"refresh": {
+				"hint": "检查 Pi 的新模型",
+				"pending": "刷新中…",
+				"updated": "模型目录已更新。",
+				"unchanged": "模型目录没有变化。",
+				"noProviders": "没有已配置的服务商支持目录刷新。",
+				"failed": "刷新失败。当前目录仍可使用。"
+			},
+			"models": "模型",
+			"showAdvanced": "显示高级设置",
+			"hideAdvanced": "隐藏高级设置",
+			"catalogFailed": "无法加载模型目录。请检查连接后重试。",
+			"retry": "重试",
+			"slot": {
+				"strong": "强力",
+				"cheap": "经济",
+				"vision": "视觉",
+				"strongRoster": "会话使用的主模型",
+				"cheapRoster": "负责研究、构建演示和评分的助手",
+				"visionRoster": "负责绘图和读取 PDF 的助手",
+				"modelAria": "{slot}模型",
+				"thinkingAria": "{slot}思考强度",
+				"cacheAria": "{slot}缓存保留"
+			},
+			"cacheDefault": "缓存：默认",
+			"concurrency": {
+				"label": "并发后台请求",
+				"hint": "同时进行的后台模型请求上限。直接对话不受此限制。",
+				"aria": "并发后台请求"
+			},
+			"tools": "工具",
+			"graphTools": "图谱工具",
+			"graphToolsAria": "图谱工具",
+			"quizzing": "提问方式",
+			"quizzingHint": "两位老师检查你理解程度的方式",
+			"quizzingMechanics": "提问机制",
+			"multipleChoice": "选择题",
+			"freeRecall": "自由回忆",
+			"fileAccess": "文件访问",
+			"restrictFolders": "仅限列出的文件夹",
+			"folderPathAria": "允许的文件夹路径",
+			"folderPlaceholder": "绝对路径或 ~/文件夹",
+			"searchEngine": "搜索引擎",
+			"searchEngineAria": "搜索引擎",
+			"context": "上下文",
+			"compactionThreshold": "压缩阈值",
+			"compactionAria": "压缩阈值",
+			"includeReasoning": "在 token 估算中包含推理（仅 OpenAI Responses）",
+			"includeReasoningHint": "使用已保存的输出 token 用量来计算匹配的 OpenAI Responses 模型的推理重放。关闭时按原始文本估算。",
+			"includeReasoningAria": "在 token 估算中包含推理（仅 OpenAI Responses）",
+			"systemPrompts": "系统提示",
+			"systemPromptsHint": "用开关在默认提示和你保存的覆盖之间切换。",
+			"promptsFailed": "无法加载提示片段。"
+		},
+		"appearance": {
+			"resetAll": "全部重置",
+			"typography": "排版",
+			"readingFont": "阅读字体",
+			"chooseInstalled": "从已安装字体中选择",
+			"fontSize": "阅读字号",
+			"fontSizeAria": "正文字号",
+			"codeLigatures": "代码连字",
+			"sessionNamesSerif": "会话名使用衬线体",
+			"sessionNamesSerifAria": "会话名衬线体",
+			"compactSessionList": "紧凑会话列表",
+			"headingWeight": "标题字重",
+			"headingWeightAria": "标题字重",
+			"transcriptWidth": "记录宽度",
+			"transcriptWidthAria": "记录宽度",
+			"adaptiveQuestions": "自适应题目布局",
+			"full": "全宽",
+			"colors": {
+				"background": "背景",
+				"accent": "强调色",
+				"accentNote": "焦点环、开关、选区",
+				"surface": "表面",
+				"surfaceNote": "卡片、输入框、侧边栏",
+				"bold": "粗体",
+				"border": "边框",
+				"italic": "斜体",
+				"text": "正文",
+				"code": "行内代码",
+				"textMuted": "弱化文本",
+				"error": "错误",
+				"success": "成功",
+				"warning": "警告",
+				"empty": "留空 = {color}",
+				"hexAria": "{color} 十六进制值"
+			}
+		},
+		"graph": {
+			"extraction": "知识抽取",
+			"extractionHint": "关闭 = 图谱停止增长",
+			"extractionAria": "启用知识抽取",
+			"rendering": "图谱渲染",
+			"renderingHint": "关闭 = 主页显示推理链视图",
+			"renderingAria": "启用图谱渲染",
+			"chunkBudget": "抽取分块预算",
+			"chunkBudgetAria": "抽取分块预算"
+		},
+		"keys": {
+			"modelApiKeys": "模型 API 密钥",
+			"subscriptions": "订阅",
+			"externalCli": "外部 CLI",
+			"deepgramKey": "Deepgram API 密钥",
+			"pasteKey": "粘贴密钥…",
+			"loadingKeys": "加载密钥…",
+			"retry": "重试",
+			"customEndpoint": "自定义端点",
+			"baseUrlPlaceholder": "基础 URL，例如 http://localhost:11434/v1",
+			"baseUrlAria": "自定义端点基础 URL",
+			"modelIdsPlaceholder": "模型 ID，用逗号分隔——可选；端点没有 /models 列表时需要",
+			"modelIdsAria": "自定义端点模型 ID",
+			"authAria": "自定义端点认证方式",
+			"keyless": "免密钥",
+			"apiKey": "API 密钥",
+			"envSupplied": "环境变量提供了实际生效的密钥。要替换它请修改环境。",
+			"apiKeyAria": "自定义端点 API 密钥",
+			"reasoningReported": "推理强度：使用上报值",
+			"reasoningSupported": "推理强度：支持",
+			"reasoningUnsupported": "推理强度：不支持",
+			"budgetNote": "预算上限不会改变后端的上下文大小。留空先用上报值，再用回退值（8192 上下文 / 4096 输出）。自定义计价未知。",
+			"reasoningNote": "推理支持只是能力声明。强度选择器的“关闭”未必能停用自定义后端的默认思考。",
+			"reload": "重新加载配置"
+		},
+		"plugins": {
+			"trustWarning": "只启用你信任的插件。插件运行受信任的本地代码，拥有广泛的文件和网络访问权限，且不在沙箱中。插件损坏可能需要重启 LearnHarness。",
+			"howToInstall": "如何安装插件",
+			"installStep1": "把插件克隆或复制到下面的目录，用插件 ID 作为文件夹名。",
+			"installStep2Before": "源码项目请按仓库说明安装依赖并运行",
+			"installStep2Middle": "。预构建包已包含",
+			"installStep2After": "，无需构建。",
+			"installStep3": "刷新列表，然后启用插件。新插件默认禁用。",
+			"installStep4Before": "改动已加载的代码后请重启 LearnHarness。更新时保留",
+			"installStep4Middle": " 与",
+			"installStep4After": " 并列。",
+			"buildPlugin": "构建插件",
+			"authoringNote": "为你的编程代理下载编写技能。",
+			"downloadSkill": "下载编写技能",
+			"directory": "插件目录",
+			"refresh": "刷新插件",
+			"noneCore": "没有可用的核心插件。",
+			"noneCommunity": "尚未安装社区插件。",
+			"saving": "保存中…",
+			"error": "错误",
+			"enabled": "已启用",
+			"disabled": "已禁用",
+			"enable": "启用{name}",
+			"settingsFor": "{name} 的设置",
+			"loadingSettings": "加载插件设置…",
+			"settingsFailed": "无法加载插件设置。",
+			"noSettings": "没有可设置的项。"
+		},
+		"storedOnDevice": "保存在本机",
+		"loadingPlugins": "加载插件中…",
+		"loadingSettings": "加载设置中…",
+		"loadFailed": "无法加载设置——请刷新重试。",
+		"saveUnconfirmed": "无法确认设置已保存。你的输入已保留。",
+		"general": {
+			"language": {
+				"label": "语言",
+				"hint": "界面语言。听写有单独的设置，在“服务商”中。",
+				"system": "跟随系统"
+			},
+			"teachingLanguage": {
+				"label": "教学语言",
+				"hint": "教学回复使用的语言。仅对新会话生效；已有会话保持原语言。",
+				"follow": "跟随界面"
+			}
+		}
+	}
 }

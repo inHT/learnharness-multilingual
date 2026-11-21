@@ -62,6 +62,7 @@ import { Button } from "@/components/ui/button";
 import { PromptSegmentDialog, type PromptDeleteOutcome, type PromptSaveOutcome } from "./prompt-segment-dialog";
 import { PromptSegmentRow, promptSegmentName } from "./prompt-segment-row";
 import type React from "react";
+import { useT } from "@/src/i18n/react";
 import {
 	COMPACTION_THRESHOLD_FLOOR,
 	MODEL_SLOTS,
@@ -84,11 +85,12 @@ import { ChatGPTBackgroundAccess } from "./chatgpt-connection";
 import { NativeSubscriptionBackgroundAccess } from "./subscription-connections";
 
 /** One slot's display identity — the tier's roster as the row hint rides
- *  with the resolved default (owner: the hint ALWAYS names the default). */
-const SLOT_META: Record<ModelSlotName, { label: string; roster: string }> = {
-	strong: { label: "Strong", roster: "The main model for your sessions" },
-	cheap: { label: "Cheap", roster: "The assistants that research, build demos, and grade your work" },
-	vision: { label: "Vision", roster: "The assistants that draw and read PDFs" },
+ *  with the resolved default (owner: the hint ALWAYS names the default).
+ *  Catalog keys (i18n wave); resolved with t() at render. */
+const SLOT_META: Record<ModelSlotName, { labelKey: string; rosterKey: string }> = {
+	strong: { labelKey: "settings.agent.slot.strong", rosterKey: "settings.agent.slot.strongRoster" },
+	cheap: { labelKey: "settings.agent.slot.cheap", rosterKey: "settings.agent.slot.cheapRoster" },
+	vision: { labelKey: "settings.agent.slot.vision", rosterKey: "settings.agent.slot.visionRoster" },
 };
 
 /** The owner's final toggleable-tool list (confirm with the user before
@@ -96,14 +98,15 @@ const SLOT_META: Record<ModelSlotName, { label: string; roster: string }> = {
 export const TOGGLE_TOOLS = ["research", "demo", "visual", "pdf"] as const;
 
 const CATALOG_REFRESH_MESSAGES: Record<ModelCatalogRefreshOutcome | "pending" | "failed", string> = {
-	pending: "Refreshing…",
-	updated: "Model catalog updated.",
-	unchanged: "No catalog changes found.",
-	"no-providers": "No configured providers support catalog refresh.",
-	failed: "Could not refresh. Your current catalog is still available.",
+	pending: "settings.agent.refresh.pending",
+	updated: "settings.agent.refresh.updated",
+	unchanged: "settings.agent.refresh.unchanged",
+	"no-providers": "settings.agent.refresh.noProviders",
+	failed: "settings.agent.refresh.failed",
 };
 
 function ModelCatalogRefreshRow() {
+	const t = useT();
 	const [state, setState] = useState<keyof typeof CATALOG_REFRESH_MESSAGES>();
 	const pending = state === "pending";
 	async function refresh() {
@@ -111,12 +114,12 @@ function ModelCatalogRefreshRow() {
 		try { setState(await refreshRemoteModelCatalog()); }
 		catch { setState("failed"); }
 	}
-	return <SettingsRow label="Model catalog" testid="model-catalog-refresh-row" hint={
+	return <SettingsRow label={t("settings.agent.modelCatalog")} testid="model-catalog-refresh-row" hint={
 		<span role="status" className={state === "failed" ? "text-destructive" : undefined}>
-			{state ? CATALOG_REFRESH_MESSAGES[state] : "Check Pi for new models"}
+			{state ? t(CATALOG_REFRESH_MESSAGES[state]) : t("settings.agent.refresh.hint")}
 		</span>
 	}>
-		<Button type="button" variant="outline" size="icon-sm" aria-label="Refresh model catalog" title="Refresh model catalog" aria-busy={pending}
+		<Button type="button" variant="outline" size="icon-sm" aria-label={t("settings.agent.refreshCatalog")} title={t("settings.agent.refreshCatalog")} aria-busy={pending}
 			disabled={pending} onClick={() => void refresh()}>
 			<RefreshCw aria-hidden="true" className={pending ? "animate-spin" : undefined} />
 		</Button>
@@ -392,6 +395,7 @@ export function AgentSection({
 	/** Writes the whole compaction section (replace-PUT discipline). */
 	onCompactionChange: (next: CompactionSettings) => boolean | Promise<boolean>;
 }) {
+	const t = useT();
 	const { catalog: body, failed: catalogFailed, refresh: refreshCatalog } = useModelCatalog();
 	const catalog = body?.models;
 	const slots = body?.slots;
@@ -601,15 +605,15 @@ export function AgentSection({
 
 	return (
 		<>
-			<SettingsGroup label="Models" testid="group-models">
+			<SettingsGroup label={t("settings.agent.models")} testid="group-models">
 				<button
 					type="button"
 					data-testid="models-advanced"
 					aria-expanded={advancedModels}
 					onClick={() => { setAdvancedModels(!advancedModels); setOpenMenu(null); }}
 					className="mb-1 self-start text-xs text-muted-foreground hover:text-foreground"
-				>{advancedModels ? "Hide advanced settings" : "Show advanced settings"}</button>
-				{catalogFailed && <p role="alert" className="text-xs text-error">Model catalog could not be loaded. Check the connection and retry. <button type="button" className="underline" onClick={refreshCatalog}>Retry</button></p>}
+				>{advancedModels ? t("settings.agent.hideAdvanced") : t("settings.agent.showAdvanced")}</button>
+				{catalogFailed && <p role="alert" className="text-xs text-error">{t("settings.agent.catalogFailed")} <button type="button" className="underline" onClick={refreshCatalog}>{t("settings.agent.retry")}</button></p>}
 				{MODEL_SLOTS.map((slot) => {
 					const override = models?.[slot];
 					const modelId = override?.model?.id ?? "";
@@ -631,8 +635,8 @@ export function AgentSection({
 					return (
 						<SettingsRow
 							key={slot}
-							label={SLOT_META[slot].label}
-							hint={SLOT_META[slot].roster}
+							label={t(SLOT_META[slot].labelKey)}
+							hint={t(SLOT_META[slot].rosterKey)}
 							testid={`slot-row-${slot}`}
 						>
 							{/* The anchor for the outside-click contract is the
@@ -646,7 +650,7 @@ export function AgentSection({
 									value={modelId ? prettyModel(modelId) : ""}
 									hint={modelId ? `${provider}:${modelId}` : undefined}
 									emptyLabel="—"
-									ariaLabel={`${SLOT_META[slot].label} model`}
+									ariaLabel={t("settings.agent.slot.modelAria", { slot: t(SLOT_META[slot].labelKey) })}
 									testid={`slot-model-${slot}`}
 									open={thisMenuOpen === "model"}
 									onClick={() => setOpenMenu(thisMenuOpen === "model" ? null : { target: slot, kind: "model" })}
@@ -658,7 +662,7 @@ export function AgentSection({
 									// what the engine build runs). Display-only until a pick writes.
 									value={thinking || (chosen ? defaultOrderLevel(levels) : "")}
 									emptyLabel="—"
-									ariaLabel={`${SLOT_META[slot].label} thinking`}
+									ariaLabel={t("settings.agent.slot.thinkingAria", { slot: t(SLOT_META[slot].labelKey) })}
 									testid={`slot-thinking-${slot}`}
 									open={thisMenuOpen === "thinking"}
 									onClick={() => setOpenMenu(thisMenuOpen === "thinking" ? null : { target: slot, kind: "thinking" })}
@@ -666,8 +670,8 @@ export function AgentSection({
 								/>
 								{advancedModels && <MenuTrigger
 									value={cacheRetentionLabel(override?.cacheRetention)}
-									emptyLabel="Cache: default"
-									ariaLabel={`${SLOT_META[slot].label} cache retention`}
+									emptyLabel={t("settings.agent.cacheDefault")}
+									ariaLabel={t("settings.agent.slot.cacheAria", { slot: t(SLOT_META[slot].labelKey) })}
 									testid={`slot-cache-${slot}`}
 									open={thisMenuOpen === "cache"}
 									disabled={!override?.model}
@@ -741,8 +745,8 @@ export function AgentSection({
 				})}
 				<ModelCatalogRefreshRow />
 				<SettingsRow
-					label="Concurrent worker requests"
-					hint="Maximum simultaneous background-worker model requests. Direct conversations are not limited."
+					label={t("settings.agent.concurrency.label")}
+					hint={t("settings.agent.concurrency.hint")}
 					testid="worker-request-concurrency-row"
 				>
 					<div
@@ -763,7 +767,7 @@ export function AgentSection({
 							step={1}
 							value={String(agent?.workerRequestConcurrency ?? "")}
 							placeholder={String(resolvedAgent.workerRequestConcurrency)}
-							ariaLabel="Concurrent worker requests"
+							ariaLabel={t("settings.agent.concurrency.aria")}
 							testid="input-worker-request-concurrency"
 							onCommit={(value) => {
 								const next = composeWorkerRequestConcurrency(agent, value);
@@ -776,7 +780,7 @@ export function AgentSection({
 				</SettingsRow>
 			</SettingsGroup>
 
-			<SettingsGroup label="Tools" testid="group-tools">
+			<SettingsGroup label={t("settings.agent.tools")} testid="group-tools">
 				{/* The prober's graph tools (wave 7, owner ruling 2026-09-23):
 				    FIRST row of the group — its subject is the map, its
 				    mechanism is agent capability, so it lives in Tools but
@@ -788,7 +792,7 @@ export function AgentSection({
 					const graphOn = graph?.enabled ?? true;
 					return (
 						<SettingsRow
-							label="Graph tools"
+							label={t("settings.agent.graphTools")}
 							hint={graphOn ? "Lets the tutor consult your knowledge map between sessions" : "Graph is disabled"}
 							testid="graph-tools-row"
 							dimmed={!graphOn}
@@ -796,7 +800,7 @@ export function AgentSection({
 							<Toggle
 								checked={agent?.graphTools?.enabled ?? true}
 								disabled={!graphOn}
-								label="graph tools"
+								label={t("settings.agent.graphToolsAria")}
 								onChange={(on) => onSectionChange(composeGraphTools(agent, on))}
 							/>
 						</SettingsRow>
@@ -810,12 +814,12 @@ export function AgentSection({
 					const free = agent?.tools?.explain === true;
 					return (
 						<SettingsRow
-							label="Quizzing"
-							hint="How both tutors check your understanding"
+							label={t("settings.agent.quizzing")}
+							hint={t("settings.agent.quizzingHint")}
 							testid="quiz-mechanics-row"
 						>
-							<SettingsSegmentedControl label="Quizzing mechanics" testidPrefix="quiz-mechanics"
-								options={[{ value: "choice", label: "Multiple choice" }, { value: "free", label: "Free recall" }]}
+							<SettingsSegmentedControl label={t("settings.agent.quizzingMechanics")} testidPrefix="quiz-mechanics"
+								options={[{ value: "choice", label: t("settings.agent.multipleChoice") }, { value: "free", label: t("settings.agent.freeRecall") }]}
 								value={free ? "free" : "choice"} onChange={(next) => onSectionChange(composeQuizMechanics(agent, next))} />
 						</SettingsRow>
 					);
@@ -846,18 +850,18 @@ export function AgentSection({
 					};
 					return (
 						<div data-testid="file-access-row" className="flex flex-col gap-2">
-							<SettingsRow label="File access" hint={!restricted
+							<SettingsRow label={t("settings.agent.fileAccess")} hint={!restricted
 								? "Broad local source access, except protected locations"
 								: folders.length ? "Only listed folders and subfolders."
 									: "Restricted: no folders allowed. Add a folder to enable access."}>
 								<div className="flex items-center gap-2 text-xs">
 									<span>Restrict to listed folders</span>
-									<Toggle checked={restricted} label="Restrict to listed folders" onChange={(on) => onSectionChange(composeFileRestriction(effectiveAgent, on))} />
+									<Toggle checked={restricted} label={t("settings.agent.restrictFolders")} onChange={(on) => onSectionChange(composeFileRestriction(effectiveAgent, on))} />
 								</div>
 							</SettingsRow>
 							{fileAccessError && <p role="alert" data-testid="file-access-config-error" className="text-xs text-error">{fileAccessError}</p>}
 							<div className="flex gap-2 pl-3">
-								<input value={folderInput} aria-label="Allowed folder path" data-testid="file-access-add" placeholder="Absolute path or ~/folder"
+								<input value={folderInput} aria-label={t("settings.agent.folderPathAria")} data-testid="file-access-add" placeholder={t("settings.agent.folderPlaceholder")}
 									onChange={(event) => { setFolderInput(event.target.value); setFolderError(null); }}
 									onKeyDown={(event) => { if (event.key === "Enter") { event.preventDefault(); addFolder(); } }}
 									className="min-w-0 flex-1 rounded-sm border border-border bg-background px-2 py-1 font-ui text-xs" />
@@ -881,7 +885,7 @@ export function AgentSection({
 					const open = openMenu?.target === "search";
 					return (
 						<SettingsRow
-							label="Search engine"
+							label={t("settings.agent.searchEngine")}
 							hint={search?.reason ?? undefined}
 							testid="search-engine-row"
 							dimmed={!anyKey}
@@ -890,7 +894,7 @@ export function AgentSection({
 								<MenuTrigger
 									value={SEARCH_ENGINES.find(({ id }) => id === engine)?.label ?? ""}
 									emptyLabel="Automatic"
-									ariaLabel="Search engine"
+									ariaLabel={t("settings.agent.searchEngineAria")}
 									testid="search-engine-trigger"
 									open={open}
 									onClick={() => setOpenMenu(open ? null : { target: "search", kind: "engine" })}
@@ -923,9 +927,9 @@ export function AgentSection({
 				})()}
 			</SettingsGroup>
 
-			<SettingsGroup label="Context" testid="group-context">
+			<SettingsGroup label={t("settings.agent.context")} testid="group-context">
 				<SettingsRow
-					label="Compaction threshold"
+					label={t("settings.agent.compactionThreshold")}
 					hint={`${resolvedCompaction.thresholdTokens} tok`}
 					testid="compaction-row-threshold"
 				>
@@ -933,7 +937,7 @@ export function AgentSection({
 						type="number"
 						value={String(compaction?.thresholdTokens ?? "")}
 						placeholder={String(resolvedCompaction.thresholdTokens)}
-						ariaLabel="compaction threshold"
+						ariaLabel={t("settings.agent.compactionAria")}
 						testid="input-compaction-threshold"
 						onCommit={(v) => {
 							// Empty = factory default (the budget row's discipline):
@@ -954,22 +958,22 @@ export function AgentSection({
 					/>
 				</SettingsRow>
 				<SettingsRow
-					label="Include reasoning in token estimates (OpenAI Responses only)"
-					hint="Use saved output-token usage to account for replayed reasoning on matching OpenAI Responses models. Off uses the original text-based estimate."
+					label={t("settings.agent.includeReasoning")}
+					hint={t("settings.agent.includeReasoningHint")}
 					testid="compaction-row-reasoning"
 				>
 					<Toggle
-						label="Include reasoning in token estimates (OpenAI Responses only)"
+						label={t("settings.agent.includeReasoning")}
 						checked={resolvedCompaction.includeReasoning}
 						onChange={(includeReasoning) => onCompactionChange({ ...compaction, includeReasoning })}
 					/>
 				</SettingsRow>
 			</SettingsGroup>
 
-			<SettingsGroup label="System prompts" testid="group-prompts">
-				<p className="text-xs text-muted-foreground">Use the switch to choose between the default and your saved override.</p>
+			<SettingsGroup label={t("settings.agent.systemPrompts")} testid="group-prompts">
+				<p className="text-xs text-muted-foreground">{t("settings.agent.systemPromptsHint")}</p>
 				{promptListStatus !== "ready" && <div className="flex items-center gap-2">
-					{promptListStatus === "failed" ? <p role="alert" className="text-xs text-error">Couldn't load prompt segments.</p> :
+					{promptListStatus === "failed" ? <p role="alert" className="text-xs text-error">{t("settings.agent.promptsFailed")}</p> :
 						<p role="status" className="text-xs text-muted-foreground">{prompts ? "Refreshing prompt segments…" : "Loading prompt segments…"}</p>}
 					<Button type="button" size="xs" variant="outline" onClick={() => void readPrompts()}>Retry</Button>
 				</div>}
