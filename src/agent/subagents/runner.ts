@@ -329,8 +329,9 @@ export function createJobRunner(deps: JobRunnerDeps): JobRunner {
 	/** Chat-record + input resolution shared by all three runners. The
 	 *  chat's frozen teaching language rides along (i18n wave,
 	 *  2026-11-21): every learner-facing sub-agent output speaks the
-	 *  session's language. */
-	function jobContext(jobId: string): { job: JobRecord; chatId: string; teachingLocale: AppLocale } | null {
+	 *  session's language. English (the default) passes as undefined — the
+	 *  sub-agent block is for a non-default learner language only. */
+	function jobContext(jobId: string): { job: JobRecord; chatId: string; teachingLocale: AppLocale | undefined } | null {
 		const job = jobStore.getJob(jobId);
 		if (!job || job.status !== "running") return null;
 		const chat = chatStore.getChat(job.chatId);
@@ -338,7 +339,8 @@ export function createJobRunner(deps: JobRunnerDeps): JobRunner {
 			jobStore.updateJob(jobId, { status: "error", error: `Chat not found: ${job.chatId}`, activity: "failed" });
 			return null;
 		}
-		return { job, chatId: job.chatId, teachingLocale: chat.teachingLocale ?? "en" };
+		const locale = chat.teachingLocale ?? "en";
+		return { job, chatId: job.chatId, teachingLocale: locale === "en" ? undefined : locale };
 	}
 
 	// ─── research ───────────────────────────────────────────────────────────

@@ -63,6 +63,12 @@ import { chatStore } from "../src/store/chats.ts";
 import { subscribe } from "../src/core/events.ts";
 import { PATHS } from "../config.ts";
 
+// Prompt assertions here pin the ENGLISH instructions. The chat store
+// freezes the teaching locale at birth from the OS tag when the settings say
+// "system" (i18n wave), so a zh-CN developer machine would compose the
+// Chinese learner-language block. Pin the fixture's OS locale.
+process.env.LH_OS_LOCALE = "en";
+
 // ─── fixtures ────────────────────────────────────────────────────────────────
 
 const createdChats: string[] = [];

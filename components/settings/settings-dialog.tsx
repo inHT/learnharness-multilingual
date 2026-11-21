@@ -1,13 +1,13 @@
 "use client";
 /**
  * THE SETTINGS DIALOG (settings-app wave, 2026-09-20): the thin settings
- * page graduated into the designed surface â€?a centered modal over
+ * page graduated into the designed surface â€” a centered modal over
  * everything, left section nav + one scrolling content column.
  *
  * Owner decisions this wave:
  * - Dialog, not a page: opens over whatever screen you're on (the payoff:
  *   appearance edits restyle the chat LIVE behind the dialog). Escape,
- *   backdrop, and âœ?all close. Modal-only â€?/settings redirects, so
+ *   backdrop, and âœ• all close. Modal-only â€” /settings redirects, so
  *   nothing links into a dead surface.
  * - Left section nav in the app's mono chrome, with small decorative
  *   Lucide icons for the built-in sections; active = bg-accent. Icons
@@ -46,7 +46,6 @@ import {
 import { useAppearance } from "./appearance.tsx";
 import { SettingsSection } from "./controls.tsx";
 import { UpdateSettings } from "./update-settings.tsx";
-import { LanguageSettings } from "./language-settings.tsx";
 import { AgentSection, composePromptSwitch } from "./agent-section.tsx";
 import type { ModelsSettings } from "@/src/core";
 import { MENU_CLOSE_EVENT, MENU_OPEN_EVENT } from "@/components/menu-shell";
@@ -61,10 +60,11 @@ import { usePlugins } from "@/components/plugins";
 import { ChatGPTUIProvider } from "./chatgpt-connection.tsx";
 import { NativeSubscriptionUIProvider } from "./subscription-connections.tsx";
 import { useT } from "@/src/i18n/react";
+import { LanguageSettings } from "./language-settings.tsx";
 
-/** Owner (2026-09-20): hints earn their place â€?mechanics-explaining
+/** Owner (2026-09-20): hints earn their place â€” mechanics-explaining
  *  prose is out; only the keyboard note stays (storage location is a
- *  real question users ask). Labels are catalog keys (i18n wave). */
+ *  real question users ask). */
 const SECTIONS = [
 	{ id: "keys", labelKey: "settings.nav.providers", icon: KeyIcon },
 	{ id: "agent", labelKey: "settings.nav.agent", icon: BotIcon },
@@ -75,10 +75,10 @@ const SECTIONS = [
 ] as const;
 type SectionId = (typeof SECTIONS)[number]["id"] | "plugins" | "core-plugins" | `plugin:${string}`;
 
-/** `open(section?, row?)` â€?the optional ROW deep-links into the Keys
+/** `open(section?, row?)` â€” the optional ROW deep-links into the Keys
  *  section with that row unfolded (zero-keys wave: the dictation error's
  *  click lands on the Deepgram row). `row` is the KEY ID (the env-var
- *  name, e.g. DEEPGRAM_API_KEY â€?KeysSection's openRow state), not the
+ *  name, e.g. DEEPGRAM_API_KEY â€” KeysSection's openRow state), not the
  *  row's testid. */
 const DialogContext = createContext<{ open: (section?: string, row?: string) => void }>({ open: () => {} });
 // Authority belongs to the persistent Settings host, not a particular field or
@@ -177,7 +177,7 @@ function SettingsDialog({
 			}}>{frame.props.children}</HostDialog>} />;
 }
 
-/** The dialog without the portal/backdrop â€?the SSR-testable frame
+/** The dialog without the portal/backdrop â€” the SSR-testable frame
  *  (portals render nothing under renderToStaticMarkup). */
 export function SettingsDialogBody({
 	onClose,
@@ -207,13 +207,13 @@ export function SettingsDialogBody({
 	);
 	const [error, setError] = useState<string | null>(null);
 	const [fileAccessError, setFileAccessError] = useState<string | null>(null);
-	// MenuShell open-count â€?drives the content column's scroll lock.
+	// MenuShell open-count â€” drives the content column's scroll lock.
 	const [openMenus, setOpenMenus] = useState(0);
 	const contentRef = useRef<HTMLDivElement | null>(null);
 	// Scroll-lock (fix wave, owner ruling: the scrollbar MAY stay,
 	// scrolling must NOT happen, nothing may move): the content column
-	// keeps overflow-y-auto â€?the scrollbar and every width stay exactly
-	// as they are â€?and while any MenuShell is open, non-passive wheel +
+	// keeps overflow-y-auto â€” the scrollbar and every width stay exactly
+	// as they are â€” and while any MenuShell is open, non-passive wheel +
 	// touchmove listeners on the column preventDefault. React attaches
 	// synthetic wheel/touch passively at the root, so this needs the
 	// native-listener ref seam.
@@ -241,9 +241,9 @@ export function SettingsDialogBody({
 	}, []);
 	const [active, setActive] = useState<SectionId>(initialSection);
 	// A deep-link fired while the dialog is ALREADY open (first exercised by
-	// the wave-6 embedding picker's "Add a provider key firstâ€? link â€?the
+	// the wave-6 embedding picker's "Add a provider key firstâ€¦" link â€” the
 	// picker itself died with wave 7, the mechanism is general) changes
-	// initialSection under our feet â€?follow it, or the link silently does
+	// initialSection under our feet â€” follow it, or the link silently does
 	// nothing.
 	useEffect(() => {
 		setActive(initialSection);
@@ -396,7 +396,7 @@ export function SettingsDialogBody({
 			className="settings-dialog-pop flex h-[620px] max-h-[85vh] w-[920px] max-w-[90vw] flex-col overflow-hidden rounded-md border border-border bg-card shadow-xl"
 			onClick={(e) => e.stopPropagation()}
 		>
-			{/* Header â€?the app's quiet CMU title language. */}
+			{/* Header â€” the app's quiet CMU title language. */}
 			<header className="flex h-15 shrink-0 items-center gap-3 border-b border-border px-5">
 				<h2 className="font-title text-2xl tracking-tight">{t("settings.title")}</h2>
 				<Hint
@@ -426,7 +426,7 @@ export function SettingsDialogBody({
 			</header>
 
 			<div className="flex min-h-0 flex-1">
-				{/* Left nav â€?mono labels and theme-inherited decorative icons,
+				{/* Left nav â€” mono labels and theme-inherited decorative icons,
 					    active = bg-accent. */}
 				<nav
 					aria-label={t("settings.sections")}
@@ -455,11 +455,11 @@ export function SettingsDialogBody({
 					))}
 				</nav>
 
-				{/* Content column â€?one section at a time, this scrolls â€?and
+				{/* Content column â€” one section at a time, this scrolls â€” and
 				    LOCKS while any MenuShell is open (owner ruling: no
 				    scrolling with a dropdown down; MenuShell announces
 				    open/close, the count keeps overlap honest). The lock
-				    intercepts wheel/touch instead of hiding the scrollbar â€?
+				    intercepts wheel/touch instead of hiding the scrollbar â€”
 				    nothing may shift when the lock engages. */}
 				<div
 					ref={contentRef}

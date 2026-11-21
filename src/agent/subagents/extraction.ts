@@ -813,9 +813,13 @@ export function createExtractionPipeline(deps: ExtractionPipelineDeps): Extracti
 		override ?? deps.engineFor?.(role);
 	/** The source's teaching language (i18n wave): a chat run reads its own
 	 *  frozen record; imported notes have no record, so the composition
-	 *  root's current settings answer. English when neither is known. */
-	const teachingLocaleFor = (sourceId: string): AppLocale =>
-		chatStore.getChat(sourceId)?.teachingLocale ?? deps.teachingLocale?.() ?? "en";
+	 *  root's current settings answer. undefined = English — the sub-agent
+	 *  block is for a NON-default learner language only (an English session
+	 *  keeps the bare, pinned instructions). */
+	const teachingLocaleFor = (sourceId: string): AppLocale | undefined => {
+		const locale = chatStore.getChat(sourceId)?.teachingLocale ?? deps.teachingLocale?.() ?? "en";
+		return locale === "en" ? undefined : locale;
+	};
 	/** The per-need refusal guard: which slot tiers the pipeline's stages
 	 *  found unset (test values count as configured — they ARE engines),
 	 *  and whether a configured stage's provider key is gone (provider-key
