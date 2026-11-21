@@ -6,7 +6,8 @@
 		"delete": "Delete",
 		"deleting": "Deleting…",
 		"rename": "Rename",
-		"close": "Close"
+		"close": "Close",
+		"working": "Working"
 	},
 	"time": {
 		"justNow": "just now",
@@ -227,6 +228,84 @@
 		"emptyAttach": "Attach your material with the paperclip or drag and drop.",
 		"chainsButton": "Chains",
 		"chainsHint": "Every reasoning chain"
+	},
+	"dialogs": {
+		"startupFailedTitle": "LearnHarness could not start",
+		"startupFailedBody": "The local server did not start. Check the log and try again."
+	},
+	"dictationLanguage": {
+		"aria": "Dictation language: {language}",
+		"searchAria": "Search dictation languages",
+		"searchPlaceholder": "Search languages…",
+		"empty": "No languages match."
+	},
+	"sourceTree": {
+		"folderName": "Folder name",
+		"nameAria": "Source or folder name"
+	},
+	"overlay": {
+		"fromLesson": "from this lesson"
+	},
+	"coverage": {
+		"title": "Extraction coverage",
+		"extracting": "extracting…",
+		"fullyExtracted": "fully extracted",
+		"uncoveredTokens": "{tokens} tok uncovered",
+		"unextractedMessages": "{count, plural, one {# message} other {# messages}} unextracted",
+		"running": "Running",
+		"extract": "Extract",
+		"ringHint": "How much of this session isn't mapped yet",
+		"uncovered": "Uncovered",
+		"covered": "Covered",
+		"messages": "Messages",
+		"chunkThreshold": "Chunk threshold",
+		"lastExtraction": "Last extraction",
+		"status": "Status",
+		"tokens": "{tokens} tokens"
+	},
+	"dictation": {
+		"dictate": "Dictate",
+		"start": "Start dictation",
+		"failed": "Dictation failed: {error}",
+		"stop": "Stop dictation",
+		"stopShort": "Stop",
+		"stopHint": "Stop dictation (Esc)"
+	},
+	"sideThread": {
+		"ask": "Ask",
+		"askAria": "Ask a side question about this selection",
+		"shorten": "Shorten selection",
+		"showQuoted": "Show the quoted tutor text",
+		"showInLesson": "Show in the lesson",
+		"micLevel": "Microphone input level",
+		"title": "Side question",
+		"dock": "Dock side conversation",
+		"float": "Float side conversation",
+		"pin": "Pin to side",
+		"unpin": "Unpin to float",
+		"close": "Close side conversation",
+		"stopped": "Stopped",
+		"answering": "Answering",
+		"retry": "Retry answer",
+		"goToStep": "Go to current step",
+		"stopDictation": "Stop side dictation",
+		"startDictation": "Start side dictation",
+		"dictate": "Dictate side question",
+		"stopAnswer": "Stop side answer",
+		"send": "Send side question",
+		"placeholderPassage": "Ask about this passage…",
+		"placeholderFollowUp": "Ask a follow-up…",
+		"placeholderFirst": "Ask a side question…"
+	},
+	"plan": {
+		"diagramAria": "Plan diagram",
+		"title": "The plan",
+		"liveNote": "live — statuses derive from your check outcomes",
+		"fullAria": "The full plan",
+		"panHint": "Drag to pan · scroll to zoom",
+		"zoomOut": "Zoom out",
+		"zoomIn": "Zoom in",
+		"fit": "Fit plan to screen"
 	},
 	"menu": {
 		"checkForUpdates": "Check for Updates…",

@@ -10,6 +10,7 @@ import { MermaidError } from "@/components/mermaid-error";
 import { Hint } from "@/components/ui/hint";
 import { SvgImage } from "@/components/artifacts/svg-image";
 import { InteractionLayerOwner, useInteractionLayer } from "./interaction-layers";
+import { useT } from "@/src/i18n/react";
 
 /**
  * SESSION-SCOPED OVERLAYS (owner wave, 2026-09-19): the "fullscreen"
@@ -95,6 +96,7 @@ export function MermaidOverlay({
 	inverted?: boolean;
 	onClose: () => void;
 }) {
+	const t = useT();
 	// ── chart render (own instance, own ids); figure mode uses the raw svg ──
 	const [svg, setSvg] = useState<string | null>(rawSvg ?? null);
 	const [error, setError] = useState<string | null>(null);
@@ -236,12 +238,12 @@ export function MermaidOverlay({
 		>
 			<div className="mb-2 flex items-center gap-2">
 				<span className="text-sm font-medium">{mediaName}</span>
-				<span className="text-xs text-muted-foreground">from this lesson</span>
-				<Hint label="Close" binding="escape" side="left">
+				<span className="text-xs text-muted-foreground">{t("overlay.fromLesson")}</span>
+				<Hint label={t("common.close")} binding="escape" side="left">
 <button
 					type="button"
 					onClick={onClose}
-					aria-label="Close"
+					aria-label={t("common.close")}
 					data-testid="mermaid-overlay-close"
 					className="ml-auto rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
 				>
@@ -307,12 +309,12 @@ export function MermaidOverlay({
 							)}
 						</div>
 						<div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between p-2">
-							<span className="text-xs text-muted-foreground/60">Drag to pan · scroll to zoom</span>
+							<span className="text-xs text-muted-foreground/60">{t("plan.panHint")}</span>
 							<div className="flex gap-1">
-								<Hint label="Zoom out" side="bottom">
+								<Hint label={t("plan.zoomOut")} side="bottom">
 <button
 									type="button"
-									aria-label="Zoom out"
+									aria-label={t("plan.zoomOut")}
 									onClick={() => stepZoom(1 / 1.25)}
 									className="pointer-events-auto flex size-7 items-center justify-center rounded-md border border-border/70 bg-card/80 text-muted-foreground backdrop-blur transition-colors hover:bg-accent hover:text-foreground"
 								>
@@ -329,10 +331,10 @@ export function MermaidOverlay({
 									<MaximizeIcon className="size-3.5" />
 								</button>
 </Hint>
-								<Hint label="Zoom in" side="bottom">
+								<Hint label={t("plan.zoomIn")} side="bottom">
 <button
 									type="button"
-									aria-label="Zoom in"
+									aria-label={t("plan.zoomIn")}
 									onClick={() => stepZoom(1.25)}
 									className="pointer-events-auto flex size-7 items-center justify-center rounded-md border border-border/70 bg-card/80 text-muted-foreground backdrop-blur transition-colors hover:bg-accent hover:text-foreground"
 								>

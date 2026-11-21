@@ -1062,7 +1062,7 @@ export function Chat({
 		return () => window.removeEventListener(kbdEventForChat("toggle-question-thread"), toggleQuestionThread);
 	}, [toggleQuestionThread]);
 	// Advancing the lesson does not close or disable an old conversation.
-	const sideActions = useMemo(() => createSideQuestionActions({ open: openSideThread }), [openSideThread]);
+	const sideActions = useMemo(() => createSideQuestionActions({ open: openSideThread, t }), [openSideThread, t]);
 	const selectionActions = useMemo(() => [citeAction, ...sideActions], [citeAction, sideActions]);
 	const router = useRouter();
 	const transcriptElementRef = useRef<HTMLElement | null>(null);

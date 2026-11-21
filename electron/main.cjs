@@ -626,10 +626,14 @@ let currentLocale = null;
  *  localized by the OS itself. */
 function menuI18n() {
 	const { createMenuI18n } = require("./i18n.cjs");
+	// Real Electron always provides both; the fallbacks keep a minimal test
+	// shell (and any future harness) from failing menu install.
+	const appPath = typeof app.getAppPath === "function" ? app.getAppPath() : path.join(__dirname, "..");
+	const tag = typeof app.getLocale === "function" ? app.getLocale() : "";
 	return createMenuI18n({
 		dataDir: DATA_DIR(),
-		messagesDir: path.join(app.getAppPath(), "messages"),
-		tag: app.getLocale(),
+		messagesDir: path.join(appPath, "messages"),
+		tag,
 		// The renderer reports its resolved locale (live switcher); a null
 		// report re-resolves from the record + OS tag.
 		locale: currentLocale,
@@ -687,6 +691,26 @@ function installMenu() {
 	Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
 
+/** The localized startup-failure surface (i18n wave): the app cannot open
+ *  a window when its server never comes up, and a silent exit hides the
+ *  reason. English fallback keeps a broken catalog from hiding it too. */
+function showStartupFailure(detail) {
+	let title = "LearnHarness could not start";
+	let body = "The local server did not start. Check the log and try again.";
+	try {
+		const { t } = menuI18n();
+		title = t("dialogs.startupFailedTitle");
+		body = t("dialogs.startupFailedBody");
+	} catch {
+		/* the catalog itself failed — keep the English lines */
+	}
+	try {
+		dialog.showErrorBox(title, `${body}\n\n${detail}`);
+	} catch {
+		/* no display server (headless CI): the log line above stands alone */
+	}
+}
+
 async function main() {
 	app.on("window-all-closed", () => {
 		chatgpt?.pause();
@@ -742,8 +766,16 @@ async function main() {
 		await subscriptions.ready;
 		log(`starting server: ${serverEntry()}`);
 		log(`data dir: ${DATA_DIR()}${fs.existsSync(AUTH_FILE()) ? " · auth.json: present" : " · auth.json: ABSENT (no BYOK keys yet)"}`);
-		await startServer(new URL(url).port);
-		await waitUntilUp(url);
+		try {
+			await startServer(new URL(url).port);
+			await waitUntilUp(url);
+		} catch (error) {
+			const detail = error?.message ?? String(error);
+			log(`server startup failed: ${detail}`);
+			showStartupFailure(detail);
+			app.exit(1);
+			return;
+		}
 		log(`server up: ${url}`);
 	} else {
 		log(`dev mode: ${devUrl} — waiting for server`);
@@ -758,6 +790,7 @@ async function main() {
 		} catch (error) {
 			if (!startup.signal.aborted) {
 				log(`dev server startup failed: ${error?.message ?? error}`);
+				showStartupFailure(error?.message ?? String(error));
 				app.exit(1);
 			}
 			return;

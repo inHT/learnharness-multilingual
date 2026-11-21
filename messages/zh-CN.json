@@ -6,7 +6,8 @@
 		"delete": "删除",
 		"deleting": "删除中…",
 		"rename": "重命名",
-		"close": "关闭"
+		"close": "关闭",
+		"working": "处理中"
 	},
 	"time": {
 		"justNow": "刚刚",
@@ -227,6 +228,84 @@
 		"emptyAttach": "用回形针或拖放添加你的材料。",
 		"chainsButton": "推理链",
 		"chainsHint": "全部推理链"
+	},
+	"dialogs": {
+		"startupFailedTitle": "LearnHarness 无法启动",
+		"startupFailedBody": "本地服务器未能启动。请查看日志后重试。"
+	},
+	"dictationLanguage": {
+		"aria": "听写语言：{language}",
+		"searchAria": "搜索听写语言",
+		"searchPlaceholder": "搜索语言…",
+		"empty": "没有匹配的语言。"
+	},
+	"sourceTree": {
+		"folderName": "文件夹名称",
+		"nameAria": "来源或文件夹名称"
+	},
+	"overlay": {
+		"fromLesson": "来自本课"
+	},
+	"coverage": {
+		"title": "抽取覆盖",
+		"extracting": "抽取中…",
+		"fullyExtracted": "已全部抽取",
+		"uncoveredTokens": "未覆盖 {tokens} tok",
+		"unextractedMessages": "{count} 条消息未抽取",
+		"running": "运行中",
+		"extract": "抽取",
+		"ringHint": "本次会话还有多少内容未进入图谱",
+		"uncovered": "未覆盖",
+		"covered": "已覆盖",
+		"messages": "消息",
+		"chunkThreshold": "分块阈值",
+		"lastExtraction": "上次抽取",
+		"status": "状态",
+		"tokens": "{tokens} token"
+	},
+	"dictation": {
+		"dictate": "听写",
+		"start": "开始听写",
+		"failed": "听写失败：{error}",
+		"stop": "停止听写",
+		"stopShort": "停止",
+		"stopHint": "停止听写（Esc）"
+	},
+	"sideThread": {
+		"ask": "追问",
+		"askAria": "针对所选内容追问侧边对话",
+		"shorten": "缩短所选内容",
+		"showQuoted": "显示引用的老师原文",
+		"showInLesson": "在课程中显示",
+		"micLevel": "麦克风输入电平",
+		"title": "侧边提问",
+		"dock": "停靠侧边对话",
+		"float": "浮动侧边对话",
+		"pin": "固定到侧边",
+		"unpin": "取消固定并浮动",
+		"close": "关闭侧边对话",
+		"stopped": "已停止",
+		"answering": "回答中",
+		"retry": "重试回答",
+		"goToStep": "跳到当前步骤",
+		"stopDictation": "停止侧边听写",
+		"startDictation": "开始侧边听写",
+		"dictate": "听写侧边问题",
+		"stopAnswer": "停止侧边回答",
+		"send": "发送侧边问题",
+		"placeholderPassage": "就这段内容提问…",
+		"placeholderFollowUp": "继续追问…",
+		"placeholderFirst": "问一个侧边问题…"
+	},
+	"plan": {
+		"diagramAria": "计划图",
+		"title": "学习计划",
+		"liveNote": "实时更新——状态来自你的检测结果",
+		"fullAria": "完整计划",
+		"panHint": "拖动平移 · 滚轮缩放",
+		"zoomOut": "缩小",
+		"zoomIn": "放大",
+		"fit": "适应屏幕"
 	},
 	"menu": {
 		"checkForUpdates": "检查更新…",

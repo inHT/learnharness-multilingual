@@ -7,6 +7,7 @@ import { canMoveFolder, folderIsEmpty, fuzzyScore, placementOf, folderEntryCheck
 import type { ChainSort } from "./chain-table";
 import { chainRow } from "./chain-navigation";
 import { TreeCell, TreeCheckbox, TreeDisclosure, TreeGuide, TreeSeparator, treeBranchLayout, treeRowLayout } from "./tree-presentation";
+import { useT } from "@/src/i18n/react";
 
 export type OrganizationChange = (action: OrganizationAction) => Promise<string | void>;
 export const SOURCE_DRAG_TYPE = "application/x-learnharness-source";
@@ -64,6 +65,7 @@ export function sourceNameMatches(directory: SourceDirectory | undefined, id: st
 export function EditableSourceName({ name, onSave, onCancel, initiallyEditing = false, muted = false, inputClassName }: {
 	name: string; onSave: (name: string) => Promise<unknown>; onCancel?: () => void; initiallyEditing?: boolean; muted?: boolean; inputClassName?: string;
 }) {
+	const t = useT();
 	const [editing, setEditing] = useState(initiallyEditing);
 	const [draft, setDraft] = useState(name);
 	const [failure, setFailure] = useState("");
@@ -84,14 +86,14 @@ export function EditableSourceName({ name, onSave, onCancel, initiallyEditing = 
 		finally { submitting.current = false; }
 	};
 	return <span className="min-w-0 flex-1">
-		{editing ? <input ref={input} value={draft} placeholder="Folder name" aria-label="Source or folder name" data-testid="source-name-input"
+		{editing ? <input ref={input} value={draft} placeholder={t("sourceTree.folderName")} aria-label={t("sourceTree.nameAria")} data-testid="source-name-input"
 			className={cn("block w-full min-w-0 border-0 bg-transparent p-0 font-medium outline-none shadow-none focus:ring-0", inputClassName ?? "h-5 text-sm leading-5")}
 			onChange={(e) => setDraft(e.target.value)} onBlur={() => { void commit(); }}
 			onKeyDown={(e) => {
 				if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); cancelled.current = true; setEditing(false); setFailure(""); onCancel?.(); }
 				if (e.key === "Enter") { e.preventDefault(); e.stopPropagation(); void commit(); }
 			}} onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }} />
-			: <button type="button" className={`block max-w-full truncate rounded-sm text-left text-sm font-medium leading-5 transition-colors hover:bg-accent${muted ? " text-muted-foreground/60" : ""}`} title="Rename"
+			: <button type="button" className={`block max-w-full truncate rounded-sm text-left text-sm font-medium leading-5 transition-colors hover:bg-accent${muted ? " text-muted-foreground/60" : ""}`} title={t("common.rename")}
 				onClick={() => { cancelled.current = false; setDraft(name); setEditing(true); }}>{name}</button>}
 		{failure && <span role="alert" className="block text-xs text-error">{failure}</span>}
 	</span>;
@@ -112,6 +114,7 @@ export function SourceFolderTree<T extends TreeSource>({ groups, directory, quer
 	selection: ReadonlySet<string>; selectedFolders: ReadonlySet<string>;
 	onToggleNodes: (ids: string[], next: boolean) => void; onToggleFolder: (id: string, next: boolean) => void;
 }) {
+	const t = useT();
 	const [dropTarget, setDropTarget] = useState<string | null | undefined>(undefined);
 	const [draggedItem, setDraggedItem] = useState<{ kind: "source" | "folder"; id: string }>();
 	if (!directory) return <>{groups.map((g) => renderSource(g, 0))}</>;
@@ -218,7 +221,7 @@ export function SourceFolderTree<T extends TreeSource>({ groups, directory, quer
 		} catch { /* An unrelated native text/file drag is not an organization move. */ }
 	}} onDragEnd={() => { setDropTarget(undefined); setDraggedItem(undefined); }}>
 		<div>{renderLevel(null, 0)}</div>
-		{onAction && <div data-testid="source-root-drop" aria-label="Move outside folders" data-drop-active={dropTarget === null}
+		{onAction && <div data-testid="source-root-drop" aria-label={t("sidebar.moveOutsideFolders")} data-drop-active={dropTarget === null}
 			className={`min-h-16 flex-1 transition-colors ${dropTarget === null ? "bg-accent/30" : ""}`} {...dropProps(null)} />}
 	</div>;
 }
