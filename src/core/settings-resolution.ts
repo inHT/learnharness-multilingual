@@ -197,6 +197,8 @@ export function resolveSettings(record: UserSettings | null): EffectiveSettings 
 	return {
 		general: {
 			autoUpdate: record?.general?.autoUpdate ?? FACTORY_SETTINGS.general.autoUpdate,
+			locale: record?.general?.locale ?? FACTORY_SETTINGS.general.locale,
+			teachingLocale: record?.general?.teachingLocale ?? FACTORY_SETTINGS.general.teachingLocale,
 		},
 		dictation: {
 			language: record?.dictation?.language ?? FACTORY_SETTINGS.dictation.language,

@@ -72,6 +72,10 @@ export * from "./fuzzy.ts";
 // view. Browser-safe — the Wave-4 panel imports these directly.
 export * from "./settings.ts";
 export * from "./file-access.ts";
+// locales.ts (i18n wave, 2026-11-21): the interface/teaching locale
+// vocabulary + resolution — pure, browser-safe (the layout boot, the
+// settings rows and the i18n runtime all read through this barrel).
+export * from "./locales.ts";
 // themes.ts (theme wave, 2026-11-04): the 12-color theme vocabulary, the
 // presets and the theme → CSS-token adapter — pure, shared by the layout,
 // the provider, Settings and the themes API.

@@ -36,6 +36,7 @@ import type { ModelRole } from "../../config.ts";
 import type { ChatSettings } from "./contracts/chat.ts";
 import { isSearchEngineId, type SearchEngineId } from "./search.ts";
 import { isDictationLanguage, type DictationLanguage } from "./dictation.ts";
+import { isLocaleSetting, isTeachingLocaleSetting, type LocaleSetting, type TeachingLocaleSetting } from "./locales.ts";
 import { parseFileAccessSettings, type FileAccessSettings } from "./file-access.ts";
 import { COLOR_OVERRIDE_KEYS, isThemeId, type AppearanceColorOverrides } from "./themes.ts";
 
@@ -340,6 +341,15 @@ export const ROLE_SLOT: Readonly<Record<ModelRole, ModelSlotName>> = {
 export interface GeneralSettings {
 	/** Automatic startup/24h update checks (default ON). Manual checks bypass this. */
 	autoUpdate?: boolean;
+	/** The interface language (i18n wave, 2026-11-21): "system" follows the
+	 *  OS locale, otherwise an explicit catalog id. Factory "system".
+	 *  Dictation is a separate setting (dictation.language) — never derived. */
+	locale?: LocaleSetting;
+	/** The teaching language the learner-facing agent output uses: "follow"
+	 *  rides the resolved interface language, otherwise an explicit id.
+	 *  Frozen per session at chat creation — later changes affect new
+	 *  sessions only. Factory "follow". */
+	teachingLocale?: TeachingLocaleSetting;
 }
 
 /** One app-wide dictation preference, shared by every composer. */
@@ -569,7 +579,7 @@ export interface FactorySettings {
 export const FACTORY_SETTINGS: FactorySettings = {
 	version: CURRENT_SETTINGS_VERSION,
 	agent: { workerRequestConcurrency: 8 },
-	general: { autoUpdate: true },
+	general: { autoUpdate: true, locale: "system", teachingLocale: "follow" },
 	dictation: { language: "en" },
 	appearance: {
 		theme: "default",
@@ -620,6 +630,10 @@ function sanitizeGeneral(raw: Record<string, unknown>): GeneralSettings {
 	const out: GeneralSettings = {};
 	const autoUpdate = boolOrDrop(raw.autoUpdate);
 	if (autoUpdate !== undefined) out.autoUpdate = autoUpdate;
+	// Locale prefs: a wrong-typed/unknown id drops (absence resolves to the
+	// factory "system"/"follow" at resolution — never a wrong language).
+	if (isLocaleSetting(raw.locale)) out.locale = raw.locale;
+	if (isTeachingLocaleSetting(raw.teachingLocale)) out.teachingLocale = raw.teachingLocale;
 	return out;
 }
 

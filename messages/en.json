@@ -1,0 +1,16 @@
+{
+	"settings": {
+		"general": {
+			"language": {
+				"label": "Language",
+				"hint": "Interface language. Dictation has its own setting under Providers.",
+				"system": "System default"
+			},
+			"teachingLanguage": {
+				"label": "Teaching language",
+				"hint": "The language teaching replies use. Applies to new sessions; existing sessions keep theirs.",
+				"follow": "Follow interface"
+			}
+		}
+	}
+}

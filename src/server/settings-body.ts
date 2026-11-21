@@ -29,6 +29,7 @@ import type {
 	RoleModelOverride,
 } from "../core/settings.ts";
 import { BACKGROUND_MODEL_ROLES, CACHE_RETENTIONS, COMPACTION_THRESHOLD_FLOOR, CUSTOM_MODEL_PIN_FLOOR, EXTRACTION_CHUNK_TOKENS_FLOOR, isTranscriptMaxWidth, MODEL_SLOTS, TRANSCRIPT_WIDTH_MAX_REM, TRANSCRIPT_WIDTH_MIN_REM } from "../core/settings.ts";
+import { isLocaleSetting, isTeachingLocaleSetting, APP_LOCALES } from "../core/locales.ts";
 import { WRITABLE_TOOL_KEYS } from "../core/pending.ts";
 import { isSearchEngineId, SEARCH_ENGINES } from "../core/search.ts";
 import { isDictationLanguage } from "../core/dictation.ts";
@@ -83,7 +84,7 @@ function asRecord(body: unknown): Record<string, unknown> | null {
 	return body as Record<string, unknown>;
 }
 
-/** general: { autoUpdate?: boolean } */
+/** general: { autoUpdate?: boolean, locale?, teachingLocale? } */
 export function parseGeneralSettingsBody(body: unknown): SettingsBodyResult<GeneralSettings> {
 	const raw = asRecord(body);
 	if (!raw) return { ok: false, error: "Invalid JSON body" };
@@ -93,6 +94,18 @@ export function parseGeneralSettingsBody(body: unknown): SettingsBodyResult<Gene
 			return { ok: false, error: "autoUpdate must be a boolean" };
 		}
 		settings.autoUpdate = raw.autoUpdate;
+	}
+	if (raw.locale !== undefined) {
+		if (!isLocaleSetting(raw.locale)) {
+			return { ok: false, error: `locale must be "system" or one of ${APP_LOCALES.map((l) => `"${l.id}"`).join(", ")}` };
+		}
+		settings.locale = raw.locale;
+	}
+	if (raw.teachingLocale !== undefined) {
+		if (!isTeachingLocaleSetting(raw.teachingLocale)) {
+			return { ok: false, error: `teachingLocale must be "follow" or one of ${APP_LOCALES.map((l) => `"${l.id}"`).join(", ")}` };
+		}
+		settings.teachingLocale = raw.teachingLocale;
 	}
 	return { ok: true, settings };
 }

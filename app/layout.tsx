@@ -9,7 +9,8 @@ import { ServerEventsProvider } from "@/components/server-events";
 import { AppearanceProvider } from "@/components/settings/appearance";
 import UpdateBanner from "@/components/update-banner";
 import { PluginsProvider } from "@/components/plugins";
-import { readThemeBoot } from "@/src/server";
+import { I18nProvider } from "@/src/i18n/react";
+import { readLocaleBoot, readThemeBoot } from "@/src/server";
 
 // Chrome = JetBrains Mono, teaching prose = Source Sans 3, titles = CMU
 // Serif (the bundled lh-cmu @font-face in globals.css — no CDN).
@@ -28,14 +29,21 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 	// prerendered route (settings) would bake the BUILD machine's record.
 	await connection();
 	const { appearance, theme, vars } = readThemeBoot();
+	// The interface language resolves on the same seam (the record + the
+	// OS tag) so the first frame — and <html lang> — never shows the
+	// wrong locale; the provider owns every live switch after that.
+	const localeBoot = readLocaleBoot();
 	return (
 		<html
-			lang="en"
+			lang={localeBoot.locale}
 			className={`${theme.mode} ${ui.variable} ${prose.variable}`}
 			style={vars as React.CSSProperties}
 			suppressHydrationWarning
 		>
 			<body className="min-h-dvh antialiased">
+			{/* The locale provider rides OUTSIDE everything too: every
+				 surface reads t(), the dock and the banner included. */}
+			<I18nProvider initialLocale={localeBoot.locale} systemTag={localeBoot.systemTag}>
 			{/* The notification channel rides OUTSIDE everything: sidebar, dock,
 				 and pages all subscribe as the polls retire (push S3, 2026-10-02). */}
 			<ServerEventsProvider>
@@ -51,6 +59,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 			</ServerEventsProvider>
 			{/* Auto-update banner (Wave C): fixed card, Electron-only pushes. */}
 			<UpdateBanner />
+			</I18nProvider>
 		</body>
 		</html>
 	);

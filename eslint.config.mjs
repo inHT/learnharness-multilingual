@@ -9,7 +9,10 @@ import importPlugin from "eslint-plugin-import";
  * way — this is not a style linter.
  *
  *   components/**  →  "@/src/core"  (the pure core barrel) — ONLY
+ *                     + "@/src/i18n" (the i18n runtime: pure catalog lookup
+ *                     and its React binding — i18n wave, 2026-11-21)
  *   app/**         →  "@/src/core" + "@/src/server" (the server barrel) — ONLY
+ *                     + "@/src/i18n" (the layout mounts the provider)
  *   src/core/**    →  never imports src/agent, src/server, src/store (pure
  *                    core: adapters implement core/ports.ts, never the reverse)
  *   src/agent/**   →  never imports src/server, src/store (dependencies —
@@ -43,14 +46,16 @@ export default defineConfig([
 							target: "./components",
 							from: "./src",
 							// NOTE: the plugin resolves `except` relative to the zone's `from` path.
-							except: ["./core/index.ts"],
+							// i18n (i18n wave, 2026-11-21): the catalog runtime + its React
+							// binding are a shell primitive beside core — pure, no IO.
+							except: ["./core/index.ts", "./i18n"],
 							message:
 								"Browser shell imports ONLY the pure core barrel: `from \"@/src/core\"` (architecture: docs/architecture.md).",
 						},
 						{
 							target: "./app",
 							from: "./src",
-							except: ["./core/index.ts", "./server/index.ts"],
+							except: ["./core/index.ts", "./server/index.ts", "./i18n"],
 							message:
 								"app/ (transport + server components) imports ONLY the barrels: `@/src/core` and `@/src/server` (architecture: docs/architecture.md).",
 						},

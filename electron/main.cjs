@@ -220,15 +220,19 @@ function startServer(port) {
 			process.platform === "darwin"
 				? ["--require", path.join(process.resourcesPath, "server-title-guard.cjs"), serverEntry()]
 				: [serverEntry()],
-			{
-				cwd: path.dirname(serverEntry()),
-				env: {
-					...process.env,
-					ELECTRON_RUN_AS_NODE: "1",
-					NODE_ENV: "production",
-					PORT: String(port),
-					HOSTNAME: "127.0.0.1", // the server defaults to 0.0.0.0 — never
-					LH_DATA_DIR: DATA_DIR(),
+				{
+					cwd: path.dirname(serverEntry()),
+					env: {
+						...process.env,
+						ELECTRON_RUN_AS_NODE: "1",
+						NODE_ENV: "production",
+						PORT: String(port),
+						HOSTNAME: "127.0.0.1", // the server defaults to 0.0.0.0 — never
+						LH_DATA_DIR: DATA_DIR(),
+						// The OS locale (i18n wave, 2026-11-21): the server resolves the
+						// interface language from the record + this tag — app.getLocale()
+						// is the shell's truth, the child has no window to ask.
+						LH_OS_LOCALE: app.getLocale(),
 					// The auth/keys store — the child reads AND writes this file itself
 					// (no env injection anymore: a spawn-time copy would shadow every
 					// settings-page key change until restart; env wins over file).
