@@ -15,7 +15,7 @@ import { useOptionalInteractionLayers } from "./interaction-layers";
 import { isInteractionScopeEligible } from "./plugin-input-focus";
 import { SidebarToggle } from "@/components/sidebar";
 import { StatsBar } from "@/components/stats-bar";
-import { OPENING_PROMPT_FAILURE } from "@/components/opening-prompt";
+import { useT } from "@/src/i18n/react";
 import { PathInput } from "@/components/path-input";
 import { AttachFilesButton } from "@/components/attach-files-button";
 import { SessionStarter } from "@/components/start-session";
@@ -37,6 +37,7 @@ export function Home({
 	 * changing the setting applies on the next visit home. */
 	rendering?: boolean;
 }) {
+	const t = useT();
 	const controller = useOptionalInteractionLayers();
 	const router = useRouter();
 	const pathname = usePathname();
@@ -238,12 +239,12 @@ export function Home({
 									onClick={() => setSetupOpen(true)}
 									className="rounded-sm border border-border bg-card px-3 py-1.5 font-ui text-xs text-foreground transition-colors hover:border-muted-foreground/50 hover:bg-accent cursor-pointer"
 								>
-									Set up your models
+									{t("newSession.setupModels")}
 								</button>
 							)
 						)}
 					/>
-					{startError && <p role="alert" className="mb-2 text-sm text-destructive">{OPENING_PROMPT_FAILURE}</p>}
+					{startError && <p role="alert" className="mb-2 text-sm text-destructive">{t("newSession.openingFailed")}</p>}
 					<form
 						data-attachment-composer=""
 						className="flex items-end gap-1.5 rounded-2xl border bg-card p-1.5 shadow-lg"
@@ -277,7 +278,7 @@ export function Home({
 								void start();
 							}
 						}}
-						placeholder={mode === "practice" ? "What do you want to practice?" : "What do you want to learn?"}
+						placeholder={mode === "practice" ? t("newSession.practicePlaceholder") : t("newSession.teachPlaceholder")}
 						autoFocus
 						className="field-sizing-content lh-input max-h-48 min-h-10 flex-1 resize-none bg-transparent px-2.5 py-2 outline-none placeholder:text-muted-foreground"
 					/>
@@ -286,7 +287,7 @@ export function Home({
 					    affordance (owner, subtlety round 2026-09-25). */}
 					<button
 						type="submit"
-						aria-label="Start session"
+						aria-label={t("newSession.startAria")}
 						disabled={(!topic.trim() && !dictation.active) || busy}
 						className="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-primary text-primary-foreground transition-colors hover:opacity-90 disabled:opacity-40"
 					>

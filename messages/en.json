@@ -1,5 +1,127 @@
 {
+	"common": {
+		"dismiss": "Dismiss",
+		"loading": "Loading…",
+		"cancel": "Cancel",
+		"delete": "Delete",
+		"deleting": "Deleting…",
+		"rename": "Rename",
+		"close": "Close",
+		"back": "Back",
+		"save": "Save"
+	},
+	"time": {
+		"justNow": "just now",
+		"minutesAgo": "{count}m ago",
+		"hoursAgo": "{count}h ago",
+		"daysAgo": "{count}d ago"
+	},
+	"sidebar": {
+		"open": "Open sidebar",
+		"close": "Close sidebar",
+		"home": "Home",
+		"teaching": "Teaching",
+		"practice": "Practice",
+		"newTeachingAria": "create a new teaching session",
+		"newPracticeAria": "create a new practice session",
+		"sessions": "Sessions",
+		"searchSessions": "Search sessions",
+		"searchPlaceholder": "Search…",
+		"addFolder": "Add folder",
+		"filterAll": "All",
+		"noSessionsMatch": "No sessions match.",
+		"noSessionsYet": "No sessions yet.",
+		"moveOutsideFolders": "Move outside folders",
+		"settings": "Settings",
+		"exportMarkdown": "Export as Markdown…",
+		"deleteWithEllipsis": "Delete…",
+		"newSubfolder": "New subfolder",
+		"practiceSession": "Practice session",
+		"renameSession": "Rename session",
+		"meta": {
+			"waiting": "Waiting for input · {time}",
+			"compacting": "Compacting context · {time}",
+			"problemWaiting": "Problem waiting · {time}",
+			"working": "Working…"
+		}
+	},
+	"delete": {
+		"session": {
+			"label": "Delete session",
+			"heading": "Delete session?",
+			"body": "This permanently removes the session — its messages, background jobs, and extraction records. Everything it added to the graph stays unless you check below. This cannot be undone."
+		},
+		"traces": {
+			"title": "Also remove its graph traces",
+			"body": "This session’s topics, links, and events leave the graph too. Topics other sessions or imported notes also cover survive; topics only this session created are removed entirely."
+		},
+		"folder": {
+			"label": "Delete folder",
+			"heading": "Delete folder?",
+			"body": "This permanently removes the folder and the {what} inside — the sessions’ messages, background jobs, and extraction records. Everything they added to the graph stays unless you check below.{notes} This cannot be undone.",
+			"sessionCount": "{count, plural, one {# session} other {# sessions}}",
+			"subfolderCount": "{count, plural, one {# subfolder} other {# subfolders}}",
+			"and": " and ",
+			"notesMove": "{count, plural, one {# imported notes file} other {# imported notes files}} inside {count, plural, one {moves} other {move}} to {target}.",
+			"topLevel": "the top level",
+			"quotedName": "“{name}”",
+			"tracesTitle": "Also remove their graph traces",
+			"tracesBody": "These sessions’ topics, links, and events leave the graph too. Topics other sessions or imported notes also cover survive; topics only these sessions created are removed entirely."
+		},
+		"tryAgain": "Try again",
+		"failed": "Delete failed ({status})",
+		"failedNetwork": "Delete failed — network error. Try again.",
+		"folderChanged": "This folder changed. Nothing was deleted."
+	},
+	"newSession": {
+		"practiceTitle": "New practice session",
+		"teachTitle": "New session",
+		"practiceDescription": "Pick nodes from your knowledge graph, describe what you want to practice, or bring your own problem.",
+		"teachDescription": "The teacher will open by probing what you already know.",
+		"practicePlaceholder": "What do you want to practice?",
+		"teachPlaceholder": "What do you want to learn?",
+		"setupModels": "Set up your models",
+		"addProviderKey": "Add a provider key",
+		"startAria": "Start session",
+		"openingFailed": "Couldn’t open the session. Your message is still here. Try sending again."
+	},
+	"updateBanner": {
+		"ready": "LearnHarness {version} is ready",
+		"updateFallback": "update",
+		"restartHint": " — restart to finish installing.",
+		"restart": "Restart",
+		"dismiss": "Dismiss update notification"
+	},
+	"minimalHome": {
+		"propositions": "{count, plural, one {# proposition} other {# propositions}}",
+		"chains": "{count, plural, one {# chain} other {# chains}}",
+		"teachingSessions": "{count, plural, one {# teaching session} other {# teaching sessions}}",
+		"practiceSessions": "{count, plural, one {# practice session} other {# practice sessions}}",
+		"importedNotes": "{count, plural, one {# imported note} other {# imported notes}}",
+		"emptyStart": "Start a session to begin learning.",
+		"emptyAttach": "Attach your material with the paperclip or drag and drop.",
+		"chainsButton": "Chains",
+		"chainsHint": "Every reasoning chain"
+	},
 	"settings": {
+		"title": "Settings",
+		"sections": "Settings sections",
+		"close": "Close settings",
+		"nav": {
+			"providers": "Providers",
+			"agent": "Agent",
+			"appearance": "Appearance",
+			"graph": "Graph",
+			"keyboard": "Keyboard",
+			"general": "General",
+			"corePlugins": "Core plugins",
+			"communityPlugins": "Community plugins"
+		},
+		"storedOnDevice": "Stored on this device",
+		"loadingPlugins": "Loading plugins…",
+		"loadingSettings": "Loading settings…",
+		"loadFailed": "Settings could not be loaded — refresh to retry.",
+		"saveUnconfirmed": "Could not confirm saved settings. Your input has been kept.",
 		"general": {
 			"language": {
 				"label": "Language",

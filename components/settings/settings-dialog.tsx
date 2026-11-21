@@ -1,13 +1,13 @@
 "use client";
 /**
  * THE SETTINGS DIALOG (settings-app wave, 2026-09-20): the thin settings
- * page graduated into the designed surface â€” a centered modal over
+ * page graduated into the designed surface â€?a centered modal over
  * everything, left section nav + one scrolling content column.
  *
  * Owner decisions this wave:
  * - Dialog, not a page: opens over whatever screen you're on (the payoff:
  *   appearance edits restyle the chat LIVE behind the dialog). Escape,
- *   backdrop, and âœ• all close. Modal-only â€” /settings redirects, so
+ *   backdrop, and âœ?all close. Modal-only â€?/settings redirects, so
  *   nothing links into a dead surface.
  * - Left section nav in the app's mono chrome, with small decorative
  *   Lucide icons for the built-in sections; active = bg-accent. Icons
@@ -60,24 +60,25 @@ import { PluginSettingsPage } from "./plugin-settings-page.tsx";
 import { usePlugins } from "@/components/plugins";
 import { ChatGPTUIProvider } from "./chatgpt-connection.tsx";
 import { NativeSubscriptionUIProvider } from "./subscription-connections.tsx";
+import { useT } from "@/src/i18n/react";
 
-/** Owner (2026-09-20): hints earn their place â€” mechanics-explaining
+/** Owner (2026-09-20): hints earn their place â€?mechanics-explaining
  *  prose is out; only the keyboard note stays (storage location is a
- *  real question users ask). */
+ *  real question users ask). Labels are catalog keys (i18n wave). */
 const SECTIONS = [
-	{ id: "keys", label: "Providers", icon: KeyIcon },
-	{ id: "agent", label: "Agent", icon: BotIcon },
-	{ id: "appearance", label: "Appearance", icon: PaletteIcon },
-	{ id: "graph", label: "Graph", icon: WaypointsIcon },
-	{ id: "keyboard", label: "Keyboard", icon: KeyboardIcon, hint: "Stored on this device" },
-	{ id: "general", label: "General", icon: SettingsIcon },
+	{ id: "keys", labelKey: "settings.nav.providers", icon: KeyIcon },
+	{ id: "agent", labelKey: "settings.nav.agent", icon: BotIcon },
+	{ id: "appearance", labelKey: "settings.nav.appearance", icon: PaletteIcon },
+	{ id: "graph", labelKey: "settings.nav.graph", icon: WaypointsIcon },
+	{ id: "keyboard", labelKey: "settings.nav.keyboard", icon: KeyboardIcon },
+	{ id: "general", labelKey: "settings.nav.general", icon: SettingsIcon },
 ] as const;
 type SectionId = (typeof SECTIONS)[number]["id"] | "plugins" | "core-plugins" | `plugin:${string}`;
 
-/** `open(section?, row?)` â€” the optional ROW deep-links into the Keys
+/** `open(section?, row?)` â€?the optional ROW deep-links into the Keys
  *  section with that row unfolded (zero-keys wave: the dictation error's
  *  click lands on the Deepgram row). `row` is the KEY ID (the env-var
- *  name, e.g. DEEPGRAM_API_KEY â€” KeysSection's openRow state), not the
+ *  name, e.g. DEEPGRAM_API_KEY â€?KeysSection's openRow state), not the
  *  row's testid. */
 const DialogContext = createContext<{ open: (section?: string, row?: string) => void }>({ open: () => {} });
 // Authority belongs to the persistent Settings host, not a particular field or
@@ -163,19 +164,20 @@ function SettingsDialog({
 	/** The keys-section row to unfold (see DialogContext above). */
 	initialRow: string | null;
 }) {
+	const t = useT();
 	// Keep the original visual frame and plain dim backdrop. The shared
 	// untransformed boundary also contains this modal's portaled menus.
 	return <SettingsDialogBody onClose={onClose} initialSection={initialSection}
 		initialRow={initialRow} navigationRequest={navigationRequest}
 		renderFrame={frame => <HostDialog open layerId={layerId} ownerId={null}
-			onClose={onClose} frame={frame} aria-label="Settings"
+			onClose={onClose} frame={frame} aria-label={t("settings.title")}
 			backdropProps={{
 				className: "fixed inset-0 z-50 flex items-center justify-center bg-background/80",
 				"data-testid": "settings-backdrop",
 			}}>{frame.props.children}</HostDialog>} />;
 }
 
-/** The dialog without the portal/backdrop â€” the SSR-testable frame
+/** The dialog without the portal/backdrop â€?the SSR-testable frame
  *  (portals render nothing under renderToStaticMarkup). */
 export function SettingsDialogBody({
 	onClose,
@@ -195,6 +197,7 @@ export function SettingsDialogBody({
 	initialRow?: string | null;
 }) {
 	const { onAppearanceChange } = useAppearance();
+	const t = useT();
 	const inheritedWriteOrder = useContext(WriteOrderContext);
 	const standaloneWriteOrder = useRef(newWriteOrder());
 	const writeOrder = inheritedWriteOrder ?? standaloneWriteOrder;
@@ -204,13 +207,13 @@ export function SettingsDialogBody({
 	);
 	const [error, setError] = useState<string | null>(null);
 	const [fileAccessError, setFileAccessError] = useState<string | null>(null);
-	// MenuShell open-count â€” drives the content column's scroll lock.
+	// MenuShell open-count â€?drives the content column's scroll lock.
 	const [openMenus, setOpenMenus] = useState(0);
 	const contentRef = useRef<HTMLDivElement | null>(null);
 	// Scroll-lock (fix wave, owner ruling: the scrollbar MAY stay,
 	// scrolling must NOT happen, nothing may move): the content column
-	// keeps overflow-y-auto â€” the scrollbar and every width stay exactly
-	// as they are â€” and while any MenuShell is open, non-passive wheel +
+	// keeps overflow-y-auto â€?the scrollbar and every width stay exactly
+	// as they are â€?and while any MenuShell is open, non-passive wheel +
 	// touchmove listeners on the column preventDefault. React attaches
 	// synthetic wheel/touch passively at the root, so this needs the
 	// native-listener ref seam.
@@ -238,9 +241,9 @@ export function SettingsDialogBody({
 	}, []);
 	const [active, setActive] = useState<SectionId>(initialSection);
 	// A deep-link fired while the dialog is ALREADY open (first exercised by
-	// the wave-6 embedding picker's "Add a provider key firstâ€¦" link â€” the
+	// the wave-6 embedding picker's "Add a provider key firstâ€? link â€?the
 	// picker itself died with wave 7, the mechanism is general) changes
-	// initialSection under our feet â€” follow it, or the link silently does
+	// initialSection under our feet â€?follow it, or the link silently does
 	// nothing.
 	useEffect(() => {
 		setActive(initialSection);
@@ -258,9 +261,9 @@ export function SettingsDialogBody({
 	}, [missingPlugin, management]);
 	const selected = missingPlugin ? management : active;
 	const navSections: { id: SectionId; label: string; icon?: LucideIcon }[] = [
-		...SECTIONS,
-		{ id: "core-plugins", label: "Core plugins", icon: PlugIcon },
-		{ id: "plugins", label: "Community plugins", icon: PuzzleIcon },
+		...SECTIONS.map(s => ({ id: s.id, label: t(s.labelKey), icon: s.icon })),
+		{ id: "core-plugins", label: t("settings.nav.corePlugins"), icon: PlugIcon },
+		{ id: "plugins", label: t("settings.nav.communityPlugins"), icon: PuzzleIcon },
 		...enabledPlugins.map(plugin => ({ id: `plugin:${plugin.info.id}` as const, label: plugin.info.manifest?.name ?? plugin.info.id })),
 	];
 
@@ -336,7 +339,7 @@ export function SettingsDialogBody({
 				const stored = reply?.settings;
 				if (!stored || typeof stored !== "object" || Array.isArray(stored) || stored.version !== 1 ||
 					!stored[section] || typeof stored[section] !== "object" || Array.isArray(stored[section])) {
-					if (ticket === writeOrder.current.issued) setError(`${section}: Could not confirm saved settings. Your input has been kept.`);
+					if (ticket === writeOrder.current.issued) setError(`${section}: ${t("settings.saveUnconfirmed")}`);
 					return false;
 				}
 				if (ticket >= writeOrder.current.acknowledged) {
@@ -388,23 +391,23 @@ export function SettingsDialogBody({
 			tabIndex={-1}
 			role="dialog"
 			aria-modal="true"
-			aria-label="Settings"
+			aria-label={t("settings.title")}
 			data-testid="settings-dialog"
 			className="settings-dialog-pop flex h-[620px] max-h-[85vh] w-[920px] max-w-[90vw] flex-col overflow-hidden rounded-md border border-border bg-card shadow-xl"
 			onClick={(e) => e.stopPropagation()}
 		>
-			{/* Header â€” the app's quiet CMU title language. */}
+			{/* Header â€?the app's quiet CMU title language. */}
 			<header className="flex h-15 shrink-0 items-center gap-3 border-b border-border px-5">
-				<h2 className="font-title text-2xl tracking-tight">Settings</h2>
+				<h2 className="font-title text-2xl tracking-tight">{t("settings.title")}</h2>
 				<Hint
 						// Esc closes through the shared interaction owner.
-						label="Close"
+						label={t("common.close")}
 						binding="escape"
 						side="left"
 					>
 						<button
 					type="button"
-					aria-label="Close settings"
+					aria-label={t("settings.close")}
 					data-testid="settings-close"
 					className="ml-auto size-7 rounded-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
 					onClick={onClose}
@@ -423,10 +426,10 @@ export function SettingsDialogBody({
 			</header>
 
 			<div className="flex min-h-0 flex-1">
-				{/* Left nav â€” mono labels and theme-inherited decorative icons,
+				{/* Left nav â€?mono labels and theme-inherited decorative icons,
 					    active = bg-accent. */}
 				<nav
-					aria-label="Settings sections"
+					aria-label={t("settings.sections")}
 					data-testid="settings-nav"
 					className="flex min-h-0 w-48 shrink-0 flex-col gap-1 overflow-y-auto border-r border-border p-2"
 				>
@@ -452,11 +455,11 @@ export function SettingsDialogBody({
 					))}
 				</nav>
 
-				{/* Content column â€” one section at a time, this scrolls â€” and
+				{/* Content column â€?one section at a time, this scrolls â€?and
 				    LOCKS while any MenuShell is open (owner ruling: no
 				    scrolling with a dropdown down; MenuShell announces
 				    open/close, the count keeps overlap honest). The lock
-				    intercepts wheel/touch instead of hiding the scrollbar â€”
+				    intercepts wheel/touch instead of hiding the scrollbar â€?
 				    nothing may shift when the lock engages. */}
 				<div
 					ref={contentRef}
@@ -474,20 +477,20 @@ export function SettingsDialogBody({
 					)}
 					{selected === "plugins" || selected === "core-plugins" ? <PluginsSection origin={selected === "core-plugins" ? "core" : "community"} onOpenSettings={pluginId => setActive(`plugin:${pluginId}`)} />
 						: activePlugin ? <PluginSettingsPage key={`${activePlugin.info.id}/${activePlugin.info.revision}`} plugin={activePlugin} />
-							: activePluginId !== null ? <p role="status" className="px-6 py-5 text-xs text-muted-foreground">Loading pluginsâ€¦</p>
+							: activePluginId !== null ? <p role="status" className="px-6 py-5 text-xs text-muted-foreground">{t("settings.loadingPlugins")}</p>
 								: record === undefined ? (
 						<p className="px-6 py-5 text-xs text-muted-foreground/70">
-							Loading settingsâ€¦
+							{t("settings.loadingSettings")}
 						</p>
 					) : record === null ? (
 						<p className="px-6 py-5 text-xs text-muted-foreground/70">
-							Settings could not be loaded â€” refresh to retry.
+							{t("settings.loadFailed")}
 						</p>
 					) : (
 						<div>
 							{active === "general" && (
 								<SettingsSection
-									title="General"
+									title={t("settings.nav.general")}
 									testid="section-general"
 								>
 									<LanguageSettings
@@ -503,13 +506,13 @@ export function SettingsDialogBody({
 								</SettingsSection>
 							)}
 							{active === "keys" && (
-								<SettingsSection title="Providers" testid="section-keys">
+								<SettingsSection title={t("settings.nav.providers")} testid="section-keys">
 									<KeysSection initialRow={initialRow ?? undefined} />
 								</SettingsSection>
 							)}
 							{active === "agent" && (
 								<SettingsSection
-									title="Agent"
+									title={t("settings.nav.agent")}
 									testid="section-agent"
 								>
 									<AgentSection
@@ -533,7 +536,7 @@ export function SettingsDialogBody({
 							)}
 							{active === "appearance" && (
 								<SettingsSection
-									title="Appearance"
+									title={t("settings.nav.appearance")}
 									testid="section-appearance"
 								>
 									<AppearanceSection
@@ -546,7 +549,7 @@ export function SettingsDialogBody({
 							)}
 							{active === "graph" && (
 								<SettingsSection
-									title="Graph"
+									title={t("settings.nav.graph")}
 									testid="section-graph"
 								>
 									<GraphSection
@@ -559,8 +562,8 @@ export function SettingsDialogBody({
 							)}
 							{active === "keyboard" && (
 								<SettingsSection
-									title="Keyboard"
-									hint="Stored on this device"
+									title={t("settings.nav.keyboard")}
+									hint={t("settings.storedOnDevice")}
 									testid="section-keyboard"
 								>
 									<KeyboardSection />
