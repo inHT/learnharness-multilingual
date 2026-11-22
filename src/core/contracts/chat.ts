@@ -32,11 +32,10 @@ export interface ChatRecord {
 	imageSnapshots?: Record<string, ImageSnapshot>;
 	/** The session's kind; an absent field reads as teach. */
 	kind?: ChatKind;
-	/** The teaching language FROZEN at session birth (i18n wave,
-	 *  2026-11-21): a concrete catalog id, resolved from the settings at
-	 *  creation. Later settings changes affect new sessions only — one
-	 *  conversation never mixes languages. Absent (pre-i18n records) reads
-	 *  as English. */
+	/** The teaching language FROZEN at session birth: a concrete catalog
+	 *  id, resolved from the settings at creation. Later settings changes
+	 *  affect new sessions only — one conversation never mixes languages.
+	 *  Absent (pre-i18n records) reads as English. */
 	teachingLocale?: AppLocale;
 	/** The session's plan tree, written by the native plan tools. */
 	tree?: PlanTree;

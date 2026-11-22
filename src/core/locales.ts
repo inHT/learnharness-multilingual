@@ -1,8 +1,8 @@
 /**
- * THE LOCALE VOCABULARY (i18n wave, 2026-11-21): the app's interface
+ * THE LOCALE VOCABULARY (i18n wave): the app's interface
  * language layer, browser-safe pure logic like the rest of core.
  *
- * Two settings ride GeneralSettings (owner plan, 2026-11-21):
+ * Two settings ride GeneralSettings:
  * - `locale` — the INTERFACE language: "system" (follow the OS) or an
  *   explicit catalog id. Factory "system".
  * - `teachingLocale` — the TEACHING language the learner-facing agent

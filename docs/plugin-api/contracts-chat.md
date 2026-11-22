@@ -235,11 +235,10 @@ kind?: ChatKind;
 
 ### ChatRecord teachingLocale
 
-The teaching language FROZEN at session birth (i18n wave,
-2026-11-21): a concrete catalog id, resolved from the settings at
-creation. Later settings changes affect new sessions only — one
-conversation never mixes languages. Absent (pre-i18n records) reads
-as English.
+The teaching language FROZEN at session birth: a concrete catalog
+id, resolved from the settings at creation. Later settings changes
+affect new sessions only — one conversation never mixes languages.
+Absent (pre-i18n records) reads as English.
 
 ```ts
 teachingLocale?: AppLocale;
