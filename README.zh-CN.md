@@ -81,7 +81,7 @@ LearnHarness 用 AI 智能体为你规划并讲授课程，从你当前的理解
 
 **[从 learnharness.ai 下载](https://learnharness.ai)** —— [GitHub Releases](https://github.com/amosblomqvist/learnharness/releases)
 
-这些是**原项目**的安装包，界面为英文。本翻译版当前从源码构建（见下），本仓库不发布预编译安装包。
+这些是**原项目**的安装包，界面为英文。本翻译版在[本仓库的 Releases](https://github.com/inHT/learnharness-multilingual/releases) 发布 **Windows x64** 安装包；macOS 与 Linux 版本可从源码构建（见下）。
 
 - **macOS（Apple Silicon）：** 已签名并公证的 DMG，拖入“应用程序”即可。
 - **Windows（x64）：** 运行安装程序。目前未签名，Windows 可能提示“未知发布者”或 SmartScreen 警告。

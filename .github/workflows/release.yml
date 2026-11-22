@@ -2,7 +2,11 @@ name: Desktop release
 
 on:
   push:
-    tags: ["v*"]
+    # Plain v<major>.<minor>.<patch> tags only. Edition tags with a suffix
+    # (for example v0.7.0-zh.1) are published manually from this repository and
+    # must not run the upstream multi-platform pipeline: its gates require
+    # tag == "v" + package.json version, and its assets are upstream builds.
+    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
   # Manual runs are artifact-only, unsigned, and NEVER create a release.
   # Use this for the first Windows/Linux dress rehearsal without secrets.
   workflow_dispatch:

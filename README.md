@@ -82,7 +82,7 @@ Future teaching sessions can read the graph instead of starting from scratch. Pr
 
 **[Download from learnharness.ai](https://learnharness.ai)** — [GitHub Releases](https://github.com/amosblomqvist/learnharness/releases)
 
-Those downloads are the **original project's** builds and are in English. This translation edition is built from source (see below); no prebuilt binaries are published in this repository.
+Those downloads are the **original project's** builds and are in English. This translation edition publishes its **Windows x64** installer in [this repository's Releases](https://github.com/inHT/learnharness-multilingual/releases); macOS and Linux builds are made from source (see below).
 
 - **macOS (Apple Silicon):** signed and notarized DMG. Drag the app to Applications.
 - **Windows (x64):** run the installer. It is currently unsigned; Windows may show an “unknown publisher” or SmartScreen warning.
