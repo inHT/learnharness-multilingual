@@ -219,16 +219,16 @@ export function Composer({
 					<button
 						type="submit"
 						data-testid="next-problem-button"
-						aria-label="Next problem"
+						aria-label={t("chat.practiceNext")}
 						className="flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-[10px] bg-success px-4 font-ui text-xs font-medium uppercase tracking-wide text-background transition-colors hover:bg-success/85"
 					>
-						Next problem
+						{t("chat.practiceNext")}
 						<ArrowRightIcon className="size-4" />
 					</button>
 				) : (
 					<button
 						type="submit"
-						aria-label={busy && !canSend ? "Stop" : "Send"}
+						aria-label={busy && !canSend ? t("composer.stop") : t("composer.send")}
 						disabled={!busy && !canSend}
 						className={cn(
 							"flex size-10 shrink-0 items-center justify-center rounded-[10px] transition-colors",

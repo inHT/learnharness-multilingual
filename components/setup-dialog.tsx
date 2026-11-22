@@ -219,7 +219,7 @@ export function SetupKeysBody({
 								data-testid="setup-key-save"
 								className="shrink-0 rounded-sm border border-border bg-background px-3 py-1.5 font-ui text-xs text-foreground transition-colors hover:border-muted-foreground/50 disabled:cursor-not-allowed disabled:opacity-40"
 							>
-								{saving ? "Saving…" : "Save key"}
+								{saving ? t("settings.plugins.saving") : t("setup.saveKey")}
 							</button>
 						</div>
 					</div>
@@ -381,7 +381,7 @@ function OpenSetupDialog({ onClose, onDone }: SetupDialogProps) {
 		setKeySaving(false);
 		if (!res || !res.ok) {
 			const body = (await res?.json().catch(() => ({}))) as { error?: string } | undefined;
-			setKeyError(res ? (body?.error ?? `Save failed (${res.status})`) : "Save failed. Check your connection and try again.");
+			setKeyError(res ? (body?.error ?? t("setup.saveFailedStatus", { status: res.status })) : t("setup.saveFailedConnection"));
 			return;
 		}
 		setKeyProvider(null);
@@ -410,7 +410,7 @@ function OpenSetupDialog({ onClose, onDone }: SetupDialogProps) {
 		}).catch(() => null);
 		if (!res || !res.ok) {
 			setSaving(false);
-			setError(res ? `Save failed: ${(await res.json().catch(() => ({}))).error ?? res.status}` : "Save failed. Check your connection and try again.");
+			setError(res ? t("setup.saveFailedDetail", { detail: (await res.json().catch(() => ({}))).error ?? res.status }) : t("setup.saveFailedConnection"));
 			return;
 		}
 		notifySettingsSaved("models");
@@ -456,7 +456,7 @@ function OpenSetupDialog({ onClose, onDone }: SetupDialogProps) {
 
 				{failed && (
 					<p role="alert" data-testid="setup-catalog-error" className="px-6 py-3 text-sm text-foreground">
-						Model catalog could not be loaded. Check the connection and retry. <button type="button" data-testid="setup-retry" className="underline" onClick={refresh}>{t("settings.agent.retry")}</button>
+						{t("settings.agent.catalogFailed")} <button type="button" data-testid="setup-retry" className="underline" onClick={refresh}>{t("settings.agent.retry")}</button>
 					</p>
 				)}
 				{stage === "loading" ? (
@@ -466,7 +466,7 @@ function OpenSetupDialog({ onClose, onDone }: SetupDialogProps) {
 				) : (
 					<div className="flex flex-col gap-4 overflow-y-auto px-6 py-5" data-testid="setup-stage-pickers">
 						<p className="text-xs text-muted-foreground">
-							Pick the model for each tier. All three are required before chats can start.
+							{t("setup.pickTiers")}
 						</p>
 						{SLOT_ORDER.map((slot) => {
 							const entry = picked[slot];
@@ -546,7 +546,7 @@ function OpenSetupDialog({ onClose, onDone }: SetupDialogProps) {
 															}));
 															setOpenMenu(null);
 														}}
-														footer={slotCatalog && slotCatalog.length === 0 && slot === "vision" ? "No image-capable models. Add a provider key with access to a vision model." : undefined}
+														footer={slotCatalog && slotCatalog.length === 0 && slot === "vision" ? t("setup.noVisionModels") : undefined}
 													/>
 												</MenuShell>
 											)}
@@ -556,7 +556,7 @@ function OpenSetupDialog({ onClose, onDone }: SetupDialogProps) {
 										<div className="relative">
 											<button
 												type="button"
-												aria-label={`${t(SLOT_META[slot].labelKey)} thinking`}
+												aria-label={t("settings.agent.slot.thinkingAria", { slot: t(SLOT_META[slot].labelKey) })}
 												data-testid={`setup-thinking-${slot}`}
 												aria-expanded={openMenu?.slot === slot && openMenu.kind === "thinking"}
 												disabled={!entry}
@@ -603,7 +603,7 @@ function OpenSetupDialog({ onClose, onDone }: SetupDialogProps) {
 								onClick={() => void save()}
 								className="rounded-sm border border-border bg-background px-3 py-1.5 font-ui text-xs text-foreground transition-colors hover:border-muted-foreground/50 disabled:cursor-not-allowed disabled:opacity-40"
 							>
-								{saving ? "Saving…" : "Save models"}
+								{saving ? t("settings.plugins.saving") : t("setup.saveModels")}
 							</button>
 							{error && <p className="text-xs text-error">{error}</p>}
 						</div>

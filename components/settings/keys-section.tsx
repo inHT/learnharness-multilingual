@@ -24,7 +24,9 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { useT } from "@/src/i18n/react";
+import { useT, useI18n } from "@/src/i18n/react";
+import { translate } from "@/src/i18n";
+import type { AppLocale } from "@/src/core";
 import {
 	AUTH_KEYS,
 	CUSTOM_MODEL_DEFAULT_CONTEXT_WINDOW,
@@ -152,11 +154,11 @@ export function providerKeyLabel(id: string, providers: readonly ProviderKeyInfo
 
 /** The minimal status line, e.g. "…ab12 · 64 chars" (" · env" marks an
  *  environment-owned value — the row itself is read-only then). Pure. */
-export function keyStatusLine(status: AuthKeyStatus): string {
-	if (!status.present || !status.masked) return "not set";
+export function keyStatusLine(status: AuthKeyStatus, locale: AppLocale = "en"): string {
+	if (!status.present || !status.masked) return translate(locale, "settings.keys.notSet");
 	const tail = status.masked.replace(/ \((\d+) chars\)$/, "");
 	const chars = status.masked.match(/\((\d+) chars\)$/)?.[1] ?? "?";
-	return `${tail} · ${chars}${status.source === "env" ? " · env" : ""}`;
+	return `${tail} · ${chars}${status.source === "env" ? translate(locale, "settings.keys.envSuffix") : ""}`;
 }
 
 /** One table row: label left, tiny docs link + status right. Writable
@@ -187,6 +189,7 @@ function KeyTableRow({
 	testid: string;
 }) {
 	const t = useT();
+	const { locale } = useI18n();
 	const envOwned = status.source === "env";
 	const [value, setValue] = useState("");
 	const [error, setError] = useState<string | null>(null);
@@ -219,7 +222,7 @@ function KeyTableRow({
 							if (e.key === "Enter") void save();
 						}}
 						placeholder={t("settings.keys.pasteKey")}
-						aria-label={`${label} key`}
+						aria-label={t("settings.keys.keyAria", { label })}
 						data-testid={`${testid}-input`}
 						disabled={busy}
 						autoFocus
@@ -232,7 +235,7 @@ function KeyTableRow({
 						data-testid={`${testid}-save`}
 						className="shrink-0 text-xs text-foreground underline-offset-2 hover:underline disabled:text-muted-foreground/40 disabled:no-underline"
 					>
-						Save
+						{t("common.save")}
 					</button>
 					<button
 						type="button"
@@ -241,7 +244,7 @@ function KeyTableRow({
 						data-testid={`${testid}-cancel`}
 						className="shrink-0 text-xs text-muted-foreground/70 underline-offset-2 hover:text-foreground hover:underline"
 					>
-						Cancel
+						{t("common.cancel")}
 					</button>
 					{status.present && status.source === "file" && onDelete && (
 						<button
@@ -251,7 +254,7 @@ function KeyTableRow({
 							data-testid={`${testid}-delete`}
 							className="shrink-0 text-xs text-muted-foreground/70 underline-offset-2 hover:text-error hover:underline"
 						>
-							Delete
+							{t("common.delete")}
 						</button>
 					)}
 				</div>
@@ -285,11 +288,11 @@ function KeyTableRow({
 							onClick={(e) => e.stopPropagation()}
 							className="text-[10px] text-muted-foreground/60 underline-offset-2 hover:text-foreground hover:underline"
 						>
-							key ↗
+							{t("settings.keys.docsLink")}
 						</a>
 					)}
 					<span data-testid={`${testid}-status`} className="font-mono text-[11px] text-muted-foreground">
-						{keyStatusLine(status)}
+						{keyStatusLine(status, locale)}
 					</span>
 				</span>
 			</button>
@@ -311,6 +314,7 @@ function AddProviderRow({
 	addable: ProviderKeyInfo[];
 	onPick: (p: ProviderKeyInfo) => void;
 }) {
+	const t = useT();
 	const [open, setOpen] = useState(false);
 	const anchorRef = useRef<HTMLDivElement>(null);
 	const interactions = useInteractionLayers();
@@ -337,7 +341,7 @@ function AddProviderRow({
 				onClick={() => setOpen((v) => !v)}
 				className="flex w-full items-center justify-between gap-3 rounded-sm px-1 py-1.5 text-left font-ui text-xs text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground"
 			>
-				<span>+ Add a provider</span>
+				<span>{t("settings.keys.addProvider")}</span>
 				{addable.length > 0 && <span className="font-mono text-[11px]">{addable.length}</span>}
 			</button>
 			{open && (
@@ -464,7 +468,7 @@ export function KeysSection({
 	 *  deleteKey: fire, re-read, broadcast so the catalog narrows everywhere. */
 	async function disconnectCustom(revision: string): Promise<string | null> {
 		const res = await fetch("/api/custom-provider", { method: "DELETE", headers: { "content-type": "application/json", "if-match": revision }, body: JSON.stringify({}) }).catch(() => null);
-		if (!res?.ok) return res ? ((await res.json().catch(() => ({}))).error ?? "Disconnect failed.") : "Disconnect failed. Check your connection.";
+		if (!res?.ok) return res ? ((await res.json().catch(() => ({}))).error ?? t("settings.keys.disconnectFailed")) : t("settings.keys.disconnectFailedConnection");
 		discardCustomEditor();
 		await reload();
 		notifySettingsSaved("keys");
@@ -605,12 +609,12 @@ export function KeysSection({
 				{label === "Dictation" && <>
 					<DictationLanguageSetting />
 					<p data-testid="dictation-setup-hint" className="px-1 text-[11px] leading-relaxed text-muted-foreground/70">
-						Create a <a
+						{t("settings.keys.dictationSetupBefore")} <a
 							href="https://console.deepgram.com/"
 							target="_blank"
 							rel="noreferrer"
 							className="underline underline-offset-2 hover:text-foreground"
-						>{t("settings.keys.deepgramKey")}</a> with the Member role or higher, then add it above.
+						>{t("settings.keys.deepgramKey")}</a>{t("settings.keys.dictationSetupAfter")}
 					</p>
 				</>}
 			</SettingsGroup>)}
@@ -652,7 +656,7 @@ function AddProviderEditor({
 					if (e.key === "Enter" && value.trim()) onSave(value);
 				}}
 				placeholder={t("settings.keys.pasteKey")}
-				aria-label={`${provider.label} key`}
+				aria-label={t("settings.keys.keyAria", { label: provider.label })}
 				data-testid={`key-${provider.id}-input`}
 				autoFocus={active}
 				className="h-7 min-w-0 flex-1 rounded-sm border border-border bg-background px-1.5 font-mono text-xs text-foreground outline-none placeholder:text-muted-foreground/60 focus:border-muted-foreground/50"
@@ -664,7 +668,7 @@ function AddProviderEditor({
 				data-testid={`key-${provider.id}-save`}
 				className="shrink-0 text-xs text-foreground underline-offset-2 hover:underline disabled:text-muted-foreground/40 disabled:no-underline"
 			>
-				Save
+				{t("common.save")}
 			</button>
 			<button
 				type="button"
@@ -672,7 +676,7 @@ function AddProviderEditor({
 				data-testid={`key-${provider.id}-cancel`}
 				className="shrink-0 text-xs text-muted-foreground/70 underline-offset-2 hover:text-foreground hover:underline"
 			>
-				Cancel
+				{t("common.cancel")}
 			</button>
 			{error && (
 				<p role="alert" className="w-full pl-0 text-xs text-error" data-testid={`key-${provider.id}-error`}>
@@ -694,7 +698,7 @@ export function CustomEndpointSetup({ onSaved }: { onSaved: () => void | Promise
 		catch { setError(true); }
 	}
 	useEffect(() => { void reload(); }, []);
-	if (!status || error) return <div className="text-xs">{error ? "Unable to load custom configuration." : "Loading custom configuration…"}{error && <button onClick={() => void reload()}>{t("settings.keys.retry")}</button>}</div>;
+	if (!status || error) return <div className="text-xs">{error ? t("settings.keys.customLoadFailed") : t("settings.keys.customLoading")}{error && <button onClick={() => void reload()}>{t("settings.keys.retry")}</button>}</div>;
 	return <CustomEndpointEditor key={status.revision} setup revision0={status.revision} authMode0={status.authMode} keySource0={status.keySource} keyReuseRequired0={status.keyReuseRequired} baseUrl0={status.baseUrl} keyPresent={status.keyPresent} models={status.models} overrides={status.overrides} manualModels0={status.manualModels} onSaved={onSaved} onPinsSaved={reload} onReload={reload} onCancel={reload} />;
 }
 
@@ -710,7 +714,8 @@ function CustomEndpointRow({
 }) {
 	const t = useT();
 	const count = status.models.length;
-	const line = `${status.baseUrl} · ${count} model${count === 1 ? "" : "s"} · ${status.authMode === "keyless" ? "keyless" : status.keyPresent ? "API key" : "API key missing"}`;
+	const auth = status.authMode === "keyless" ? t("settings.keys.keylessInline") : status.keyPresent ? t("settings.keys.apiKey") : t("settings.keys.apiKeyMissing");
+	const line = t("settings.keys.customSummary", { url: status.baseUrl, count, auth });
 	return (
 		<div data-testid="custom-endpoint-row">
 			<button
@@ -829,7 +834,7 @@ function CustomEndpointEditor({
 			setKeyPresent(status.keyPresent);
 			setKeyReuseRequired(status.keyReuseRequired);
 			if (status.keySource === "env") setKey("");
-		}).catch(() => { if (!cancelled) setError("Unable to inspect effective key. Reload configuration and retry."); })
+		}).catch(() => { if (!cancelled) setError(t("settings.keys.inspectKeyFailed")); })
 			.finally(() => { if (!cancelled) setAuthLoading(false); });
 		return () => { cancelled = true; };
 	}, [authMode]);
@@ -865,7 +870,7 @@ function CustomEndpointEditor({
 		}).catch(() => null);
 		if (!res || !res.ok) {
 			const b = (await res?.json().catch(() => ({}))) as { error?: string } | undefined;
-			setPinsError(res ? (b?.error ?? `Save failed (${res.status})`) : "Save failed. Check your connection.");
+			setPinsError(res ? (b?.error ?? t("settings.keys.saveFailedStatus", { status: res.status })) : t("settings.keys.saveFailedConnection"));
 			setPinsBusy(false);
 			return;
 		}
@@ -890,7 +895,7 @@ function CustomEndpointEditor({
 		}).catch(() => null);
 		if (!res || !res.ok) {
 			const b = (await res?.json().catch(() => ({}))) as { error?: string } | undefined;
-			setError(res ? (b?.error ?? `Connect failed (${res.status})`) : "Connect failed. Check your connection.");
+			setError(res ? (b?.error ?? t("settings.keys.connectFailedStatus", { status: res.status })) : t("settings.keys.connectFailedConnection"));
 			setBusy(false);
 			return;
 		}
@@ -925,13 +930,13 @@ function CustomEndpointEditor({
 				disabled={busy}
 				className="h-7 min-w-0 rounded-sm border border-border bg-background px-1.5 font-mono text-xs text-foreground outline-none placeholder:text-muted-foreground/60 focus:border-muted-foreground/50"
 			/>
-			<label className="flex items-center gap-2 text-xs">Authentication
+			<label className="flex items-center gap-2 text-xs">{t("settings.keys.authentication")}
 				<select aria-label={t("settings.keys.authAria")} data-testid="custom-auth-mode" value={authMode} disabled={busy || pinsBusy} onChange={(e) => { setAuthMode(e.target.value as "keyless" | "apiKey"); setReuseKey(false); }}>
 					<option value="keyless">{t("settings.keys.keyless")}</option><option value="apiKey">{t("settings.keys.apiKey")}</option>
 				</select>
 			</label>
 			{authMode === "apiKey" && keySource === "env" && <p className="text-[11px] text-muted-foreground" data-testid="custom-env-owned">{t("settings.keys.envSupplied")}</p>}
-			{authMode === "apiKey" && keyPresent && (changedTarget || keyReuseRequired) && <label className="text-[11px]"><input type="checkbox" data-testid="custom-reuse-key" checked={reuseKey} onChange={(e) => setReuseKey(e.target.checked)} /> Allow reuse of the effective existing key for this URL</label>}
+			{authMode === "apiKey" && keyPresent && (changedTarget || keyReuseRequired) && <label className="text-[11px]"><input type="checkbox" data-testid="custom-reuse-key" checked={reuseKey} onChange={(e) => setReuseKey(e.target.checked)} /> {t("settings.keys.allowReuseKey")}</label>}
 			<div className="flex items-center gap-2">
 				{authMode === "apiKey" && <input
 					type="password"
@@ -941,7 +946,7 @@ function CustomEndpointEditor({
 						setKeyTouched(true);
 						if (!e.target.value.trim()) setAuthMode("keyless");
 					}}
-					placeholder={keyPresent ? "Leave blank to keep effective key" : "API key"}
+					placeholder={keyPresent ? t("settings.keys.leaveBlankKey") : t("settings.keys.apiKey")}
 					aria-label={t("settings.keys.apiKeyAria")}
 					data-testid="custom-key-input"
 					disabled={busy || pinsBusy || keySource === "env"}
@@ -954,7 +959,7 @@ function CustomEndpointEditor({
 					data-testid="custom-save"
 					className="shrink-0 text-xs text-foreground underline-offset-2 hover:underline disabled:text-muted-foreground/40 disabled:no-underline"
 				>
-					{busy ? "Connecting…" : "Connect"}
+					{busy ? t("settings.keys.connecting") : t("settings.keys.connect")}
 				</button>
 				<button
 					type="button"
@@ -963,7 +968,7 @@ function CustomEndpointEditor({
 					data-testid="custom-cancel"
 					className="shrink-0 text-xs text-muted-foreground/70 underline-offset-2 hover:text-foreground hover:underline"
 				>
-					Cancel
+					{t("common.cancel")}
 				</button>
 				{/* Disconnect rides beside Connect, exactly the stored-key rows' Delete:
 				    quiet text, one click, no confirm — and only once there IS an
@@ -976,7 +981,7 @@ function CustomEndpointEditor({
 						data-testid="custom-delete"
 						className="shrink-0 text-xs text-muted-foreground/70 underline-offset-2 hover:text-error hover:underline"
 					>
-						Disconnect
+						{t("settings.keys.disconnect")}
 					</button>
 				)}
 			</div>
@@ -989,7 +994,10 @@ function CustomEndpointEditor({
 								<div key={m.id} className="flex items-center gap-2" data-testid={pinTestid("custom-pin-row", m.id)}>
 									<span className="min-w-0 flex-1 truncate font-mono text-[11px] text-foreground" title={m.id}>
 										{m.id}
-										<span className="block text-[10px] text-muted-foreground">Context: {d.context.trim() ? "user pin" : m.context ? `reported ${m.context}` : `fallback ${CUSTOM_MODEL_DEFAULT_CONTEXT_WINDOW}`} · Output: {d.maxTokens.trim() ? "user pin" : m.maxTokens ? `reported ${m.maxTokens}` : `fallback ${CUSTOM_MODEL_DEFAULT_MAX_TOKENS}`}</span>
+										<span className="block text-[10px] text-muted-foreground">{t("settings.keys.pinSummary", {
+											context: d.context.trim() ? t("settings.keys.userPin") : m.context ? t("settings.keys.reportedValue", { value: m.context }) : t("settings.keys.fallbackValue", { value: CUSTOM_MODEL_DEFAULT_CONTEXT_WINDOW }),
+											output: d.maxTokens.trim() ? t("settings.keys.userPin") : m.maxTokens ? t("settings.keys.reportedValue", { value: m.maxTokens }) : t("settings.keys.fallbackValue", { value: CUSTOM_MODEL_DEFAULT_MAX_TOKENS }),
+										})}</span>
 									</span>
 									<input
 										type="text"
@@ -997,7 +1005,7 @@ function CustomEndpointEditor({
 										value={d.context}
 										onChange={(e) => setDraft(m, { context: e.target.value })}
 										placeholder={String(m.context ?? CUSTOM_MODEL_DEFAULT_CONTEXT_WINDOW)}
-										aria-label={`${m.id} context window in tokens`}
+										aria-label={t("settings.keys.pinContextAria", { model: m.id })}
 										data-testid={pinTestid("custom-pin-context", m.id)}
 										disabled={pinsBusy}
 										className="h-7 w-20 shrink-0 rounded-sm border border-border bg-background px-1.5 text-right font-mono text-[11px] text-foreground outline-none placeholder:text-muted-foreground/60 focus:border-muted-foreground/50"
@@ -1008,7 +1016,7 @@ function CustomEndpointEditor({
 										value={d.maxTokens}
 										onChange={(e) => setDraft(m, { maxTokens: e.target.value })}
 										placeholder={String(m.maxTokens ?? CUSTOM_MODEL_DEFAULT_MAX_TOKENS)}
-										aria-label={`${m.id} max output tokens`}
+										aria-label={t("settings.keys.pinOutputAria", { model: m.id })}
 										data-testid={pinTestid("custom-pin-maxtokens", m.id)}
 										disabled={pinsBusy}
 										className="h-7 w-20 shrink-0 rounded-sm border border-border bg-background px-1.5 text-right font-mono text-[11px] text-foreground outline-none placeholder:text-muted-foreground/60 focus:border-muted-foreground/50"
@@ -1016,7 +1024,7 @@ function CustomEndpointEditor({
 									<select
 										value={d.reasoning}
 										onChange={(e) => setDraft(m, { reasoning: e.target.value as PinDraft["reasoning"] })}
-										aria-label={`${m.id} reasoning effort support`}
+										aria-label={t("settings.keys.pinReasoningAria", { model: m.id })}
 										data-testid={pinTestid("custom-pin-reasoning", m.id)}
 										disabled={pinsBusy}
 										className="h-7 shrink-0 rounded-sm border border-border bg-background px-1 font-ui text-[11px] text-foreground outline-none focus:border-muted-foreground/50"
@@ -1042,7 +1050,7 @@ function CustomEndpointEditor({
 							data-testid="custom-pins-save"
 							className="ml-auto shrink-0 text-xs text-foreground underline-offset-2 hover:underline disabled:text-muted-foreground/40 disabled:no-underline"
 						>
-							{pinsBusy ? "Saving…" : "Save limits"}
+							{pinsBusy ? t("settings.plugins.saving") : t("settings.keys.saveLimits")}
 						</button>
 					</div>
 				</div>

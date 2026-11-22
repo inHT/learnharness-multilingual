@@ -30,11 +30,11 @@ export function PluginViewScreen({ pluginId, viewId }: { pluginId: string; viewI
 	const unavailable = !plugin ? t("pluginChrome.notInstalled") : !plugin.info.enabled ? t("pluginChrome.disabled") : t("pluginChrome.viewUnavailable");
 	return <div className="flex h-dvh min-w-0 flex-col">
 		<TopBar>
-			<h1 data-plugin-chrome-title className="min-w-0 truncate font-title text-3xl tracking-tight">{view?.name ?? plugin?.info.manifest?.name ?? "Plugin"}</h1>
+			<h1 data-plugin-chrome-title className="min-w-0 truncate font-title text-3xl tracking-tight">{view?.name ?? plugin?.info.manifest?.name ?? t("pluginChrome.plugin")}</h1>
 			<div className="min-w-4 flex-1" aria-hidden="true" />
 			<PluginTopBarActions context={{ placement: "top-bar", surface: "plugin-view", pluginId, viewId }} />
 			<Hint label={t("pluginChrome.settings")} side="bottom">
-				<Button variant="ghost" size="icon" aria-label={t("pluginChrome.settings")} title="Plugin settings" className="shrink-0" onClick={() => open(`plugin:${pluginId}`)}><SettingsIcon className="size-4" /></Button>
+				<Button variant="ghost" size="icon" aria-label={t("pluginChrome.settings")} title={t("pluginChrome.settings")} className="shrink-0" onClick={() => open(`plugin:${pluginId}`)}><SettingsIcon className="size-4" /></Button>
 			</Hint>
 		</TopBar>
 		<div ref={bodyRef} className="relative flex min-h-0 min-w-0 flex-1 flex-col">

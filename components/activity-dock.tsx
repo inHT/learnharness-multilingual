@@ -7,7 +7,9 @@ import type { CallUsage, JobKind, JobRecord } from "@/src/core";
 import { isModelsRefusal, isProviderKeyRefusal, subscriptionLabel, subscriptionLabels } from "@/src/core";
 import { formatTokens, planCostLabel } from "@/components/usage-format";
 import { useServerEvent, useServerResync } from "@/components/server-events";
-import { useT } from "@/src/i18n/react";
+import { useT, useI18n } from "@/src/i18n/react";
+import { translate } from "@/src/i18n";
+import type { AppLocale } from "@/src/core";
 
 /**
  * THE BACKGROUND-AGENTS SECTION (owner, sidebar round — the successor of
@@ -210,7 +212,7 @@ export interface ActivityBlob {
 }
 
 /** Merge the feed into one oldest-first blob list (the stable blob order). */
-export function toBlobs(feed: ActivityFeed): ActivityBlob[] {
+export function toBlobs(feed: ActivityFeed, locale: AppLocale = "en"): ActivityBlob[] {
 	const blobs: ActivityBlob[] = feed.jobs.map((job) => {
 		const usage = job.usage;
 		let context: ActivityBlob["context"] = null;
@@ -238,7 +240,7 @@ export function toBlobs(feed: ActivityFeed): ActivityBlob[] {
 			id: job.id,
 			process: "job",
 			jobKind: job.kind,
-			title: job.kind === "plugin" ? job.plugin?.label || job.plugin?.toolName || "Plugin worker" : job.title,
+			title: job.kind === "plugin" ? job.plugin?.label || job.plugin?.toolName || translate(locale, "activity.pluginWorker") : job.title,
 			chatId: job.chatId,
 			startedAt: Date.parse(job.createdAt) || 0,
 			cost: job.costUsd ?? null,
@@ -250,9 +252,9 @@ export function toBlobs(feed: ActivityFeed): ActivityBlob[] {
 			// 66dbea9): a pinned model whose key is gone reads as the key
 			// being needed, same quiet tone.
 			activity: isModelsRefusal(job.error)
-				? "needs model setup"
+				? translate(locale, "activity.needsModelSetup")
 				: isProviderKeyRefusal(job.error)
-					? "needs a provider key"
+					? translate(locale, "activity.needsProviderKey")
 					: (job.activity ?? ""),
 			model: usage?.model,
 			steps: usage?.steps,
@@ -324,10 +326,11 @@ type AbortState = "pending" | "failed";
 
 export function ActivitySection({ feed: feedProp }: { feed?: ActivityFeed }) {
 	const t = useT();
+	const { locale } = useI18n();
 	const ctx = useContext(ActivityContext);
 	const feed = feedProp ?? ctx.feed;
 	const refresh = ctx.refresh;
-	const blobs = useMemo(() => toBlobs(feed), [feed]);
+	const blobs = useMemo(() => toBlobs(feed, locale), [feed, locale]);
 	const [openBlob, setOpenBlob] = useState<string | null>(null); // detail, inline-expanded
 	const [abortStates, setAbortStates] = useState<Record<string, AbortState>>({});
 	const now = useNow(blobs.length > 0);
@@ -428,18 +431,18 @@ function ActivityBlobRow({
 	const Icon = blob.process === "extraction" ? WaypointsIcon : (blob.jobKind && KIND_ICON[blob.jobKind]) || BotIcon;
 	const label =
 		blob.process === "extraction"
-			? `Extraction — ${blob.phase ?? "running"}`
+			? t("activity.extraction", { phase: blob.phase ?? "running" })
 			: blob.jobKind === "research"
-				? "Researcher"
+				? t("activity.agent.research")
 				: blob.jobKind === "demo"
-					? "Demo builder"
+					? t("activity.agent.demo")
 					: blob.jobKind === "visual"
-						? "Figure maker"
+						? t("activity.agent.visual")
 						: blob.jobKind === "pdf"
-							? "PDF reader"
+							? t("activity.agent.pdf")
 							: blob.jobKind === "plugin"
-								? "Plugin worker"
-								: "Sub-agent";
+								? t("activity.pluginWorker")
+								: t("activity.agent.subagent");
 	return (
 		<div
 			data-testid={`activity-blob-${blob.process}`}
@@ -479,8 +482,8 @@ function ActivityBlobRow({
 					data-testid="activity-abort"
 					onClick={onAbort}
 					disabled={abortState !== undefined}
-					title={abortState === "failed" ? "Abort failed — try again" : "End this background process"}
-					aria-label={`End ${label} in ${blob.title}`}
+					title={abortState === "failed" ? t("activity.abortFailed") : t("activity.endProcess")}
+					aria-label={t("activity.endAria", { label, title: blob.title })}
 					className="absolute right-1 top-1/2 -translate-y-1/2 rounded-md p-1 text-muted-foreground/70 transition-colors hover:bg-destructive/10 hover:text-destructive disabled:opacity-50"
 				>
 					<SquareIcon className="size-3" />
@@ -529,13 +532,13 @@ function ActivityBlobRow({
 						)}
 						{blob.chatId && (
 							<a href={`/chat/${blob.chatId}`} className="text-primary hover:underline">
-								Open session →
+								{t("activity.openSession")}
 							</a>
 						)}
 					</div>
 					<div className="mt-2 text-muted-foreground/80">
-					{abortState === "failed" && "Abort failed — try again"}
-					{abortState === "pending" && "Stopping…"}
+					{abortState === "failed" && t("activity.abortFailed")}
+					{abortState === "pending" && t("activity.stopping")}
 				</div>
 				</div>
 			)}

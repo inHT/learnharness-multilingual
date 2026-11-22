@@ -26,5 +26,5 @@ export function PluginQuestionPart({ part, chatId }: { part: LhViewPart; chatId:
 		const cancellation = readPluginQuestionCancellation(part.result?.details ?? part.output, snapshot);
 		if (cancellation) return <p className="py-1 text-xs text-muted-foreground">{t("pluginChrome.questionDismissed")}</p>;
 	}
-	return <p role="status" className="py-1 text-xs text-muted-foreground">{annotation.status === "unreadable" || part.state === "output-error" ? "Question unavailable" : "Preparing question…"}</p>;
+	return <p role="status" className="py-1 text-xs text-muted-foreground">{annotation.status === "unreadable" || part.state === "output-error" ? t("pluginChrome.questionUnavailable") : t("pluginChrome.preparingQuestion")}</p>;
 }

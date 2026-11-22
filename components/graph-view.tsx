@@ -369,9 +369,10 @@ export function GraphCostControl({ costs }: { costs: GraphCostSummary }) {
  * naming-kind runs never reach the list.
  */
 function GraphCostPanel({ costs }: { costs: GraphCostSummary }) {
+	const t = useT();
 	const stageRows: [string, GraphCostSummary["stages"]["extraction"]][] = [
-		["Extraction", costs.stages.extraction],
-		["Audit", costs.stages.audit],
+		[t("graph.stageExtraction"), costs.stages.extraction],
+		[t("graph.stageAudit"), costs.stages.audit],
 	];
 	// The displayed figures come from displayCostTotals (naming excluded —
 	// the pill and this panel must agree).
@@ -380,12 +381,12 @@ function GraphCostPanel({ costs }: { costs: GraphCostSummary }) {
 		<div className="w-80 max-w-[calc(100vw-1.5rem)] rounded-xl border bg-card/95 p-3 text-xs shadow-lg backdrop-blur">
 			<div className="mb-2 flex items-baseline justify-between">
 				<span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-					Graph pipeline costs
+					{t("graph.pipelineCosts")}
 				</span>
 				<span className="text-foreground tabular-nums">
 					{graphUsageLabel(costs)}
 					{unpricedRuns > 0 && (
-						<span className="text-muted-foreground"> · {unpricedRuns} unpriced</span>
+						<span className="text-muted-foreground"> · {t("graph.unpriced", { count: unpricedRuns })}</span>
 					)}
 				</span>
 			</div>
@@ -396,11 +397,11 @@ function GraphCostPanel({ costs }: { costs: GraphCostSummary }) {
 						<span className="min-w-0 text-right tabular-nums">
 							{fmtRunCost(stage.runs - stage.unpricedRuns - (stage.subscriptionRuns ?? 0) <= 0 ? null : stage.dollars, graphProviders(stage))}
 							{stage.unpricedRuns > 0 && (stage.runs - stage.unpricedRuns - (stage.subscriptionRuns ?? 0) > 0 || (stage.subscriptionRuns ?? 0) > 0) && (
-								<span className="text-muted-foreground"> +{stage.unpricedRuns} unpriced</span>
+								<span className="text-muted-foreground"> {t("graph.plusUnpriced", { count: stage.unpricedRuns })}</span>
 							)}
 							<span className="text-muted-foreground">
 								{" "}
-								· {fmtTokens(stage.tokens.inputTokens)} in / {fmtTokens(stage.tokens.outputTokens)} out
+								{t("graph.tokensInOut", { input: fmtTokens(stage.tokens.inputTokens), output: fmtTokens(stage.tokens.outputTokens) })}
 							</span>
 						</span>
 					</div>
@@ -419,7 +420,7 @@ function GraphCostPanel({ costs }: { costs: GraphCostSummary }) {
 									</span>
 								)}
 							</span>
-							<span className="shrink-0 tabular-nums">{fmtRunCost(run.dollars, graphProviders(run))}{run.dollars === null && run.subscriptionRuns === 1 ? " +1 unpriced" : ""}</span>
+							<span className="shrink-0 tabular-nums">{fmtRunCost(run.dollars, graphProviders(run))}{run.dollars === null && run.subscriptionRuns === 1 ? ` ${t("graph.plusUnpriced", { count: 1 })}` : ""}</span>
 						</div>
 					))}
 			</div>
@@ -545,7 +546,7 @@ function GraphSettingsControl({
 						    the paint. */}
 						<div className="mt-1.5 flex flex-col gap-1.5 border-t pt-1.5">
 							<span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-								Regions
+								{t("graph.regions")}
 							</span>
 							<label className="flex cursor-pointer items-center justify-between text-[11px] text-muted-foreground">
 								<span>{t("graph.display.backgroundColors")}</span>
@@ -666,7 +667,7 @@ function GraphSettingsControl({
 						    anchor + its gray-out-able controls last. */}
 						<div className="mt-1.5 flex flex-col gap-1.5 border-t pt-1.5">
 							<span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-								Physics
+								{t("graph.physics")}
 							</span>
 							<SettingSlider
 								label={t("graph.display.nodeRepulsion")}
@@ -751,7 +752,7 @@ function GraphSettingsControl({
 							    controls at the very bottom — the grayed group reads
 							    as a self-contained sub-section. */}
 							<label className="flex items-center justify-between gap-2 text-xs">
-								Depth anchor
+								{t("graph.depthAnchor")}
 								<select
 									className="rounded border bg-background px-1 py-0.5 text-xs"
 									value={physicsTuning.depthMode}
@@ -762,9 +763,9 @@ function GraphSettingsControl({
 										}))
 									}
 								>
-									<option value="off">Off</option>
-									<option value="vertical">Vertical (up)</option>
-									<option value="radial">Radial (outward)</option>
+									<option value="off">{t("graph.depthOff")}</option>
+									<option value="vertical">{t("graph.depthVertical")}</option>
+									<option value="radial">{t("graph.depthRadial")}</option>
 								</select>
 							</label>
 							<SettingSlider
@@ -892,7 +893,7 @@ export function GraphChromeRow({
 							className="flex h-7 items-center gap-1.5 rounded-lg px-2.5 text-xs text-muted-foreground transition-colors hover:bg-accent"
 						>
 							<ListTreeIcon className="size-3" />
-							Chains
+							{t("minimalHome.chainsButton")}
 						</button>
 					</Hint>
 				</div>
@@ -1519,8 +1520,8 @@ export function GraphView({
 						<WaypointsIcon className="size-10 opacity-40" strokeWidth={1.25} />
 						<div className="text-lg font-medium text-foreground">{t("graph.title")}</div>
 						<div className="max-w-sm text-sm">
-							<p>Start a session to begin learning.</p>
-							<p className="mt-1 text-xs">Attach your material with the paperclip or drag and drop.</p>
+							<p>{t("minimalHome.emptyStart")}</p>
+							<p className="mt-1 text-xs">{t("minimalHome.emptyAttach")}</p>
 						</div>
 					</div>
 				</div>

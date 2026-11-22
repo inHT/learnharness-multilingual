@@ -176,7 +176,7 @@ export function StatsBar({
 						{turns.length > 0 && (
 							<>
 								<div className="mb-1 mt-2.5 border-t pt-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-									Turns
+									{t("stats.turns")}
 								</div>
 								<ul className="flex max-h-56 flex-col gap-1 overflow-y-auto">
 									{turns.map((turn, i) => {
@@ -187,7 +187,7 @@ export function StatsBar({
 													#{i + 1} · {prettyModel(turn.model, true)}
 												</span>
 												<span className="flex shrink-0 items-center gap-2 tabular-nums text-card-foreground">
-													<span className="text-muted-foreground">{turn.steps.length} steps</span>
+													<span className="text-muted-foreground">{t("stats.stepsCount", { count: turn.steps.length })}</span>
 													<span>{turn.model.startsWith(`${CLAUDE_CODE_PROVIDER}:`) ? "CLI" : subscriptionLabel(turn.model) ?? (c === null ? "—" : formatUsd(c))}</span>
 												</span>
 											</li>

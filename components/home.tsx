@@ -317,7 +317,7 @@ export function Home({
 										}
 									>
 										{m === "practice" ? <DumbbellIcon aria-hidden="true" className="size-3" /> : null}
-										{m === "teach" ? "Teach" : "Practice"}
+										{m === "teach" ? t("newSession.modeTeach") : t("sidebar.practice")}
 									</button>
 								))}
 							</div>

@@ -43,7 +43,7 @@ import {
 	type AppLocale,
 } from "@/src/core";
 import { translate } from "@/src/i18n";
-import { useI18n } from "@/src/i18n/react";
+import { useI18n, useT } from "@/src/i18n/react";
 import type { PrepareBuiltinSubmission } from "./plugin-submission-adapters";
 import { CONFIDENCE_COLORS, confidenceRailStyle } from "@/components/confidence-rail";
 import {
@@ -255,10 +255,11 @@ export function QuestionDock({
 	// ("recall") is explain-shaped. Old records keep the teach names.
 	const canonical =
 		toolName === "probe" ? "quiz" : toolName === "recall" ? "explain" : toolName;
+	const t = useT();
 	// The chip's display name carries the tool's OWN name (owner
 	// 2026-10-09): probe-phase questions label Probe/Recall in the
 	// composer; teach tools keep the standing labels.
-	const toolLabel = toolName === "probe" ? "Probe" : toolName === "recall" ? "Recall" : undefined;
+	const toolLabel = toolName === "probe" ? t("question.label.probe") : toolName === "recall" ? t("question.label.recall") : undefined;
 	// Parse, don't cast (src/core/tool-parts.ts): the model authored this
 	// input, and only the schema the tool declared vouches for its shape.
 	// The dock mounts on input-available parts (already validated at the
@@ -282,7 +283,7 @@ export function QuestionDock({
 					label={
 						(canonical === "quiz" || canonical === "explain") &&
 						normalizeQuizType((parsed as { type?: unknown }).type) === "predict"
-							? "Prediction"
+							? t("question.label.prediction")
 							: undefined
 					}
 				/>
@@ -337,6 +338,7 @@ export function QuestionDockBar({
 	 *  label Probe/Recall — the phase boundary visible in the composer. */
 	toolLabel?: string;
 }) {
+	const t = useT();
 	if (variant === "reveal") {
 		return (
 			<button
@@ -349,13 +351,13 @@ export function QuestionDockBar({
 					<PlayIcon className="size-3.5" />
 				</span>
 				<span className="min-w-0 flex-1">
-					<span className="block text-sm font-medium">Check your understanding</span>
+					<span className="block text-sm font-medium">{t("question.checkUnderstanding")}</span>
 					<span className="block text-xs text-muted-foreground">
 						<QuestionPreview>{question}</QuestionPreview>
 					</span>
 				</span>
 				<span className="flex shrink-0 items-center gap-1 text-xs font-medium text-primary">
-					Open <ChevronRightIcon className="size-3.5" />
+					{t("question.open")} <ChevronRightIcon className="size-3.5" />
 				</span>
 			</button>
 		);
@@ -370,13 +372,13 @@ export function QuestionDockBar({
 			<span className="shrink-0 text-xs font-medium uppercase tracking-wide text-muted-foreground">
 				{label ??
 							toolLabel ??
-							(toolName === "quiz" ? "Check" : toolName === "explain" ? "Explain" : "Question")}
+							(toolName === "quiz" ? t("question.label.check") : toolName === "explain" ? t("question.label.explain") : t("question.label.question"))}
 			</span>
 			<span className="min-w-0 flex-1 text-muted-foreground">
 				<QuestionPreview>{question}</QuestionPreview>
 			</span>
 			<span className="flex shrink-0 items-center gap-1 text-xs font-medium">
-				Answer <ArrowDownIcon className="size-3.5" />
+				{t("question.answer")} <ArrowDownIcon className="size-3.5" />
 			</span>
 		</button>
 	);
@@ -1201,7 +1203,7 @@ function QuestionDockForm({
 					)}
 					<div className="flex items-center justify-between gap-2 p-1">
 						<span aria-hidden className="pl-1.5 text-xs text-muted-foreground">
-								{compactionRunning ? "compacting session…" : "↵ submits · ⇧↵ newline"}
+								{compactionRunning ? t("practice.compacting") : t("practice.submitHint")}
 						</span>
 						<Button
 							type="submit"

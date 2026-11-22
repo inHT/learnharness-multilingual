@@ -3,6 +3,7 @@
 import { useLayoutEffect, useRef, type RefObject } from "react";
 import { HostMarkdown } from "@/components/host-markdown";
 import { cn } from "@/lib/utils";
+import { useT } from "@/src/i18n/react";
 
 export function PromptText({ text, preview, fieldRef, onChange, busy }: {
 	text: string;
@@ -11,6 +12,7 @@ export function PromptText({ text, preview, fieldRef, onChange, busy }: {
 	onChange?: (text: string) => void;
 	busy?: boolean;
 }) {
+	const t = useT();
 	const gutter = useRef<HTMLDivElement>(null);
 	const lines = text.split(/\r\n|\r|\n/);
 	const wrapping = "whitespace-pre-wrap [overflow-wrap:anywhere]";
@@ -46,7 +48,7 @@ export function PromptText({ text, preview, fieldRef, onChange, busy }: {
 				</div>
 				<textarea
 					ref={fieldRef}
-					aria-label={onChange ? "Override Markdown" : "Default Markdown"}
+					aria-label={onChange ? t("settings.agent.promptText.overrideMarkdown") : t("settings.agent.promptText.defaultMarkdown")}
 					value={text}
 					readOnly={!onChange || busy}
 					spellCheck={false}
@@ -57,7 +59,7 @@ export function PromptText({ text, preview, fieldRef, onChange, busy }: {
 				/>
 			</div>
 		</div>
-		{preview && <div className="h-full overflow-auto p-4" tabIndex={0} aria-label="Rendered Markdown">
+		{preview && <div className="h-full overflow-auto p-4" tabIndex={0} aria-label={t("settings.agent.promptText.renderedMarkdown")}>
 			<HostMarkdown text={text} />
 		</div>}
 	</div>;

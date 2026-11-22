@@ -7,7 +7,10 @@
 		"deleting": "Deleting…",
 		"rename": "Rename",
 		"close": "Close",
-		"working": "Working"
+		"working": "Working",
+		"save": "Save",
+		"previousBranch": "Previous branch",
+		"nextBranch": "Next branch"
 	},
 	"time": {
 		"justNow": "just now",
@@ -42,7 +45,11 @@
 			"compacting": "Compacting context · {time}",
 			"problemWaiting": "Problem waiting · {time}",
 			"working": "Working…"
-		}
+		},
+		"folderDeleteFailed": "Could not delete the folder ({status}).",
+		"folderDeleteNetwork": "Could not delete the folder — network error.",
+		"collapseFolderAria": "Collapse folder {name}",
+		"expandFolderAria": "Expand folder {name}"
 	},
 	"deleteSource": {
 		"label": "Delete sources",
@@ -95,7 +102,20 @@
 		"nodeExtractionRunning": "An extraction is running — try again when the activity dock drains."
 	},
 	"composer": {
-		"placeholder": "Ask, answer, or steer the lesson…"
+		"placeholder": "Ask, answer, or steer the lesson…",
+		"send": "Send",
+		"stop": "Stop",
+		"attachFiles": "Attach files",
+		"attachFilesOrFolder": "Attach files or a folder",
+		"files": "Files",
+		"folder": "Folder",
+		"folderChooseFailed": "Could not choose a folder. Try again.",
+		"browserNotice": "Local file paths can only be attached in the desktop app. You can paste a full path instead.",
+		"dropToAttach": "Drop to attach file paths",
+		"noLocalPaths": "No local file paths were available. Drop existing files or folders from your computer.",
+		"openChatToAttach": "Open a chat to attach file paths.",
+		"someDroppedMissingPath": "Some dropped items had no available file path.",
+		"dismissAttachmentNotice": "Dismiss attachment notice"
 	},
 	"abort": {
 		"turn": {
@@ -146,7 +166,29 @@
 			"depthStrength": "Depth strength",
 			"depthSpacing": "Depth spacing",
 			"baseRingRadius": "Base ring radius"
-		}
+		},
+		"pipelineCosts": "Graph pipeline costs",
+		"unpriced": "{count} unpriced",
+		"plusUnpriced": "+{count} unpriced",
+		"tokensInOut": "· {input} in / {output} out",
+		"regions": "Regions",
+		"physics": "Physics",
+		"depthAnchor": "Depth anchor",
+		"depthOff": "Off",
+		"depthVertical": "Vertical (up)",
+		"depthRadial": "Radial (outward)",
+		"showFolderAria": "Show folder {name}",
+		"folderFiltered": "Graph filtered by folder",
+		"showFolders": "Show folders",
+		"folderFilter": "Folder filter",
+		"folderFilterNamed": "Folder filter: {name}",
+		"folderFilterCount": "Folder filter: {count} selected",
+		"showAll": "Show all",
+		"noFolders": "No folders contain graph material yet.",
+		"stageExtraction": "Extraction",
+		"stageAudit": "Audit",
+		"contextTitle": "Graph context",
+		"propositionsSummary": "{count, plural, one {# proposition} other {# propositions}}"
 	},
 	"practice": {
 		"problem": "Problem",
@@ -154,7 +196,30 @@
 		"compacting": "compacting session…",
 		"submitHint": "↵ submits · ⇧↵ newline",
 		"submitSubmit": "Submit",
-		"submitThinking": "Submit thinking"
+		"submitThinking": "Submit thinking",
+		"problemDismissed": "Problem dismissed.",
+		"concluded": "Concluded",
+		"modelSolution": "Model solution",
+		"metadata": "Metadata",
+		"mode": "Mode",
+		"targets": "Targets",
+		"outcome": {
+			"solved": "Solved",
+			"solvedWithHints": "Solved with hints",
+			"movedOn": "Moved on",
+			"surrendered": "Surrendered",
+			"dismissed": "Dismissed"
+		},
+		"hintRung": "Hint rung",
+		"missClass": "Miss class",
+		"retest": "Retest",
+		"untagged": "untagged",
+		"none": "none",
+		"yes": "yes",
+		"no": "no",
+		"outcomeLabel": "Outcome",
+		"pickNodes": "Pick nodes",
+		"nodesSelected": "{count, plural, one {# node} other {# nodes}} selected"
 	},
 	"question": {
 		"label": {
@@ -176,7 +241,23 @@
 		"thinkingPlaceholder": "Why this answer? Whatever comes to mind.",
 		"yourAnswer": "Your answer",
 		"yourThinking": "YOUR THINKING",
-		"submit": "Submit answer"
+		"submit": "Submit answer",
+		"checkUnderstanding": "Check your understanding",
+		"open": "Open",
+		"answer": "Answer",
+		"skippedSuffix": "— skipped",
+		"didntKnowBadge": "didn't know",
+		"correct": "correct",
+		"incorrect": "incorrect",
+		"answeredDontKnow": "Answered “I don't know”.",
+		"hideWhy": "Hide why",
+		"why": "Why",
+		"whyLabel": "Why:",
+		"theAnswer": "The answer:",
+		"malformed": "This question could not be displayed.",
+		"malformedHint": "Retry it or send a message to continue.",
+		"malformedTooltip": "Requests a replacement from the model.",
+		"retryMalformed": "Retry question"
 	},
 	"chat": {
 		"phase": {
@@ -197,7 +278,20 @@
 		"error": "Something went wrong: {message}",
 		"retry": "Retry",
 		"nextPlaceholder": "Ask anything, or press Enter for the next one.",
-		"practiceNext": "Next problem"
+		"practiceNext": "Next problem",
+		"you": "You",
+		"evaluating": "Evaluating",
+		"thinking": "Thinking",
+		"evaluatingUpper": "EVALUATING…",
+		"thinkingUpper": "THINKING…",
+		"compactingContext": "Compacting context",
+		"compactingContextUpper": "COMPACTING CONTEXT…",
+		"answerOrDiscard": "Answer or discard the remaining question first.",
+		"syncFailed": "Could not sync the saved session.",
+		"retrySync": "Retry syncing",
+		"contextCompacted": "Context compacted",
+		"historyCompacted": "History compacted",
+		"tokensSuffix": " · {count}k tok"
 	},
 	"newSession": {
 		"practiceTitle": "New practice session",
@@ -209,7 +303,8 @@
 		"setupModels": "Set up your models",
 		"addProviderKey": "Add a provider key",
 		"startAria": "Start session",
-		"openingFailed": "Couldn’t open the session. Your message is still here. Try sending again."
+		"openingFailed": "Couldn’t open the session. Your message is still here. Try sending again.",
+		"modeTeach": "Teach"
 	},
 	"updateBanner": {
 		"ready": "LearnHarness {version} is ready",
@@ -253,7 +348,55 @@
 		"complete": "complete",
 		"researchLabel": "Research",
 		"pagesRead": "· read {count, plural, one {# page} other {# pages}}",
-		"sourcesCount": "· {count} sources"
+		"sourcesCount": "· {count} sources",
+		"viewBrief": "view brief",
+		"hideBrief": "hide brief",
+		"pdfUnavailable": "PDF reading completed, but the result could not be displayed.",
+		"pdfBrief": "PDF brief",
+		"pagesReadLine": "Pages read: {pages}",
+		"pagesConsultedLine": "Pages consulted: {pages}",
+		"researchUnavailable": "Research completed, but the result could not be displayed.",
+		"researchBrief": "Research brief",
+		"demoUnavailable": "Demo completed, but the result could not be displayed.",
+		"demoTitle": "Interactive demo",
+		"demoLabel": "interactive demo",
+		"demoNotBuilt": "The demo could not be built.",
+		"sendToTeacher": "Send to teacher",
+		"unknownError": "unknown error",
+		"figureUnavailable": "Figure completed, but the result could not be displayed.",
+		"figureNotDrawn": "The figure could not be drawn.",
+		"imageSnapshotFailed": "Image snapshot could not be loaded.",
+		"loadingImage": "Loading image…",
+		"imageDisplayFailed": "Image shown, but it could not be displayed.",
+		"image": "Image",
+		"downloadImage": "Download image",
+		"openImageFullscreen": "Open image fullscreen",
+		"agentResearch": "Research agent",
+		"agentDemo": "Demo agent",
+		"agentVisual": "Figure agent",
+		"agentPdf": "PDF reader",
+		"agentPlugin": "Plugin worker",
+		"needsModels": "needs model setup",
+		"setUpModels": "Set up models",
+		"needsProviderKey": "needs a provider key",
+		"addKey": "Add a key",
+		"finished": "finished",
+		"dispatched": "Dispatched…",
+		"runningAria": "{label} running",
+		"probeAssessment": "Probe assessment",
+		"proberRetried": "The prober retried: {error}",
+		"assessmentMalformed": "The assessment was malformed — the prober retried with a corrected one.",
+		"writingAssessment": "Writing the assessment…",
+		"strandCount": "{count, plural, one {# strand} other {# strands}}",
+		"subagentUnavailable": "A sub-agent finished, but its result could not be displayed.",
+		"taskDetails": "Task details",
+		"resultFormattingFailed": "Result formatting failed: {error}",
+		"input": "Input",
+		"error": "Error",
+		"output": "Output",
+		"running": "running…",
+		"imagesAttached": "[{count, plural, one {# image} other {# images}} attached to the model]",
+		"inputStreaming": "Input (streaming)"
 	},
 	"pluginChrome": {
 		"preparingQuestion": "Preparing question…",
@@ -270,20 +413,35 @@
 		"loading": "Loading plugin…",
 		"backHome": "Back to home",
 		"graphActions": "Plugin graph actions",
-		"moreActions": "More plugin actions"
+		"moreActions": "More plugin actions",
+		"scopeApp": "App-wide",
+		"scopeTeaching": "Teaching",
+		"scopePractice": "Practice",
+		"viewsList": "Views: {views}",
+		"closeDialog": "Close dialog",
+		"plugin": "Plugin"
 	},
 	"dictationLanguage": {
 		"aria": "Dictation language: {language}",
 		"searchAria": "Search dictation languages",
 		"searchPlaceholder": "Search languages…",
-		"empty": "No languages match."
+		"empty": "No languages match.",
+		"saveFailed": "Could not save dictation language. Try again."
 	},
 	"sourceTree": {
 		"folderName": "Folder name",
-		"nameAria": "Source or folder name"
+		"nameAria": "Source or folder name",
+		"saveFoldersFailed": "Could not save folders."
 	},
 	"overlay": {
-		"fromLesson": "from this lesson"
+		"fromLesson": "from this lesson",
+		"image": "Image",
+		"diagram": "Diagram",
+		"fitImage": "Fit image to view",
+		"fitDiagram": "Fit diagram to view",
+		"submittedImage": "Submitted image",
+		"openSubmittedImage": "Open submitted image fullscreen",
+		"renderingDiagram": "Rendering diagram…"
 	},
 	"coverage": {
 		"title": "Extraction coverage",
@@ -308,7 +466,16 @@
 		"failed": "Dictation failed: {error}",
 		"stop": "Stop dictation",
 		"stopShort": "Stop",
-		"stopHint": "Stop dictation (Esc)"
+		"stopHint": "Stop dictation (Esc)",
+		"transcriptApplyFailed": "Dictation transcript could not be applied",
+		"reconnectFailed": "Deepgram reconnect failed",
+		"connectionLost": "Deepgram connection lost ({code})",
+		"languageUnavailable": "Dictation language unavailable",
+		"micDenied": "Microphone permission denied",
+		"micUnavailable": "mic unavailable",
+		"tokenUnavailable": "token unavailable",
+		"needsKey": "Dictation needs a Deepgram key",
+		"activeElsewhere": "Dictation is active elsewhere"
 	},
 	"sideThread": {
 		"ask": "Ask",
@@ -344,7 +511,8 @@
 		"panHint": "Drag to pan · scroll to zoom",
 		"zoomOut": "Zoom out",
 		"zoomIn": "Zoom in",
-		"fit": "Fit plan to screen"
+		"fit": "Fit plan to screen",
+		"empty": "No plan in this session yet."
 	},
 	"menu": {
 		"checkForUpdates": "Check for Updates…",
@@ -360,7 +528,23 @@
 		"cost": "Cost",
 		"context": "Context",
 		"model": "Model",
-		"steps": "Steps"
+		"steps": "Steps",
+		"needsModelSetup": "needs model setup",
+		"needsProviderKey": "needs a provider key",
+		"pluginWorker": "Plugin worker",
+		"agent": {
+			"research": "Researcher",
+			"demo": "Demo builder",
+			"visual": "Figure maker",
+			"pdf": "PDF reader",
+			"subagent": "Sub-agent"
+		},
+		"extraction": "Extraction — {phase}",
+		"abortFailed": "Abort failed — try again",
+		"endProcess": "End this background process",
+		"endAria": "End {label} in {title}",
+		"stopping": "Stopping…",
+		"openSession": "Open session →"
 	},
 	"stats": {
 		"title": "Session stats",
@@ -370,7 +554,9 @@
 		"totalCost": "Total cost",
 		"cacheHitRate": "Cache hit rate",
 		"manageChatGPT": "Manage ChatGPT usage",
-		"unpricedTurns": "Unpriced turns"
+		"unpricedTurns": "Unpriced turns",
+		"turns": "Turns",
+		"stepsCount": "{count, plural, one {# step} other {# steps}}"
 	},
 	"chainTable": {
 		"counts": "{chains, plural, one {# chain} other {# chains}} · {nodes, plural, one {# node} other {# nodes}}",
@@ -378,7 +564,20 @@
 		"expandSource": "Expand source {name}",
 		"unlabeled": "unlabeled",
 		"notes": "notes",
-		"deleteSelected": "Delete selected sources and folders"
+		"deleteSelected": "Delete selected sources and folders",
+		"name": "Name",
+		"props": "Props",
+		"created": "Created",
+		"noMatch": "No matching chains.",
+		"nodesSummary": "{count, plural, one {# node} other {# nodes}}",
+		"chainsSummary": "{count, plural, one {# chain} other {# chains}}",
+		"sourcesSummary": "{count, plural, one {# source} other {# sources}}",
+		"foldersSummary": "{count, plural, one {# folder} other {# folders}}",
+		"clear": "Clear",
+		"donePickingAria": "Done picking — {count, plural, one {# proposition} other {# propositions}} selected",
+		"done": "Done",
+		"saveOrganizationFailed": "Could not save source organization.",
+		"deleteSourcesFailed": "Could not delete sources."
 	},
 	"modelPicker": {
 		"thinking": "Thinking"
@@ -392,7 +591,17 @@
 		"folder": "Folder"
 	},
 	"reading": {
-		"placeholder": "Whatever comes to mind as you read."
+		"placeholder": "Whatever comes to mind as you read.",
+		"copyDiagramSource": "Copy diagram source",
+		"openFullScreen": "Open full-screen",
+		"expandDiagram": "Expand diagram",
+		"copyCode": "Copy code",
+		"copyTable": "Copy table",
+		"copyEquation": "Copy equation source",
+		"diagramFailed": "Diagram failed to render",
+		"showDiagramSource": "Show diagram source",
+		"imageNotAvailable": "Image not available",
+		"thinkingWhileReading": "Thinking while reading"
 	},
 	"sessionFind": {
 		"region": "Session Find",
@@ -413,7 +622,8 @@
 		"rebind": "Rebind",
 		"clear": "Clear",
 		"reset": "Reset",
-		"storedNote": "Stored on this device (lh:keymap) — overrides only."
+		"storedNote": "Stored on this device (lh:keymap) — overrides only.",
+		"resetAll": "Reset all to defaults"
 	},
 	"shortcuts": {
 		"title": "Keyboard shortcuts",
@@ -456,7 +666,14 @@
 		"pickModel": "Pick a model…",
 		"needed": "needed",
 		"close": "Close setup",
-		"loadingModels": "Loading models…"
+		"loadingModels": "Loading models…",
+		"saveKey": "Save key",
+		"saveModels": "Save models",
+		"pickTiers": "Pick the model for each tier. All three are required before chats can start.",
+		"noVisionModels": "No image-capable models. Add a provider key with access to a vision model.",
+		"saveFailedStatus": "Save failed ({status})",
+		"saveFailedConnection": "Save failed. Check your connection and try again.",
+		"saveFailedDetail": "Save failed: {detail}"
 	},
 	"startupMessage": {
 		"closeAnnouncement": "Close announcement"
@@ -529,7 +746,92 @@
 			"includeReasoningHint": "Use saved output-token usage to account for replayed reasoning on matching OpenAI Responses models. Off uses the original text-based estimate.",
 			"systemPrompts": "System prompts",
 			"systemPromptsHint": "Use the switch to choose between the default and your saved override.",
-			"promptsFailed": "Couldn't load prompt segments."
+			"promptsFailed": "Couldn't load prompt segments.",
+			"concurrencyInvalid": "Enter a positive, safely representable whole number.",
+			"promptSection": {
+				"teacher": "Teacher",
+				"prober": "Prober",
+				"practice": "Practice",
+				"shared": "Shared"
+			},
+			"userList": "{head} and {last}",
+			"usedBy": "Used by {users}",
+			"engineHasKey": "✓ key",
+			"engineNoKey": "· no key",
+			"noModels": "No models — add a provider key in Keys",
+			"runsTier": "Runs every agent of this tier",
+			"graphToolsHintOn": "Lets the tutor consult your knowledge map between sessions",
+			"graphToolsHintOff": "Graph is disabled",
+			"toolRowLabel": "Tool: {tool}",
+			"toolToggleLabel": "tool {tool}",
+			"folderInvalid": "Enter an absolute path or ~/folder.",
+			"fileAccessBroad": "Broad local source access, except protected locations",
+			"fileAccessListed": "Only listed folders and subfolders.",
+			"fileAccessRestricted": "Restricted: no folders allowed. Add a folder to enable access.",
+			"removeFolder": "Remove",
+			"removeFolderAria": "Remove {folder}",
+			"automatic": "Automatic",
+			"promptsRefreshing": "Refreshing prompt segments…",
+			"promptsLoading": "Loading prompt segments…",
+			"promptSwitchFailed": "Couldn't switch prompt versions.",
+			"cache": {
+				"retention": "Cache retention",
+				"description": "Controls the cache-retention preference sent to Pi. Support and duration depend on the provider and model. This does not guarantee a cache hit.",
+				"label": "Cache: {value}",
+				"compact": {
+					"default": "default",
+					"none": "not requested",
+					"short": "short",
+					"long": "long"
+				},
+				"optionDefault": {
+					"label": "Pi default",
+					"description": "Leave the option unset. Pi’s normal behavior and environment override apply."
+				},
+				"optionNone": {
+					"label": "Don’t request caching",
+					"description": "Pass Pi’s native none preference. Providers may still cache automatically."
+				},
+				"optionShort": {
+					"label": "Short retention",
+					"description": "Pass Pi’s native short preference. The duration depends on the provider and model."
+				},
+				"optionLong": {
+					"label": "Long retention",
+					"description": "Pass Pi’s native long preference. Cache-write costs may be higher."
+				}
+			},
+			"promptDisplay": "Prompt display",
+			"markdown": "Markdown",
+			"preview": "Preview",
+			"promptDialog": {
+				"viewDefault": "View default",
+				"addOverride": "Add override",
+				"editOverride": "Edit override",
+				"activationFailed": "Override saved, but it couldn't be put in use. Retry activation below.",
+				"saveFailed": "Couldn't save the override. Your edits are still here.",
+				"settingsBusy": "Settings is still saving. Try deleting the override again after the save finishes.",
+				"deleteFailed": "Couldn't delete the override.",
+				"discardTitle": "Discard unsaved changes?",
+				"keepEditing": "Keep editing",
+				"discardChanges": "Discard changes",
+				"deleteOverride": "Delete override",
+				"retryActivation": "Retry activation",
+				"saveAndActivate": "Save and activate"
+			},
+			"promptRow": {
+				"addOverride": "+ Add override",
+				"inUse": "In use:",
+				"yourVersion": "Your version",
+				"default": "Default",
+				"toggleAria": "Use your override for {name}",
+				"toggleTitle": "Use your override instead of the default"
+			},
+			"promptText": {
+				"overrideMarkdown": "Override Markdown",
+				"defaultMarkdown": "Default Markdown",
+				"renderedMarkdown": "Rendered Markdown"
+			}
 		},
 		"appearance": {
 			"resetAll": "Reset all",
@@ -564,7 +866,24 @@
 				"warning": "Warning",
 				"empty": "Empty = {color}",
 				"hexAria": "{color} hex"
-			}
+			},
+			"colorsHint": "· overrides on top of the theme, kept when you switch",
+			"fontsInstalled": "Your installed fonts",
+			"fontsUnreadable": "Common families — installed fonts could not be read",
+			"fontsDesktop": "Common families — your installed list needs the desktop app",
+			"theme": "Theme",
+			"themeHint": "{name} · {mode} · sets every color below",
+			"exportJson": "Export JSON",
+			"importJson": "Import JSON",
+			"importHint": "name · mode · colors",
+			"custom": "custom",
+			"removeThemeAria": "Remove {name}",
+			"invalidJson": "{name} is not valid JSON",
+			"importFailedStatus": "import failed ({status})",
+			"importFailedNetwork": "import failed (network)",
+			"colorsHeading": "Colors",
+			"modeLight": "light",
+			"modeDark": "dark"
 		},
 		"graph": {
 			"extraction": "Extraction",
@@ -599,7 +918,108 @@
 			"reasoningUnsupported": "Reasoning effort: Not supported",
 			"budgetNote": "Budget pins do not resize backend context. Blank uses reported limits, then fallback (8192 context / 4096 output). Custom pricing is unknown.",
 			"reasoningNote": "Reasoning support is a capability declaration. The effort picker’s Off may not disable a custom backend’s default thinking.",
-			"reload": "Reload configuration"
+			"reload": "Reload configuration",
+			"notSet": "not set",
+			"envSuffix": " · env",
+			"docsLink": "key ↗",
+			"addProvider": "+ Add a provider",
+			"disconnectFailed": "Disconnect failed.",
+			"disconnectFailedConnection": "Disconnect failed. Check your connection.",
+			"dictationSetupBefore": "Create a",
+			"dictationSetupAfter": " with the Member role or higher, then add it above.",
+			"customLoadFailed": "Unable to load custom configuration.",
+			"customLoading": "Loading custom configuration…",
+			"keylessInline": "keyless",
+			"apiKeyMissing": "API key missing",
+			"customSummary": "{url} · {count, plural, one {# model} other {# models}} · {auth}",
+			"inspectKeyFailed": "Unable to inspect effective key. Reload configuration and retry.",
+			"saveFailedStatus": "Save failed ({status})",
+			"saveFailedConnection": "Save failed. Check your connection.",
+			"connectFailedStatus": "Connect failed ({status})",
+			"connectFailedConnection": "Connect failed. Check your connection.",
+			"authentication": "Authentication",
+			"allowReuseKey": "Allow reuse of the effective existing key for this URL",
+			"leaveBlankKey": "Leave blank to keep effective key",
+			"connecting": "Connecting…",
+			"connect": "Connect",
+			"disconnect": "Disconnect",
+			"userPin": "user pin",
+			"reportedValue": "reported {value}",
+			"fallbackValue": "fallback {value}",
+			"pinSummary": "Context: {context} · Output: {output}",
+			"pinContextAria": "{model} context window in tokens",
+			"pinOutputAria": "{model} max output tokens",
+			"pinReasoningAria": "{model} reasoning effort support",
+			"keyAria": "{label} key",
+			"saveLimits": "Save limits",
+			"subscription": {
+				"noticeWeb": "Your prompts, tool results, and relevant session context are sent to {label} to run the work you select. Credentials are stored on the machine running LearnHarness in an owner-only plaintext file. Provider terms, data-use policies, and plan limits apply. This connection never falls back to an API key.",
+				"noticeLocal": "Your prompts, tool results, and relevant session context are sent to {label} to run the work you select. Credentials are stored locally in an owner-only plaintext file. Provider terms, data-use policies, and plan limits apply. This connection never falls back to an API key.",
+				"disconnectCopyWeb": "Disconnect {label} from LearnHarness? This stops work using this connection and removes its saved credentials from the machine running LearnHarness. It does not cancel your subscription or revoke access at the provider. Saved model choices will remain unavailable until you reconnect or change them.",
+				"disconnectCopyLocal": "Disconnect {label} from LearnHarness? This stops work using this connection and removes its saved credentials from this device. It does not cancel your subscription or revoke access at the provider. Saved model choices will remain unavailable until you reconnect or change them.",
+				"copilotPolicy": "Pi's native Copilot sign-in may enable additional models whose policy is not yet configured. Models explicitly disabled by policy are not enabled. Organization restrictions still apply.",
+				"backgroundHint": "Allow LearnHarness helper agents and automatic follow-ups to use this connection.",
+				"backgroundUse": "Allow background use",
+				"unavailable": "Subscription sign-in requires the desktop app's private server connection. API-key connections remain available here.",
+				"connectionFailed": "The connection could not be changed. Try again.",
+				"desktopUnavailable": "The desktop connection is unavailable. Retry when the app is ready.",
+				"signInFailed": "Sign-in did not complete. Try connecting again.",
+				"dialogLabel": "{label} connection",
+				"deviceCode": "Device code:",
+				"openBrowser": "Open browser",
+				"browserFailed": "The browser could not be opened. Try again.",
+				"select": "Select…",
+				"continue": "Continue",
+				"signInAgain": "Sign in again",
+				"manage": "Manage…",
+				"enableBackground": "Enable background use",
+				"disconnectTitle": "Disconnect {label}?",
+				"connect": "Connect",
+				"disconnect": "Disconnect"
+			},
+			"chatgpt": {
+				"notice": "LearnHarness stores your ChatGPT account details and credentials in an unencrypted local file on this device. When this connection is used, relevant conversation context, learning material, and tool results are sent directly to OpenAI. ChatGPT plan limits apply; any additional credits are authorized and managed in ChatGPT, not LearnHarness.",
+				"noticeWeb": "LearnHarness stores your ChatGPT account details and credentials in an unencrypted local file on the machine running LearnHarness. When this connection is used, relevant conversation context, learning material, and tool results are sent directly to OpenAI. ChatGPT plan limits apply; any additional credits are authorized and managed in ChatGPT, not LearnHarness. Complete ChatGPT sign-in in a browser on that same machine.",
+				"backgroundHint": "Background work counts toward your ChatGPT plan usage.",
+				"backgroundLabel": "Allow background use for all ChatGPT accounts",
+				"revocationWarning": "Account disconnected locally. Remote revocation could not be confirmed.",
+				"disconnectTitle": "Disconnect account?",
+				"disconnectBody": "This removes the saved account and its credentials from this device.",
+				"disconnectBodyWeb": "This removes the saved account and its credentials from the machine running LearnHarness.",
+				"controlError": "The ChatGPT connection could not be changed. Try again.",
+				"desktopUnavailable": "The desktop connection is unavailable. Retry when the app is ready.",
+				"accountFallback": "ChatGPT account",
+				"savedAccountAria": "Saved ChatGPT account",
+				"addAnother": "Add another account or workspace",
+				"openaiPrivacy": "OpenAI privacy",
+				"manageUsage": "Manage usage",
+				"desktopOnly": "ChatGPT sign-in is available only in the desktop app. API-key connections remain available here.",
+				"waiting": "Waiting for browser sign-in…",
+				"manageAria": "Manage ChatGPT account",
+				"addAccounts": "Add accounts",
+				"disconnect": "Disconnect",
+				"disconnectAccount": "Disconnect account",
+				"signInAgain": "Sign in again",
+				"continue": "Continue with ChatGPT",
+				"accountDialog": "ChatGPT account",
+				"accountAria": "ChatGPT account",
+				"enableBackground": "Enable background use"
+			},
+			"claudeCode": {
+				"notFound": "Not found",
+				"meetsMinimum": "Version {version} · meets minimum",
+				"updateRequired": "Version {version} · update required",
+				"unchecked": "Version could not be checked",
+				"loadFailed": "Could not load Claude Code settings.",
+				"saveFailed": "Could not save Claude Code settings.",
+				"checking": "Checking…",
+				"checkAgain": "Check again",
+				"installHintStrong": "Install and authenticate Claude Code in your terminal, then select a Claude Code model here.",
+				"installHintRest": "LearnHarness starts it when needed—no background process required.",
+				"checkNote": "Checks installation/version only—not authentication, model access, or quota. Claude Code controls billing. Requires v{version}+.",
+				"setup": "Setup ↗",
+				"disclaimer": "Verify AI claims independently—they may be inaccurate, incomplete, misleading, or outdated."
+			}
 		},
 		"plugins": {
 			"trustWarning": "Only enable plugins you trust. Plugins run trusted local code with broad file and network access; they are not sandboxed. A broken plugin may require restarting LearnHarness.",
@@ -627,7 +1047,8 @@
 			"settingsFor": "Settings for {name}",
 			"loadingSettings": "Loading plugin settings…",
 			"settingsFailed": "Plugin settings could not be loaded.",
-			"noSettings": "No settings available."
+			"noSettings": "No settings available.",
+			"valueOutOfRange": "Value is outside the allowed range."
 		},
 		"storedOnDevice": "Stored on this device",
 		"loadingPlugins": "Loading plugins…",
@@ -645,6 +1066,91 @@
 				"hint": "The language teaching replies use. Applies to new sessions; existing sessions keep theirs.",
 				"follow": "Follow interface"
 			}
+		},
+		"update": {
+			"version": "Version {version}",
+			"unknownVersion": "unknown",
+			"releaseNotes": "Release notes",
+			"check": "Check for updates",
+			"checking": "Checking for updates…",
+			"downloadingVersion": "Downloading version {version}…",
+			"downloading": "Downloading an update…",
+			"upToDate": "No newer version was found at the last check.",
+			"readyVersion": "Version {version} is ready. It will install when you quit the app.",
+			"readyFallback": "An update is ready. It will install when you quit the app.",
+			"error": "Couldn’t check for updates. Try again later.",
+			"manualHint": "Checking downloads available updates. Downloaded updates install when you quit the app.",
+			"downloadingSpinner": "Downloading update",
+			"checkingSpinner": "Checking for updates",
+			"autoLabel": "Automatic updates",
+			"autoHint": "Check at startup and every 24 hours. Turning this off does not stop updates already in progress or ready to install.",
+			"autoToggle": "auto update"
+		},
+		"modelMenu": {
+			"unpriced": "Unpriced",
+			"searchModels": "Search models…",
+			"noModelsMatch": "No models match.",
+			"claudeBilling": "Billing is determined by your Claude Code configuration; LearnHarness does not estimate it.",
+			"subscriptionConnection": "Subscription connection",
+			"pricePerMillion": "USD per 1M tokens in/out",
+			"priceUnavailable": "Price unavailable",
+			"cliBilling": "CLI billing",
+			"withSubscription": "{label} (subscription)",
+			"noThinkingLevels": "No thinking levels.",
+			"searchProviders": "Search providers…",
+			"noProvidersMatch": "No providers match.",
+			"searchFonts": "Search fonts…",
+			"loadingFonts": "Loading fonts…",
+			"default": "default",
+			"useCustom": "Use “{family}”",
+			"custom": "custom"
+		},
+		"modelPicker": {
+			"unreachable": "Could not reach the server — try again.",
+			"settingsRejected": "settings rejected ({status})",
+			"noModels": "No models — add a provider key in Keys",
+			"sessionModel": "This session's model",
+			"strongDefault": "Strong tier — the default for new sessions",
+			"noThinkingLevels": "{model} has no thinking levels.",
+			"pickFirst": "Pick a model first.",
+			"levelsFooter": "Levels this model actually supports"
 		}
+	},
+	"reasoning": {
+		"thinking": "Thinking...",
+		"agentThinking": "AGENT’S THINKING"
+	},
+	"citation": {
+		"cite": "Cite",
+		"citeAria": "Cite selection in your input",
+		"shorten": "Shorten selection",
+		"goToSource": "Go to source",
+		"editComment": "Edit citation comment",
+		"addComment": "Add comment to citation",
+		"viewCitedAria": "View cited tutor text: {label}",
+		"quotedAria": "Quoted tutor text: {label}",
+		"commentAria": "Comment on selected text",
+		"commentDescription": "Enter to save the citation comment; Command/Ctrl+Enter to save and send; Shift+Enter for a new line.",
+		"commentPlaceholder": "Add an optional comment...",
+		"commentTooLong": "Comments can contain up to 8,000 characters.",
+		"shortenComment": "Shorten comment"
+	},
+	"selection": {
+		"actions": "Selection actions"
+	},
+	"toolActivity": {
+		"read": "Reading a file…",
+		"ls": "Listing a directory…",
+		"find": "Finding files…",
+		"grep": "Searching file contents…",
+		"research": "Dispatching research…",
+		"demo": "Building a demo…",
+		"visual": "Making a visual…",
+		"pdf": "Reading a PDF…",
+		"plan_init": "Drawing up the plan…",
+		"probe_done": "Concluding the assessment…",
+		"writingQuestion": "Writing a question…",
+		"working": "Working…",
+		"live": "{label} — live"
 	}
 }

@@ -149,7 +149,7 @@ export function KeyboardSection() {
 													onClick={() => setRebinding(null)}
 													className="text-xs text-muted-foreground/70 underline-offset-2 hover:text-foreground hover:underline"
 												>
-													Cancel
+													{t("common.cancel")}
 												</button>
 											) : (
 												<>
@@ -159,7 +159,7 @@ export function KeyboardSection() {
 														data-testid={`kbd-rebind-${def.id}`}
 														className="text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
 													>
-														Rebind
+														{t("keyboard.rebind")}
 													</button>
 													{overridden(def.id) && (
 														<button
@@ -168,7 +168,7 @@ export function KeyboardSection() {
 															data-testid={`kbd-reset-${def.id}`}
 															className="text-xs text-muted-foreground/70 underline-offset-2 hover:text-foreground hover:underline"
 														>
-															Reset
+															{t("keyboard.reset")}
 														</button>
 													)}
 												</>
@@ -184,7 +184,7 @@ export function KeyboardSection() {
 			{[...new Set(pluginRows.map(row => row.pluginId))].map(pluginId => <div key={pluginId} data-testid={`kbd-plugin-${pluginId}`}>
 				<p className="mb-1 text-xs uppercase tracking-widest text-muted-foreground/70">{pluginRows.find(row => row.pluginId === pluginId)!.pluginName}</p>
 				<div className="flex flex-col gap-2">{pluginRows.filter(row => row.pluginId === pluginId).map(row => <SettingsRow key={row.id} label={row.name}
-					hint={`${pluginShortcutScopeLabel(row)}${row.reason ? `${t("keyboard.inactive")}${row.reason}` : ""}`} testid={`kbd-row-${row.id}`}>
+					hint={`${pluginShortcutScopeLabel(row, locale)}${row.reason ? `${t("keyboard.inactive")}${row.reason}` : ""}`} testid={`kbd-row-${row.id}`}>
 					<span className="flex items-center gap-2">
 						<kbd className="rounded-sm border border-border bg-muted px-1.5 py-0.5 font-ui text-xs">{rebinding === row.id ? t("keyboard.pressKeys") : row.binding ? formatBinding(row.binding) : t("keyboard.unbound")}</kbd>
 						{rebinding === row.id ? <button type="button" onClick={() => { setRebinding(null); setRebindError(null); }} className="text-xs text-muted-foreground">{t("common.cancel")}</button> : <>
@@ -203,7 +203,7 @@ export function KeyboardSection() {
 					data-testid="kbd-reset-all"
 					className="text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
 				>
-					Reset all to defaults
+					{t("keyboard.resetAll")}
 				</button>
 			</div>
 		</>

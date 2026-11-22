@@ -28,6 +28,7 @@ function DictationLanguagePicker({ preference, disabled }: {
 }) {
 	const { language, saving, error, load, save } = preference;
 	const t = useT();
+	const errorText = error === "Could not save dictation language. Try again." ? t("dictationLanguage.saveFailed") : error;
 	const [open, setOpen] = useState(false);
 	const triggerRef = useRef<HTMLButtonElement>(null);
 	const interactions = useInteractionLayers();
@@ -55,7 +56,7 @@ function DictationLanguagePicker({ preference, disabled }: {
 	};
 
 	return <>
-		<Hint label={error ?? t("dictationLanguage.aria", { language: label })} side="top">
+		<Hint label={errorText ?? t("dictationLanguage.aria", { language: label })} side="top">
 			<SettingsMenuTrigger
 				ref={triggerRef}
 				value={label}
@@ -85,7 +86,7 @@ function DictationLanguagePicker({ preference, disabled }: {
 					event.stopPropagation();
 				}
 			}}>
-				{error && <div role="alert" className="mb-1.5 text-destructive">{error}</div>}
+				{errorText && <div role="alert" className="mb-1.5 text-destructive">{errorText}</div>}
 				<SearchMenuList
 					items={DICTATION_LANGUAGES}
 					itemKey={(item) => item.code}

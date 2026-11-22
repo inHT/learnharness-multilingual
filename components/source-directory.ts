@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { OrganizationAction, SourceDirectory } from "@/src/core";
 import { useServerEvent, useServerResync } from "@/components/server-events";
+import { useT } from "@/src/i18n/react";
 
 /**
  * The shared source organization (folders + placements), read and changed
@@ -14,6 +15,7 @@ import { useServerEvent, useServerResync } from "@/components/server-events";
  * folder-less presentation instead of failing.
  */
 export function useSourceDirectory(enabled: boolean) {
+	const t = useT();
 	const [directory, setDirectory] = useState<SourceDirectory>();
 	const [failure, setFailure] = useState("");
 	const version = useRef(0);
@@ -54,7 +56,7 @@ export function useSourceDirectory(enabled: boolean) {
 					body: JSON.stringify(action),
 				});
 				const body = await response.json() as { createdFolderId?: unknown; error?: unknown };
-				if (!response.ok) throw new Error(typeof body.error === "string" ? body.error : "Could not save folders.");
+				if (!response.ok) throw new Error(typeof body.error === "string" ? body.error : t("sourceTree.saveFoldersFailed"));
 				// The acknowledgement describes the directory at commit time; a
 				// later window's write may already be reflected in an SSE read.
 				// Never install the POST snapshot. Reconcile with a fresh GET.

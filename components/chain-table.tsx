@@ -366,7 +366,7 @@ export function ChainTableBody({
 						aria-sort={sort.col === "name" ? (sort.dir === 1 ? "ascending" : "descending") : "none"}
 						{...treeColumnLayout({ grow: true, align: "left", className: "flex items-center gap-1 transition-colors hover:text-foreground" })}
 					>
-						Name {dirIcon("name")}
+						{t("chainTable.name")} {dirIcon("name")}
 					</button>
 					<button
 						type="button"
@@ -375,7 +375,7 @@ export function ChainTableBody({
 						aria-sort={sort.col === "props" ? (sort.dir === 1 ? "ascending" : "descending") : "none"}
 						{...treeColumnLayout({ widthClassName: "w-14", align: "right", className: "flex items-center justify-end gap-1 transition-colors hover:text-foreground" })}
 					>
-						Props {dirIcon("props")}
+						{t("chainTable.props")} {dirIcon("props")}
 					</button>
 					<button
 						type="button"
@@ -384,7 +384,7 @@ export function ChainTableBody({
 						aria-sort={sort.col === "created" ? (sort.dir === 1 ? "ascending" : "descending") : "none"}
 						{...treeColumnLayout({ widthClassName: "w-20", align: "right", className: "flex items-center justify-end gap-1 transition-colors hover:text-foreground" })}
 					>
-						Created {dirIcon("created")}
+						{t("chainTable.created")} {dirIcon("created")}
 					</button>
 				</TreeHeader>
 
@@ -397,7 +397,7 @@ export function ChainTableBody({
 				</div>}
 				{groups.length === 0 && (directory?.organization.folders.length ?? 0) === 0 && (
 					<div data-testid="chain-table-nomatch" className="px-4 pt-3 text-xs text-muted-foreground">
-						No matching chains.
+						{t("chainTable.noMatch")}
 					</div>
 				)}
 
@@ -586,8 +586,8 @@ export function ChainTableBody({
 						className="pointer-events-auto flex items-center gap-3 rounded-full border bg-card py-2 pl-4 pr-2 shadow-lg"
 					>
 						<span data-testid="chain-selected-summary" className="text-xs font-medium">
-							{selectMode ? <>{selection.size} {selection.size === 1 ? "node" : "nodes"} → {derived.length} {derived.length === 1 ? "chain" : "chains"}</>
-								: <>{selectedSources.size} {selectedSources.size === 1 ? "source" : "sources"}{fullySelectedFolders.size > 0 && ` · ${fullySelectedFolders.size} ${fullySelectedFolders.size === 1 ? "folder" : "folders"}`}</>}
+							{selectMode ? <>{t("chainTable.nodesSummary", { count: selection.size })} → {t("chainTable.chainsSummary", { count: derived.length })}</>
+								: <>{t("chainTable.sourcesSummary", { count: selectedSources.size })}{fullySelectedFolders.size > 0 && ` · ${t("chainTable.foldersSummary", { count: fullySelectedFolders.size })}`}</>}
 						</span>
 						<button
 							type="button"
@@ -595,17 +595,17 @@ export function ChainTableBody({
 							onClick={onClear}
 							className="rounded-full px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
 						>
-							Clear
+							{t("chainTable.clear")}
 						</button>
 						{selectMode ? (
 							<button
 								type="button"
 								data-testid="chain-practice-done"
 								onClick={onSelect}
-								aria-label={`Done picking — ${selection.size} ${selection.size === 1 ? "proposition" : "propositions"} selected`}
+								aria-label={t("chainTable.donePickingAria", { count: selection.size })}
 								className="flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/80"
 							>
-								Done
+								{t("chainTable.done")}
 							</button>
 						) : (
 							<>
@@ -703,6 +703,7 @@ export function ChainTableOverlay({
 	controlledSelection?: ReadonlySet<string>;
 	onSelectionChange?: (next: ReadonlySet<string>) => void;
 }) {
+	const t = useT();
 	const [query, setQuery] = useState("");
 	const [sort, setSort] = useState<ChainSort>({ col: "name", dir: 1 });
 	const [internalSelection, setInternalSelection] = useState<ReadonlySet<string>>(() => new Set());
@@ -760,7 +761,7 @@ export function ChainTableOverlay({
 			try {
 				const response = await fetch("/api/graph/sources", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(action) });
 				const body = await response.json();
-				if (!response.ok) throw new Error(typeof body.error === "string" ? body.error : "Could not save source organization.");
+					if (!response.ok) throw new Error(typeof body.error === "string" ? body.error : t("chainTable.saveOrganizationFailed"));
 				if (opening === directoryOpening.current) {
 					requestVersion.current++;
 					setDirectory(body as SourceDirectory); setDirectoryPending(false); setDirectoryFailure("");
@@ -875,7 +876,7 @@ export function ChainTableOverlay({
 							const response = await fetch("/api/graph/sources", { method: "DELETE", headers: { "Content-Type": "application/json" },
 								body: JSON.stringify({ sourceIds: deletion?.sources.map((s) => s.id) ?? [], folderIds: deletion?.folders.map((f) => f.id) ?? [], deleteSessions }) });
 							const body = await response.json();
-							if (!response.ok) throw new Error(typeof body.error === "string" ? body.error : "Could not delete sources.");
+							if (!response.ok) throw new Error(typeof body.error === "string" ? body.error : t("chainTable.deleteSourcesFailed"));
 							graphRevision = body.graphRevision;
 							if (opening === directoryOpening.current) {
 								requestVersion.current++; setDirectory(body as SourceDirectory); setDirectoryPending(false); setDirectoryFailure("");

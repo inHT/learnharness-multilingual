@@ -248,10 +248,11 @@ function SystemLine({ children, testId }: { children: React.ReactNode; testId?: 
 /** One immediate optimistic placeholder; only its wording changes during
  * host-managed submission evaluation. The spinner keeps its identity. */
 export function PendingTurnIndicator({ evaluating }: { evaluating: boolean }) {
+	const t = useT();
 	return (
 		<span className="flex items-center gap-2 font-ui text-xs font-medium uppercase tracking-wide text-muted-foreground">
-			<BrailleSpinner label={evaluating ? "Evaluating" : "Thinking"} />
-			<Shimmer duration={1}>{evaluating ? "EVALUATING…" : "THINKING…"}</Shimmer>
+			<BrailleSpinner label={evaluating ? t("chat.evaluating") : t("chat.thinking")} />
+			<Shimmer duration={1}>{evaluating ? t("chat.evaluatingUpper") : t("chat.thinkingUpper")}</Shimmer>
 		</span>
 	);
 }
@@ -992,8 +993,8 @@ export function Chat({
 		return () => document.removeEventListener("focusin", remember);
 	}, [cycleChatFields]);
 	const citeAction = useMemo(
-		() => createCiteAction({ chatId, composer: citeInput, openEditor: setCitationEdit }),
-		[chatId, citeInput],
+		() => createCiteAction({ chatId, composer: citeInput, openEditor: setCitationEdit, t }),
+		[chatId, citeInput, t],
 	);
 	// One durable companion per explanation/check, in teaching AND practice.
 	// Main requests append new raw exchanges from every thread; closing only hides the UI.
@@ -1884,7 +1885,7 @@ export function Chat({
 												{/* The rail GROUPS (owner round 4, 2026-10-05): the YOU heading
 												    sits INSIDE the rail, same mono-xs register and same 1ch
 												    rail as the thinking rows — one quote geometry. */}
-												<div className="font-medium uppercase tracking-wide text-muted-foreground">You</div>
+												<div className="font-medium uppercase tracking-wide text-muted-foreground">{t("chat.you")}</div>
 												<div className="lh-prose whitespace-pre-wrap text-foreground">
 													<PathText text={m.parts.filter((p) => p.type === "text").map((p) => p.text).join("\n")} />
 												</div>
@@ -1963,7 +1964,7 @@ export function Chat({
 													case "tool-recall": {
 														const malformed = !busy && malformedQuestions.find(call => call.messageId === part.sourceMessageId && call.contentIndex === part.sourceContentIndex && call.toolCallId === part.toolCallId);
 														if (malformed) return <MalformedQuestion key={pi} disabled={!!pending || compacting}
-															reason={pending ? "Answer or discard the remaining question first." : undefined}
+															reason={pending ? t("chat.answerOrDiscard") : undefined}
 															onRetry={() => {
 																draftRef.current = null;
 																void send({ type: "retry-question", messageId: malformed.messageId, contentIndex: malformed.contentIndex, toolCallId: malformed.toolCallId });
@@ -2017,8 +2018,8 @@ export function Chat({
 						    BEFORE beginTurn; the settle kick runs after endTurn). */}
 							{compacting && (
 								<span className="flex items-center gap-2 font-ui text-xs font-medium uppercase tracking-wide text-muted-foreground">
-									<BrailleSpinner label="Compacting context" />
-									<Shimmer duration={1}>COMPACTING CONTEXT…</Shimmer>
+									<BrailleSpinner label={t("chat.compactingContext")} />
+									<Shimmer duration={1}>{t("chat.compactingContextUpper")}</Shimmer>
 								</span>
 							)}
 							{(status === "submitted" || turnInFlight) && (
@@ -2499,6 +2500,7 @@ export function DockOverlay({
 	 *  home and /chat/new carry, above the composer while slots are unset. */
 	setupCta?: React.ReactNode;
 }) {
+	const t = useT();
 	const controller = useOptionalInteractionLayers();
 	const { isAtBottom, scrollToBottom, scrollRef } = useStickToBottomContext();
 	// Render-fresh bottom state (flicker round): the arrival block below reads
@@ -2916,7 +2918,7 @@ export function DockOverlay({
 					<div ref={viewportRef} data-dock-viewport="" className="pointer-events-auto">
 					<div ref={bodyRef}>
 					{setupCta}
-					{reconciliation === "failed" && <div role="alert" className="mb-2 rounded-2xl border bg-card px-4 py-3 text-sm">Could not sync the saved session. <Button type="button" variant="ghost" onClick={onRetrySync}>Retry syncing</Button></div>}
+					{reconciliation === "failed" && <div role="alert" className="mb-2 rounded-2xl border bg-card px-4 py-3 text-sm">{t("chat.syncFailed")} <Button type="button" variant="ghost" onClick={onRetrySync}>{t("chat.retrySync")}</Button></div>}
 					{/* The queued-steer indicator (owner spec 2026-10-03): quiet
 					    one-liners above the shell - right-aligned to where its corner
 					    rounding starts, truncated, no background, no container. A
@@ -2958,8 +2960,8 @@ export function DockOverlay({
 								<PluginQuestionDock viewReader={customViewReader} snapshot={pluginQuestion} chatId={chatId} draft={pluginDraft} expanded={expanded} reveal={revealPending} onExpand={expandAndReveal} ready={pluginReady} available={pluginAvailable} reconciliation={reconciliation} readingRef={readingInputRef} onMicAvailable={onPluginMicAvailable} send={onPluginSend} dismiss={onPluginDismiss} prepareSubmission={onPreparePluginQuestion} />
 							) : unreadablePlugin ? (
 								<div className="px-4 py-3">
-									{reconciliation === "syncing" && <p role="status" className="text-sm text-muted-foreground">Preparing question…</p>}
-									{reconciliation === "ready" && <><p role="status" className="text-sm text-muted-foreground">Question unavailable</p><Button type="button" variant="ghost" disabled={!pluginReady} onClick={() => { void finishDictation().then(onPluginDismiss); }}>Dismiss question</Button></>}
+									{reconciliation === "syncing" && <p role="status" className="text-sm text-muted-foreground">{t("pluginChrome.preparingQuestion")}</p>}
+									{reconciliation === "ready" && <><p role="status" className="text-sm text-muted-foreground">{t("pluginChrome.questionUnavailable")}</p><Button type="button" variant="ghost" disabled={!pluginReady} onClick={() => { void finishDictation().then(onPluginDismiss); }}>{t("pluginChrome.dismissQuestion")}</Button></>}
 								</div>
 							) : pending ? (
 								<QuestionDock
@@ -3046,7 +3048,7 @@ export function DockOverlay({
 				    mid-question unmount), and widening past the floor fades it
 				    back in. */}
 				{(pending || pluginQuestion) && plan && (
-					<Hint label="Open the full plan" side="bottom">
+					<Hint label={t("chat.planChipHint")} side="bottom">
 <button
 						type="button"
 						data-testid="plan-marginalia"

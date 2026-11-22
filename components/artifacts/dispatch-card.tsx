@@ -6,6 +6,7 @@ import { JobsContext } from "@/components/jobs-context";
 import { ChatActionsContext } from "@/components/chat";
 import { isModelsRefusal, isProviderKeyRefusal, type JobKind, type JobRecord } from "@/src/core";
 import { BrailleSpinner } from "@/components/braille-spinner";
+import { useT } from "@/src/i18n/react";
 
 /**
  * The dispatch card (contracts.ts "THE ASYNC PROTOCOL" §4): the tool-call
@@ -19,18 +20,19 @@ import { BrailleSpinner } from "@/components/braille-spinner";
  *                 itself arrives in the steer message right below, so the
  *                 box must not duplicate it.
  */
-const KIND_LABEL: Record<JobKind, string> = {
-	research: "Research agent",
-	demo: "Demo agent",
-	visual: "Figure agent",
-	pdf: "PDF reader",
-	plugin: "Plugin worker",
+const KIND_LABEL_KEY: Record<JobKind, string> = {
+	research: "artifacts.agentResearch",
+	demo: "artifacts.agentDemo",
+	visual: "artifacts.agentVisual",
+	pdf: "artifacts.agentPdf",
+	plugin: "artifacts.agentPlugin",
 };
 
 export function DispatchCard({ toolCallId, kind }: { toolCallId: string; kind: JobKind }) {
+	const t = useT();
 	const jobs = useContext(JobsContext);
 	const job = jobs.find((j) => j.toolCallId === toolCallId) ?? null;
-	const label = kind === "plugin" ? job?.plugin?.label || job?.plugin?.toolName || KIND_LABEL.plugin : KIND_LABEL[kind];
+	const label = kind === "plugin" ? job?.plugin?.label || job?.plugin?.toolName || t(KIND_LABEL_KEY.plugin) : t(KIND_LABEL_KEY[kind]);
 
 	if (!job || job.status === "running") {
 		return <DispatchActivityCard job={job} label={label} />;
@@ -42,10 +44,10 @@ export function DispatchCard({ toolCallId, kind }: { toolCallId: string; kind: J
 	// whose key is gone reads as the key being needed — the deep-link
 	// lands on the SetupDialog's first-key stage on its own.
 	if (isModelsRefusal(job.error)) {
-		return <DispatchRefusedCard label={label} line="needs model setup" button="Set up models" />;
+		return <DispatchRefusedCard label={label} line={t("artifacts.needsModels")} button={t("artifacts.setUpModels")} />;
 	}
 	if (isProviderKeyRefusal(job.error)) {
-		return <DispatchRefusedCard label={label} line="needs a provider key" button="Add a key" />;
+		return <DispatchRefusedCard label={label} line={t("artifacts.needsProviderKey")} button={t("artifacts.addKey")} />;
 	}
 	const failed = job.status === "error";
 	return (
@@ -55,7 +57,7 @@ export function DispatchCard({ toolCallId, kind }: { toolCallId: string; kind: J
 		>
 			{failed ? <XIcon className="size-3.5 text-error" /> : <CheckIcon className="size-3.5" />}
 			<span className="font-medium uppercase tracking-wide">{label}</span>
-			<span>{failed ? "failed" : "finished"}</span>
+			<span>{failed ? t("artifacts.failed") : t("artifacts.finished")}</span>
 		</div>
 	);
 }
@@ -86,6 +88,7 @@ function DispatchRefusedCard({ label, line, button }: { label: string; line: str
 }
 
 function DispatchActivityCard({ job, label }: { job: JobRecord | null; label: string }) {
+	const t = useT();
 	// Elapsed from createdAt — jobs appear here only via the jobs feed (post-mount),
 	// so no SSR/hydration mismatch.
 	const elapsed =
@@ -100,7 +103,7 @@ function DispatchActivityCard({ job, label }: { job: JobRecord | null; label: st
 				    the Braille spinner replaces the pulsing dot — one indicator
 				    everywhere. This is the ONLY dispatch-card change; the card's
 				    shape is untouched. */}
-				<BrailleSpinner label={`${label} running`} />
+				<BrailleSpinner label={t("artifacts.runningAria", { label })} />
 				{label}
 				{elapsed !== null && <span className="font-normal">· {elapsed}s</span>}
 			</div>
@@ -111,7 +114,7 @@ function DispatchActivityCard({ job, label }: { job: JobRecord | null; label: st
 			)}
 			{!job && (
 				<div className="mt-1 text-sm text-muted-foreground" data-testid="dispatch-pending">
-					Dispatched…
+					{t("artifacts.dispatched")}
 				</div>
 			)}
 		</div>

@@ -106,7 +106,7 @@ export function DemoOutputCard({
 	if (!result || typeof result.html !== "string" || typeof result.title !== "string") {
 		return (
 			<div className="rounded-xl border bg-card p-4 text-sm text-muted-foreground">
-				Demo completed, but the result could not be displayed.
+				{t("artifacts.demoUnavailable")}
 			</div>
 		);
 	}
@@ -115,10 +115,10 @@ export function DemoOutputCard({
 		return (
 			<div className="rounded-xl border bg-card p-4 text-card-foreground" data-testid="demo-card-failed">
 				<div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-					Interactive demo
+					{t("artifacts.demoTitle")}
 					<span className="rounded bg-error/15 px-1.5 py-0.5 text-error">{t("artifacts.failed")}</span>
 				</div>
-				<p className="mt-2 text-sm text-muted-foreground">{result.notes ?? "The demo could not be built."}</p>
+				<p className="mt-2 text-sm text-muted-foreground">{result.notes ?? t("artifacts.demoNotBuilt")}</p>
 			</div>
 		);
 	}
@@ -180,7 +180,7 @@ function DemoFrame({
 			<div className="flex items-center justify-between gap-2">
 				<div className="flex min-w-0 items-baseline gap-2">
 					<span className="shrink-0 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-						interactive demo
+						{t("artifacts.demoLabel")}
 					</span>
 					<span className="truncate text-xs font-medium tracking-wide text-foreground">{title}</span>
 				</div>
@@ -256,7 +256,7 @@ export function DemoErrorChip({
 		>
 			<span className="font-medium">{t("artifacts.demoError")}</span>
 			<span className="min-w-0 flex-1 truncate font-mono text-xs" title={message}>
-				{message}
+				{message === "unknown error" ? t("artifacts.unknownError") : message}
 			</span>
 			{onSend && (
 				<button
@@ -265,7 +265,7 @@ export function DemoErrorChip({
 					className="rounded-md border border-error/40 px-2 py-1 text-xs font-medium hover:bg-error/15"
 					data-testid="demo-error-send"
 				>
-					Send to teacher
+					{t("artifacts.sendToTeacher")}
 				</button>
 			)}
 		</div>

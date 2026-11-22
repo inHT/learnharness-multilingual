@@ -147,8 +147,8 @@ export function MermaidOverlay({
 	}, []);
 
 	const box = useMemo(() => image ? { w: image.width, h: image.height } : svg ? chartSize(svg) : { w: 0, h: 0 }, [svg, image]);
-	const mediaName = image ? "Image" : "Diagram";
-	const fitLabel = image ? "Fit image to view" : "Fit diagram to view";
+	const mediaName = image ? t("overlay.image") : t("overlay.diagram");
+	const fitLabel = image ? t("overlay.fitImage") : t("overlay.fitDiagram");
 	const fitZoom = useMemo(() => fitZoomFor(box, size), [box, size]);
 
 	const [view, setView] = useState<Viewport>({ x: 0, y: 0, zoom: 1 });
@@ -291,7 +291,7 @@ export function MermaidOverlay({
 							{image ? (
 								// Reuse the figure viewport without re-encoding or inverting raster bytes.
 								// eslint-disable-next-line @next/next/no-img-element
-								<img src={image.src} alt="Submitted image" draggable={false} className="block h-auto w-full" />
+								<img src={image.src} alt={t("overlay.submittedImage")} draggable={false} className="block h-auto w-full" />
 							) : rawSvg !== undefined ? (
 								<div
 									data-lh-overlay-chart
@@ -347,7 +347,7 @@ export function MermaidOverlay({
 				) : (
 					<div className="flex h-full items-center justify-center gap-2 text-sm text-muted-foreground">
 						<span className="inline-block size-4 animate-spin rounded-full border border-current border-b-2" />
-						Rendering diagram…
+						{t("overlay.renderingDiagram")}
 					</div>
 				)}
 			</div>

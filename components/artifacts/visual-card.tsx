@@ -77,7 +77,7 @@ export function VisualOutputCard({
 	if (!result || typeof result.svg !== "string") {
 		return (
 			<div className="rounded-xl border bg-card p-4 text-sm text-muted-foreground">
-				Figure completed, but the result could not be displayed.
+				{t("artifacts.figureUnavailable")}
 			</div>
 		);
 	}
@@ -90,14 +90,14 @@ export function VisualOutputCard({
 		return (
 			<div className="rounded-xl border bg-card p-4 text-card-foreground" data-testid="visual-card-failed">
 				<div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-					Figure
+					{t("artifacts.figure")}
 					<span className="rounded bg-error/15 px-1.5 py-0.5 text-error">{t("artifacts.failed")}</span>
 				</div>
-				<p className="mt-2 text-sm text-muted-foreground">{result.notes ?? "The figure could not be drawn."}</p>
+				<p className="mt-2 text-sm text-muted-foreground">{result.notes ?? t("artifacts.figureNotDrawn")}</p>
 			</div>
 		);
 	}
-	if (result.image && !snapshot.image) return <div className="my-4 text-sm text-muted-foreground" role="status">{snapshot.failed ? "Image snapshot could not be loaded." : "Loading image…"}</div>;
+	if (result.image && !snapshot.image) return <div className="my-4 text-sm text-muted-foreground" role="status">{snapshot.failed ? t("artifacts.imageSnapshotFailed") : t("artifacts.loadingImage")}</div>;
 	return (
 		/* NO CARD CHROME (owner round, 2026-10-07): the figure is document
 		   material — no border, no padding box. Image first, then the CAPTION

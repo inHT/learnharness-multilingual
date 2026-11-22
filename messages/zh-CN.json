@@ -7,7 +7,10 @@
 		"deleting": "删除中…",
 		"rename": "重命名",
 		"close": "关闭",
-		"working": "处理中"
+		"working": "处理中",
+		"save": "保存",
+		"previousBranch": "上一个分支",
+		"nextBranch": "下一个分支"
 	},
 	"time": {
 		"justNow": "刚刚",
@@ -42,7 +45,11 @@
 			"compacting": "正在压缩上下文 · {time}",
 			"problemWaiting": "题目等待作答 · {time}",
 			"working": "处理中…"
-		}
+		},
+		"folderDeleteFailed": "无法删除文件夹（{status}）。",
+		"folderDeleteNetwork": "无法删除文件夹——网络错误。",
+		"collapseFolderAria": "折叠文件夹 {name}",
+		"expandFolderAria": "展开文件夹 {name}"
 	},
 	"deleteSource": {
 		"label": "删除来源",
@@ -95,7 +102,20 @@
 		"nodeExtractionRunning": "正在执行知识抽取——等活动栏清空后重试。"
 	},
 	"composer": {
-		"placeholder": "提问、作答，或引导这堂课…"
+		"placeholder": "提问、作答，或引导这堂课…",
+		"send": "发送",
+		"stop": "停止",
+		"attachFiles": "附加文件",
+		"attachFilesOrFolder": "附加文件或文件夹",
+		"files": "文件",
+		"folder": "文件夹",
+		"folderChooseFailed": "无法选择文件夹。请重试。",
+		"browserNotice": "只有在桌面应用中才能附加本地文件路径。你也可以直接粘贴完整路径。",
+		"dropToAttach": "拖放以附加文件路径",
+		"noLocalPaths": "没有可用的本地文件路径。请从电脑中拖入已有的文件或文件夹。",
+		"openChatToAttach": "打开一个会话来附加文件路径。",
+		"someDroppedMissingPath": "部分拖入项没有可用的文件路径。",
+		"dismissAttachmentNotice": "关闭附件提示"
 	},
 	"abort": {
 		"turn": {
@@ -146,7 +166,29 @@
 			"depthStrength": "深度强度",
 			"depthSpacing": "深度间距",
 			"baseRingRadius": "基础环半径"
-		}
+		},
+		"pipelineCosts": "图谱流水线费用",
+		"unpriced": "{count} 项未计价",
+		"plusUnpriced": "+{count} 项未计价",
+		"tokensInOut": "· 输入 {input} / 输出 {output}",
+		"regions": "区域",
+		"physics": "物理",
+		"depthAnchor": "深度锚点",
+		"depthOff": "关闭",
+		"depthVertical": "垂直（向上）",
+		"depthRadial": "径向（向外）",
+		"showFolderAria": "显示文件夹 {name}",
+		"folderFiltered": "图谱已按文件夹筛选",
+		"showFolders": "显示文件夹",
+		"folderFilter": "文件夹筛选",
+		"folderFilterNamed": "文件夹筛选：{name}",
+		"folderFilterCount": "文件夹筛选：已选 {count} 个",
+		"showAll": "显示全部",
+		"noFolders": "还没有文件夹包含图谱内容。",
+		"stageExtraction": "知识抽取",
+		"stageAudit": "审校",
+		"contextTitle": "图谱上下文",
+		"propositionsSummary": "{count} 个命题"
 	},
 	"practice": {
 		"problem": "题目",
@@ -154,7 +196,30 @@
 		"compacting": "正在压缩会话…",
 		"submitHint": "↵ 提交 · ⇧↵ 换行",
 		"submitSubmit": "提交",
-		"submitThinking": "提交思路"
+		"submitThinking": "提交思路",
+		"problemDismissed": "题目已跳过。",
+		"concluded": "已结束",
+		"modelSolution": "模型解答",
+		"metadata": "元数据",
+		"mode": "模式",
+		"targets": "目标",
+		"outcome": {
+			"solved": "已解决",
+			"solvedWithHints": "借助提示解决",
+			"movedOn": "已继续",
+			"surrendered": "已放弃",
+			"dismissed": "已跳过"
+		},
+		"hintRung": "提示层级",
+		"missClass": "错误类型",
+		"retest": "重测",
+		"untagged": "未标记",
+		"none": "无",
+		"yes": "是",
+		"no": "否",
+		"outcomeLabel": "结果",
+		"pickNodes": "选择节点",
+		"nodesSelected": "已选 {count} 个节点"
 	},
 	"question": {
 		"label": {
@@ -176,7 +241,23 @@
 		"thinkingPlaceholder": "为什么选它？想到什么写什么。",
 		"yourAnswer": "你的答案",
 		"yourThinking": "你的思路",
-		"submit": "提交答案"
+		"submit": "提交答案",
+		"checkUnderstanding": "检查你的理解",
+		"open": "打开",
+		"answer": "作答",
+		"skippedSuffix": "——已跳过",
+		"didntKnowBadge": "不知道",
+		"correct": "正确",
+		"incorrect": "错误",
+		"answeredDontKnow": "已回答“我不知道”。",
+		"hideWhy": "收起原因",
+		"why": "原因",
+		"whyLabel": "原因：",
+		"theAnswer": "答案：",
+		"malformed": "此题目无法显示。",
+		"malformedHint": "请重试，或发送消息以继续。",
+		"malformedTooltip": "向模型请求一个替代题目。",
+		"retryMalformed": "重试题目"
 	},
 	"chat": {
 		"phase": {
@@ -197,7 +278,20 @@
 		"error": "出了点问题：{message}",
 		"retry": "重试",
 		"nextPlaceholder": "随便问，或按 Enter 进入下一题。",
-		"practiceNext": "下一题"
+		"practiceNext": "下一题",
+		"you": "你",
+		"evaluating": "正在评估",
+		"thinking": "思考中",
+		"evaluatingUpper": "正在评估…",
+		"thinkingUpper": "思考中…",
+		"compactingContext": "正在压缩上下文",
+		"compactingContextUpper": "正在压缩上下文…",
+		"answerOrDiscard": "请先回答或跳过剩余问题。",
+		"syncFailed": "无法同步已保存的会话。",
+		"retrySync": "重试同步",
+		"contextCompacted": "上下文已压缩",
+		"historyCompacted": "历史已压缩",
+		"tokensSuffix": " · {count}k token"
 	},
 	"newSession": {
 		"practiceTitle": "新建练习会话",
@@ -209,7 +303,8 @@
 		"setupModels": "设置你的模型",
 		"addProviderKey": "添加服务商密钥",
 		"startAria": "开始会话",
-		"openingFailed": "无法打开会话。你的消息还在这里，请重新发送。"
+		"openingFailed": "无法打开会话。你的消息还在这里，请重新发送。",
+		"modeTeach": "授课"
 	},
 	"updateBanner": {
 		"ready": "LearnHarness {version} 已就绪",
@@ -253,7 +348,55 @@
 		"complete": "完成",
 		"researchLabel": "研究",
 		"pagesRead": "· 阅读 {count} 页",
-		"sourcesCount": "· {count} 个来源"
+		"sourcesCount": "· {count} 个来源",
+		"viewBrief": "查看简报",
+		"hideBrief": "收起简报",
+		"pdfUnavailable": "PDF 阅读已完成，但结果无法显示。",
+		"pdfBrief": "PDF 简报",
+		"pagesReadLine": "已读页：{pages}",
+		"pagesConsultedLine": "查阅页：{pages}",
+		"researchUnavailable": "研究已完成，但结果无法显示。",
+		"researchBrief": "研究简报",
+		"demoUnavailable": "演示已完成，但结果无法显示。",
+		"demoTitle": "互动演示",
+		"demoLabel": "互动演示",
+		"demoNotBuilt": "无法构建演示。",
+		"sendToTeacher": "发送给老师",
+		"unknownError": "未知错误",
+		"figureUnavailable": "图像已完成，但结果无法显示。",
+		"figureNotDrawn": "无法绘制图像。",
+		"imageSnapshotFailed": "无法加载图片快照。",
+		"loadingImage": "正在加载图片…",
+		"imageDisplayFailed": "图片已生成，但无法显示。",
+		"image": "图片",
+		"downloadImage": "下载图片",
+		"openImageFullscreen": "全屏查看图片",
+		"agentResearch": "研究代理",
+		"agentDemo": "演示代理",
+		"agentVisual": "图像代理",
+		"agentPdf": "PDF 阅读器",
+		"agentPlugin": "插件工作进程",
+		"needsModels": "需要设置模型",
+		"setUpModels": "设置模型",
+		"needsProviderKey": "需要服务商密钥",
+		"addKey": "添加密钥",
+		"finished": "已完成",
+		"dispatched": "已派发…",
+		"runningAria": "{label} 正在运行",
+		"probeAssessment": "摸底评估",
+		"proberRetried": "出题老师已重试：{error}",
+		"assessmentMalformed": "评估格式有误——出题老师已用修正后的评估重试。",
+		"writingAssessment": "正在撰写评估…",
+		"strandCount": "{count} 条线索",
+		"subagentUnavailable": "子代理已完成，但结果无法显示。",
+		"taskDetails": "任务详情",
+		"resultFormattingFailed": "结果格式化失败：{error}",
+		"input": "输入",
+		"error": "错误",
+		"output": "输出",
+		"running": "运行中…",
+		"imagesAttached": "[{count} 张图片已附加给模型]",
+		"inputStreaming": "输入（流式）"
 	},
 	"pluginChrome": {
 		"preparingQuestion": "正在准备题目…",
@@ -270,20 +413,35 @@
 		"loading": "加载插件中…",
 		"backHome": "返回主页",
 		"graphActions": "插件图谱操作",
-		"moreActions": "更多插件操作"
+		"moreActions": "更多插件操作",
+		"scopeApp": "全应用",
+		"scopeTeaching": "教学",
+		"scopePractice": "练习",
+		"viewsList": "视图：{views}",
+		"closeDialog": "关闭对话框",
+		"plugin": "插件"
 	},
 	"dictationLanguage": {
 		"aria": "听写语言：{language}",
 		"searchAria": "搜索听写语言",
 		"searchPlaceholder": "搜索语言…",
-		"empty": "没有匹配的语言。"
+		"empty": "没有匹配的语言。",
+		"saveFailed": "无法保存听写语言。请重试。"
 	},
 	"sourceTree": {
 		"folderName": "文件夹名称",
-		"nameAria": "来源或文件夹名称"
+		"nameAria": "来源或文件夹名称",
+		"saveFoldersFailed": "无法保存文件夹。"
 	},
 	"overlay": {
-		"fromLesson": "来自本课"
+		"fromLesson": "来自本课",
+		"image": "图片",
+		"diagram": "图表",
+		"fitImage": "图片适应视图",
+		"fitDiagram": "图表适应视图",
+		"submittedImage": "已提交的图片",
+		"openSubmittedImage": "全屏查看已提交的图片",
+		"renderingDiagram": "正在渲染图表…"
 	},
 	"coverage": {
 		"title": "抽取覆盖",
@@ -308,7 +466,16 @@
 		"failed": "听写失败：{error}",
 		"stop": "停止听写",
 		"stopShort": "停止",
-		"stopHint": "停止听写（Esc）"
+		"stopHint": "停止听写（Esc）",
+		"transcriptApplyFailed": "无法应用听写文本",
+		"reconnectFailed": "Deepgram 重新连接失败",
+		"connectionLost": "Deepgram 连接中断（{code}）",
+		"languageUnavailable": "听写语言不可用",
+		"micDenied": "麦克风权限被拒绝",
+		"micUnavailable": "麦克风不可用",
+		"tokenUnavailable": "token 不可用",
+		"needsKey": "听写需要 Deepgram 密钥",
+		"activeElsewhere": "听写已在其他地方进行"
 	},
 	"sideThread": {
 		"ask": "追问",
@@ -344,7 +511,8 @@
 		"panHint": "拖动平移 · 滚轮缩放",
 		"zoomOut": "缩小",
 		"zoomIn": "放大",
-		"fit": "适应屏幕"
+		"fit": "适应屏幕",
+		"empty": "此会话还没有计划。"
 	},
 	"menu": {
 		"checkForUpdates": "检查更新…",
@@ -360,7 +528,23 @@
 		"cost": "消耗",
 		"context": "上下文",
 		"model": "模型",
-		"steps": "步数"
+		"steps": "步数",
+		"needsModelSetup": "需要设置模型",
+		"needsProviderKey": "需要服务商密钥",
+		"pluginWorker": "插件工作进程",
+		"agent": {
+			"research": "研究代理",
+			"demo": "演示构建",
+			"visual": "图像制作",
+			"pdf": "PDF 阅读器",
+			"subagent": "子代理"
+		},
+		"extraction": "知识抽取——{phase}",
+		"abortFailed": "中止失败——请重试",
+		"endProcess": "结束此后台进程",
+		"endAria": "结束 {title} 中的 {label}",
+		"stopping": "正在停止…",
+		"openSession": "打开会话 →"
 	},
 	"stats": {
 		"title": "会话统计",
@@ -370,7 +554,9 @@
 		"totalCost": "总花费",
 		"cacheHitRate": "缓存命中率",
 		"manageChatGPT": "管理 ChatGPT 用量",
-		"unpricedTurns": "未计价回合"
+		"unpricedTurns": "未计价回合",
+		"turns": "回合",
+		"stepsCount": "{count} 个步骤"
 	},
 	"chainTable": {
 		"counts": "{chains} 条推理链 · {nodes} 个节点",
@@ -378,7 +564,20 @@
 		"expandSource": "展开来源 {name}",
 		"unlabeled": "未命名",
 		"notes": "笔记",
-		"deleteSelected": "删除所选来源和文件夹"
+		"deleteSelected": "删除所选来源和文件夹",
+		"name": "名称",
+		"props": "命题数",
+		"created": "创建时间",
+		"noMatch": "没有匹配的推理链。",
+		"nodesSummary": "{count} 个节点",
+		"chainsSummary": "{count} 条推理链",
+		"sourcesSummary": "{count} 个来源",
+		"foldersSummary": "{count} 个文件夹",
+		"clear": "清除",
+		"donePickingAria": "选择完成——已选 {count} 个命题",
+		"done": "完成",
+		"saveOrganizationFailed": "无法保存来源组织方式。",
+		"deleteSourcesFailed": "无法删除来源。"
 	},
 	"modelPicker": {
 		"thinking": "思考"
@@ -392,7 +591,17 @@
 		"folder": "文件夹"
 	},
 	"reading": {
-		"placeholder": "阅读时想到什么就写什么。"
+		"placeholder": "阅读时想到什么就写什么。",
+		"copyDiagramSource": "复制图表源码",
+		"openFullScreen": "全屏打开",
+		"expandDiagram": "展开图表",
+		"copyCode": "复制代码",
+		"copyTable": "复制表格",
+		"copyEquation": "复制公式源码",
+		"diagramFailed": "图表渲染失败",
+		"showDiagramSource": "显示图表源码",
+		"imageNotAvailable": "图片不可用",
+		"thinkingWhileReading": "阅读时的思考"
 	},
 	"sessionFind": {
 		"region": "会话内查找",
@@ -413,7 +622,8 @@
 		"rebind": "重新绑定",
 		"clear": "清除",
 		"reset": "重置",
-		"storedNote": "保存在本机（lh:keymap）——仅覆盖项。"
+		"storedNote": "保存在本机（lh:keymap）——仅覆盖项。",
+		"resetAll": "全部恢复默认"
 	},
 	"shortcuts": {
 		"title": "键盘快捷键",
@@ -456,7 +666,14 @@
 		"pickModel": "选择模型…",
 		"needed": "待设置",
 		"close": "关闭设置",
-		"loadingModels": "加载模型中…"
+		"loadingModels": "加载模型中…",
+		"saveKey": "保存密钥",
+		"saveModels": "保存模型",
+		"pickTiers": "为每个档位选择模型。三个档位都选好后才能开始会话。",
+		"noVisionModels": "没有支持图像的模型。请添加可访问视觉模型的服务商密钥。",
+		"saveFailedStatus": "保存失败（{status}）",
+		"saveFailedConnection": "保存失败。请检查网络连接后重试。",
+		"saveFailedDetail": "保存失败：{detail}"
 	},
 	"startupMessage": {
 		"closeAnnouncement": "关闭公告"
@@ -529,7 +746,92 @@
 			"includeReasoningHint": "使用已保存的输出 token 用量来计算匹配的 OpenAI Responses 模型的推理重放。关闭时按原始文本估算。",
 			"systemPrompts": "系统提示",
 			"systemPromptsHint": "用开关在默认提示和你保存的覆盖之间切换。",
-			"promptsFailed": "无法加载提示片段。"
+			"promptsFailed": "无法加载提示片段。",
+			"concurrencyInvalid": "请输入可安全表示的正整数。",
+			"promptSection": {
+				"teacher": "授课老师",
+				"prober": "出题老师",
+				"practice": "练习",
+				"shared": "共享"
+			},
+			"userList": "{head} 和 {last}",
+			"usedBy": "使用者：{users}",
+			"engineHasKey": "✓ 有密钥",
+			"engineNoKey": "· 无密钥",
+			"noModels": "没有模型——请在“密钥”中添加服务商密钥",
+			"runsTier": "运行此档位的所有代理",
+			"graphToolsHintOn": "允许老师在会话之间查阅你的知识图谱",
+			"graphToolsHintOff": "图谱已禁用",
+			"toolRowLabel": "工具：{tool}",
+			"toolToggleLabel": "工具 {tool}",
+			"folderInvalid": "请输入绝对路径或 ~/folder。",
+			"fileAccessBroad": "可广泛访问本地来源，受保护位置除外",
+			"fileAccessListed": "仅限列出的文件夹及其子文件夹。",
+			"fileAccessRestricted": "已限制：不允许访问任何文件夹。添加文件夹以启用访问。",
+			"removeFolder": "移除",
+			"removeFolderAria": "移除 {folder}",
+			"automatic": "自动",
+			"promptsRefreshing": "正在刷新提示词片段…",
+			"promptsLoading": "正在加载提示词片段…",
+			"promptSwitchFailed": "无法切换提示词版本。",
+			"cache": {
+				"retention": "缓存保留",
+				"description": "控制发送给 Pi 的缓存保留偏好。是否支持及保留时长取决于服务商和模型。这并不保证缓存命中。",
+				"label": "缓存：{value}",
+				"compact": {
+					"default": "默认",
+					"none": "不请求",
+					"short": "短",
+					"long": "长"
+				},
+				"optionDefault": {
+					"label": "Pi 默认",
+					"description": "不设置该选项。采用 Pi 的正常行为和环境变量覆盖。"
+				},
+				"optionNone": {
+					"label": "不请求缓存",
+					"description": "向 Pi 传递原生 none 偏好。服务商仍可能自动缓存。"
+				},
+				"optionShort": {
+					"label": "短时保留",
+					"description": "向 Pi 传递原生 short 偏好。保留时长取决于服务商和模型。"
+				},
+				"optionLong": {
+					"label": "长时保留",
+					"description": "向 Pi 传递原生 long 偏好。缓存写入费用可能更高。"
+				}
+			},
+			"promptDisplay": "提示词显示",
+			"markdown": "Markdown",
+			"preview": "预览",
+			"promptDialog": {
+				"viewDefault": "查看默认",
+				"addOverride": "添加覆盖",
+				"editOverride": "编辑覆盖",
+				"activationFailed": "覆盖已保存，但无法启用。请在下方重试启用。",
+				"saveFailed": "无法保存覆盖。你的修改仍保留在这里。",
+				"settingsBusy": "设置仍在保存。请等保存完成后再次删除覆盖。",
+				"deleteFailed": "无法删除覆盖。",
+				"discardTitle": "放弃未保存的修改？",
+				"keepEditing": "继续编辑",
+				"discardChanges": "放弃修改",
+				"deleteOverride": "删除覆盖",
+				"retryActivation": "重试启用",
+				"saveAndActivate": "保存并启用"
+			},
+			"promptRow": {
+				"addOverride": "+ 添加覆盖",
+				"inUse": "使用中：",
+				"yourVersion": "你的版本",
+				"default": "默认",
+				"toggleAria": "对 {name} 使用你的覆盖",
+				"toggleTitle": "使用你的覆盖而不是默认值"
+			},
+			"promptText": {
+				"overrideMarkdown": "覆盖内容 Markdown",
+				"defaultMarkdown": "默认 Markdown",
+				"renderedMarkdown": "渲染后的 Markdown"
+			}
 		},
 		"appearance": {
 			"resetAll": "全部重置",
@@ -564,7 +866,24 @@
 				"warning": "警告",
 				"empty": "留空 = {color}",
 				"hexAria": "{color} 十六进制值"
-			}
+			},
+			"colorsHint": "· 在主题之上的覆盖，切换主题时保留",
+			"fontsInstalled": "你已安装的字体",
+			"fontsUnreadable": "常用字体——无法读取已安装字体",
+			"fontsDesktop": "常用字体——获取已安装字体列表需要桌面应用",
+			"theme": "主题",
+			"themeHint": "{name} · {mode} · 设置下方所有颜色",
+			"exportJson": "导出 JSON",
+			"importJson": "导入 JSON",
+			"importHint": "名称 · 模式 · 颜色",
+			"custom": "自定义",
+			"removeThemeAria": "移除 {name}",
+			"invalidJson": "{name} 不是有效的 JSON",
+			"importFailedStatus": "导入失败（{status}）",
+			"importFailedNetwork": "导入失败（网络）",
+			"colorsHeading": "颜色",
+			"modeLight": "浅色",
+			"modeDark": "深色"
 		},
 		"graph": {
 			"extraction": "知识抽取",
@@ -599,7 +918,108 @@
 			"reasoningUnsupported": "推理强度：不支持",
 			"budgetNote": "预算上限不会改变后端的上下文大小。留空先用上报值，再用回退值（8192 上下文 / 4096 输出）。自定义计价未知。",
 			"reasoningNote": "推理支持只是能力声明。强度选择器的“关闭”未必能停用自定义后端的默认思考。",
-			"reload": "重新加载配置"
+			"reload": "重新加载配置",
+			"notSet": "未设置",
+			"envSuffix": " · 环境变量",
+			"docsLink": "获取密钥 ↗",
+			"addProvider": "+ 添加服务商",
+			"disconnectFailed": "断开连接失败。",
+			"disconnectFailedConnection": "断开连接失败。请检查网络连接。",
+			"dictationSetupBefore": "创建一个",
+			"dictationSetupAfter": "，角色需为 Member 或更高，然后在上方添加。",
+			"customLoadFailed": "无法加载自定义配置。",
+			"customLoading": "正在加载自定义配置…",
+			"keylessInline": "免密钥",
+			"apiKeyMissing": "缺少 API 密钥",
+			"customSummary": "{url} · {count} 个模型 · {auth}",
+			"inspectKeyFailed": "无法检查生效的密钥。请重新加载配置后重试。",
+			"saveFailedStatus": "保存失败（{status}）",
+			"saveFailedConnection": "保存失败。请检查网络连接。",
+			"connectFailedStatus": "连接失败（{status}）",
+			"connectFailedConnection": "连接失败。请检查网络连接。",
+			"authentication": "认证方式",
+			"allowReuseKey": "允许此 URL 复用当前生效的密钥",
+			"leaveBlankKey": "留空以保留当前生效的密钥",
+			"connecting": "正在连接…",
+			"connect": "连接",
+			"disconnect": "断开连接",
+			"userPin": "用户固定值",
+			"reportedValue": "上报值 {value}",
+			"fallbackValue": "回退值 {value}",
+			"pinSummary": "上下文：{context} · 输出：{output}",
+			"pinContextAria": "{model} 上下文窗口（token）",
+			"pinOutputAria": "{model} 最大输出 token",
+			"pinReasoningAria": "{model} 推理强度支持",
+			"keyAria": "{label} 密钥",
+			"saveLimits": "保存限制",
+			"subscription": {
+				"noticeWeb": "你的提示、工具结果和相关会话上下文会发送给 {label} 以执行你选择的工作。凭据以仅所有者可读的明文文件形式保存在运行 LearnHarness 的机器上。适用服务商条款、数据使用政策和套餐限制。此连接绝不会回退到 API 密钥。",
+				"noticeLocal": "你的提示、工具结果和相关会话上下文会发送给 {label} 以执行你选择的工作。凭据以仅所有者可读的明文文件形式保存在本地。适用服务商条款、数据使用政策和套餐限制。此连接绝不会回退到 API 密钥。",
+				"disconnectCopyWeb": "要从 LearnHarness 断开 {label} 吗？这会停止使用此连接的工作，并从运行 LearnHarness 的机器上删除已保存的凭据。这不会取消你的订阅，也不会在服务商处撤销访问权限。在你重新连接或更改之前，已保存的模型选择将一直不可用。",
+				"disconnectCopyLocal": "要从 LearnHarness 断开 {label} 吗？这会停止使用此连接的工作，并从本设备删除已保存的凭据。这不会取消你的订阅，也不会在服务商处撤销访问权限。在你重新连接或更改之前，已保存的模型选择将一直不可用。",
+				"copilotPolicy": "Pi 自带的 Copilot 登录可能会启用策略尚未配置的其他模型。被策略明确禁用的模型不会被启用。组织限制仍然适用。",
+				"backgroundHint": "允许 LearnHarness 的辅助代理和自动跟进使用此连接。",
+				"backgroundUse": "允许后台使用",
+				"unavailable": "订阅登录需要桌面应用的私有服务器连接。此处仍可使用 API 密钥连接。",
+				"connectionFailed": "无法更改连接。请重试。",
+				"desktopUnavailable": "桌面连接不可用。请在应用就绪后重试。",
+				"signInFailed": "登录未完成。请重新连接。",
+				"dialogLabel": "{label} 连接",
+				"deviceCode": "设备代码：",
+				"openBrowser": "打开浏览器",
+				"browserFailed": "无法打开浏览器。请重试。",
+				"select": "请选择…",
+				"continue": "继续",
+				"signInAgain": "重新登录",
+				"manage": "管理…",
+				"enableBackground": "启用后台使用",
+				"disconnectTitle": "断开 {label}？",
+				"connect": "连接",
+				"disconnect": "断开连接"
+			},
+			"chatgpt": {
+				"notice": "LearnHarness 会将你的 ChatGPT 账户信息和凭据保存在本设备上未加密的本地文件中。使用此连接时，相关的对话上下文、学习材料和工具结果会直接发送给 OpenAI。适用 ChatGPT 套餐限制；额外额度由 ChatGPT 授权和管理，而不是 LearnHarness。",
+				"noticeWeb": "LearnHarness 会将你的 ChatGPT 账户信息和凭据保存在运行 LearnHarness 的机器上未加密的本地文件中。使用此连接时，相关的对话上下文、学习材料和工具结果会直接发送给 OpenAI。适用 ChatGPT 套餐限制；额外额度由 ChatGPT 授权和管理，而不是 LearnHarness。请在同一台机器的浏览器中完成 ChatGPT 登录。",
+				"backgroundHint": "后台工作会计入你的 ChatGPT 套餐用量。",
+				"backgroundLabel": "允许所有 ChatGPT 账户在后台使用",
+				"revocationWarning": "账户已在本地断开。无法确认远程撤销是否成功。",
+				"disconnectTitle": "断开账户？",
+				"disconnectBody": "这会从本设备删除已保存的账户及其凭据。",
+				"disconnectBodyWeb": "这会从运行 LearnHarness 的机器上删除已保存的账户及其凭据。",
+				"controlError": "无法更改 ChatGPT 连接。请重试。",
+				"desktopUnavailable": "桌面连接不可用。请在应用就绪后重试。",
+				"accountFallback": "ChatGPT 账户",
+				"savedAccountAria": "已保存的 ChatGPT 账户",
+				"addAnother": "添加其他账户或工作区",
+				"openaiPrivacy": "OpenAI 隐私政策",
+				"manageUsage": "管理用量",
+				"desktopOnly": "ChatGPT 登录仅在桌面应用中可用。此处仍可使用 API 密钥连接。",
+				"waiting": "正在等待浏览器登录…",
+				"manageAria": "管理 ChatGPT 账户",
+				"addAccounts": "添加账户",
+				"disconnect": "断开连接",
+				"disconnectAccount": "断开账户",
+				"signInAgain": "重新登录",
+				"continue": "使用 ChatGPT 继续",
+				"accountDialog": "ChatGPT 账户",
+				"accountAria": "ChatGPT 账户",
+				"enableBackground": "启用后台使用"
+			},
+			"claudeCode": {
+				"notFound": "未找到",
+				"meetsMinimum": "版本 {version} · 满足最低要求",
+				"updateRequired": "版本 {version} · 需要更新",
+				"unchecked": "无法检查版本",
+				"loadFailed": "无法加载 Claude Code 设置。",
+				"saveFailed": "无法保存 Claude Code 设置。",
+				"checking": "正在检查…",
+				"checkAgain": "重新检查",
+				"installHintStrong": "在终端中安装并登录 Claude Code，然后在这里选择 Claude Code 模型。",
+				"installHintRest": "LearnHarness 会在需要时启动它——无需常驻后台进程。",
+				"checkNote": "仅检查安装/版本——不检查登录状态、模型访问或额度。计费由 Claude Code 控制。需要 v{version}+。",
+				"setup": "设置 ↗",
+				"disclaimer": "请独立核实 AI 的说法——它们可能不准确、不完整、有误导性或已过时。"
+			}
 		},
 		"plugins": {
 			"trustWarning": "只启用你信任的插件。插件运行受信任的本地代码，拥有广泛的文件和网络访问权限，且不在沙箱中。插件损坏可能需要重启 LearnHarness。",
@@ -627,7 +1047,8 @@
 			"settingsFor": "{name} 的设置",
 			"loadingSettings": "加载插件设置…",
 			"settingsFailed": "无法加载插件设置。",
-			"noSettings": "没有可设置的项。"
+			"noSettings": "没有可设置的项。",
+			"valueOutOfRange": "值超出允许范围。"
 		},
 		"storedOnDevice": "保存在本机",
 		"loadingPlugins": "加载插件中…",
@@ -645,6 +1066,91 @@
 				"hint": "教学回复使用的语言。仅对新会话生效；已有会话保持原语言。",
 				"follow": "跟随界面"
 			}
+		},
+		"update": {
+			"version": "版本 {version}",
+			"unknownVersion": "未知",
+			"releaseNotes": "发行说明",
+			"check": "检查更新",
+			"checking": "正在检查更新…",
+			"downloadingVersion": "正在下载版本 {version}…",
+			"downloading": "正在下载更新…",
+			"upToDate": "上次检查未发现新版本。",
+			"readyVersion": "版本 {version} 已就绪，退出应用后会安装。",
+			"readyFallback": "更新已就绪，退出应用后会安装。",
+			"error": "无法检查更新。请稍后重试。",
+			"manualHint": "检查会下载可用的更新。已下载的更新会在退出应用时安装。",
+			"downloadingSpinner": "正在下载更新",
+			"checkingSpinner": "正在检查更新",
+			"autoLabel": "自动更新",
+			"autoHint": "启动时检查，并每 24 小时检查一次。关闭此选项不会停止正在进行或已就绪的更新。",
+			"autoToggle": "自动更新"
+		},
+		"modelMenu": {
+			"unpriced": "未计价",
+			"searchModels": "搜索模型…",
+			"noModelsMatch": "没有匹配的模型。",
+			"claudeBilling": "计费由你的 Claude Code 配置决定；LearnHarness 不进行估算。",
+			"subscriptionConnection": "订阅连接",
+			"pricePerMillion": "每 100 万输入/输出 token 的美元价格",
+			"priceUnavailable": "价格不可用",
+			"cliBilling": "CLI 计费",
+			"withSubscription": "{label}（订阅）",
+			"noThinkingLevels": "没有推理强度选项。",
+			"searchProviders": "搜索服务商…",
+			"noProvidersMatch": "没有匹配的服务商。",
+			"searchFonts": "搜索字体…",
+			"loadingFonts": "正在加载字体…",
+			"default": "默认",
+			"useCustom": "使用“{family}”",
+			"custom": "自定义"
+		},
+		"modelPicker": {
+			"unreachable": "无法连接服务器——请重试。",
+			"settingsRejected": "设置被拒绝（{status}）",
+			"noModels": "没有模型——请在“密钥”中添加服务商密钥",
+			"sessionModel": "此会话的模型",
+			"strongDefault": "强力档位——新会话的默认值",
+			"noThinkingLevels": "{model} 没有推理强度选项。",
+			"pickFirst": "请先选择模型。",
+			"levelsFooter": "此模型实际支持的强度级别"
 		}
+	},
+	"reasoning": {
+		"thinking": "思考中…",
+		"agentThinking": "代理的思考"
+	},
+	"citation": {
+		"cite": "引用",
+		"citeAria": "在输入中引用所选内容",
+		"shorten": "缩短所选内容",
+		"goToSource": "转到来源",
+		"editComment": "编辑引用评论",
+		"addComment": "为引用添加评论",
+		"viewCitedAria": "查看引用的老师原文：{label}",
+		"quotedAria": "引用的老师原文：{label}",
+		"commentAria": "对所选文本发表评论",
+		"commentDescription": "Enter 保存引用评论；Command/Ctrl+Enter 保存并发送；Shift+Enter 换行。",
+		"commentPlaceholder": "添加可选评论…",
+		"commentTooLong": "评论最多可包含 8,000 个字符。",
+		"shortenComment": "缩短评论"
+	},
+	"selection": {
+		"actions": "所选内容操作"
+	},
+	"toolActivity": {
+		"read": "正在读取文件…",
+		"ls": "正在列出目录…",
+		"find": "正在查找文件…",
+		"grep": "正在搜索文件内容…",
+		"research": "正在派发研究…",
+		"demo": "正在构建演示…",
+		"visual": "正在制作图像…",
+		"pdf": "正在阅读 PDF…",
+		"plan_init": "正在制定计划…",
+		"probe_done": "正在总结评估…",
+		"writingQuestion": "正在编写题目…",
+		"working": "处理中…",
+		"live": "{label}——实时"
 	}
 }

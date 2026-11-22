@@ -749,8 +749,8 @@ function SessionsSidebar() {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(scope),
 			})
-				.then(async (res) => { if (!res.ok) reportFolderFailure(((await res.json().catch(() => ({}))) as { error?: string }).error ?? `Could not delete the folder (${res.status}).`); })
-				.catch(() => reportFolderFailure("Could not delete the folder — network error."));
+				.then(async (res) => { if (!res.ok) reportFolderFailure(((await res.json().catch(() => ({}))) as { error?: string }).error ?? t("sidebar.folderDeleteFailed", { status: res.status })); })
+				.catch(() => reportFolderFailure(t("sidebar.folderDeleteNetwork")));
 			return;
 		}
 		const copy = folderDeleteCopy({

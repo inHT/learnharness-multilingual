@@ -155,7 +155,7 @@ export function ModelControl({ chatId, onModelChange }: { chatId?: string; onMod
 				});
 				if (!res.ok) {
 					const body = (await res.json().catch(() => ({}))) as { error?: string };
-					setError(body.error ?? `settings rejected (${res.status})`);
+					setError(body.error ?? t("settings.modelPicker.settingsRejected", { status: res.status }));
 					return;
 				}
 				// Server truth, never the request body (fix wave): a pick
@@ -168,7 +168,7 @@ export function ModelControl({ chatId, onModelChange }: { chatId?: string; onMod
 				setOpen(null);
 				notifySettingsSaved("models");
 			} catch {
-				setError("Could not reach the server — try again.");
+				setError(t("settings.modelPicker.unreachable"));
 			}
 		},
 		[],
@@ -190,14 +190,14 @@ export function ModelControl({ chatId, onModelChange }: { chatId?: string; onMod
 				});
 				if (!res.ok) {
 					const body = (await res.json().catch(() => ({}))) as { error?: string };
-					setError(body.error ?? `settings rejected (${res.status})`);
+					setError(body.error ?? t("settings.modelPicker.settingsRejected", { status: res.status }));
 					return;
 				}
 				const stored = (await res.json().catch(() => null)) as { settings?: ChatSettings } | null;
 				setSession({ settings: stored?.settings ?? next });
 				setOpen(null);
 			} catch {
-				setError("Could not reach the server — try again.");
+				setError(t("settings.modelPicker.unreachable"));
 			}
 		},
 		[chatId],
@@ -275,7 +275,7 @@ export function ModelControl({ chatId, onModelChange }: { chatId?: string; onMod
 	return (
 		<div ref={containerRef} className="relative flex items-center gap-1.5" data-testid="model-control">
 			<Hint
-				label={effectiveId ? `${effectiveProvider ? `${effectiveProvider}:` : ""}${effectiveId}` : "Model selector"}
+				label={effectiveId ? `${effectiveProvider ? `${effectiveProvider}:` : ""}${effectiveId}` : t("shortcuts.action.open-model-picker")}
 				action="open-model-picker"
 				side="bottom"
 			>
@@ -321,10 +321,10 @@ export function ModelControl({ chatId, onModelChange }: { chatId?: string; onMod
 						onPick={pickModel}
 						footer={
 							catalog && catalog.models.length === 0
-								? "No models — add a provider key in Keys"
+								? t("settings.modelPicker.noModels")
 								: chatId
-									? "This session's model"
-									: "Strong tier — the default for new sessions"
+									? t("settings.modelPicker.sessionModel")
+									: t("settings.modelPicker.strongDefault")
 						}
 					/>
 				</MenuShell>
@@ -341,8 +341,8 @@ export function ModelControl({ chatId, onModelChange }: { chatId?: string; onMod
 						levels={catalog ? levels : []}
 						effectiveLevel={effectiveLevel}
 						onPick={(level) => apply(effectiveProvider ?? "", effectiveId ?? "", level as ThinkingLevel)}
-						empty={catalog ? (effectiveId ? `${prettyModel(effectiveId)} has no thinking levels.` : "Pick a model first.") : "Loading…"}
-						footer="Levels this model actually supports"
+						empty={catalog ? (effectiveId ? t("settings.modelPicker.noThinkingLevels", { model: prettyModel(effectiveId) }) : t("settings.modelPicker.pickFirst")) : t("common.loading")}
+						footer={t("settings.modelPicker.levelsFooter")}
 					/>
 					{error && <div className="mt-1 text-destructive">{error}</div>}
 				</MenuShell>

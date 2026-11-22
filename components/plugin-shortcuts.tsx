@@ -6,6 +6,8 @@ import { usePlugins } from "./plugins";
 import type { FrontendPlugin, PluginFrontendManager } from "./plugin-manager";
 import type { InteractionLayersController } from "./interaction-layers";
 import { findCurrentSurfaceBoundary } from "./plugin-surface-targets";
+import { translate } from "@/src/i18n";
+import type { AppLocale } from "@/src/core";
 
 export function pluginShortcutCandidates(plugins: readonly FrontendPlugin[]): PluginShortcutCandidate[] {
 	return plugins.flatMap(plugin => !plugin.info.enabled || plugin.phase !== "active" ? [] : (plugin.shortcuts ?? []).flatMap(({ actionId, shortcut }) => {
@@ -40,9 +42,9 @@ export function usePluginShortcutPage(pathname: string, read: () => PluginPageAc
 	const latest = useRef(read); latest.current = read;
 	useLayoutEffect(() => manager?.registerShortcutPage(pathname, () => latest.current()), [manager, pathname]);
 }
-export function pluginShortcutScopeLabel(candidate: PluginShortcutCandidate): string {
+export function pluginShortcutScopeLabel(candidate: PluginShortcutCandidate, locale: AppLocale = "en"): string {
 	const scope = candidate.shortcut.scope;
-	return scope === "app" ? "App-wide" : [...(scope.sessions ?? []).map(kind => kind === "teaching" ? "Teaching" : "Practice"), ...(scope.views?.length ? [`Views: ${scope.views.join(", ")}`] : [])].join(" · ");
+	return scope === "app" ? translate(locale, "pluginChrome.scopeApp") : [...(scope.sessions ?? []).map(kind => kind === "teaching" ? translate(locale, "pluginChrome.scopeTeaching") : translate(locale, "pluginChrome.scopePractice")), ...(scope.views?.length ? [translate(locale, "pluginChrome.viewsList", { views: scope.views.join(", ") })] : [])].join(" · ");
 }
 
 /** Window-bubble fallback only; never an independent low-level plugin listener. */

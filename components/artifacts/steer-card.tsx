@@ -52,7 +52,7 @@ export function SubagentSteerCard({ message }: { message: LhViewMessage }) {
 		if (aborted?.data) return <AbortedBadge kind={aborted.data.kind ?? "job"} />;
 		return (
 				<div className="rounded-xl border bg-card p-4 text-sm text-muted-foreground">
-				A sub-agent finished, but its result could not be displayed.
+				{t("artifacts.subagentUnavailable")}
 			</div>
 		);
 	}

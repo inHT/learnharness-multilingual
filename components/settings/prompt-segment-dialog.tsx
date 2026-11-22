@@ -6,6 +6,7 @@ import type { CloseOutcome } from "@/components/interaction-layers";
 import { Button } from "@/components/ui/button";
 import { PromptText } from "./prompt-text";
 import { SettingsSegmentedControl } from "./controls";
+import { useT } from "@/src/i18n/react";
 
 export type PromptSaveOutcome = "saved" | "save-failed" | "activation-failed";
 export type PromptDeleteOutcome = "deleted" | "delete-failed" | "settings-busy";
@@ -21,6 +22,7 @@ export function PromptSegmentDialog({ name, source, override, mode, returnFocusF
 	onClose: () => void;
 }) {
 	const editing = mode === "edit";
+	const t = useT();
 	const [savedText, setSavedText] = useState(override);
 	const [text, setText] = useState(editing ? override ?? source : source);
 	const [preview, setPreview] = useState(!editing);
@@ -35,7 +37,7 @@ export function PromptSegmentDialog({ name, source, override, mode, returnFocusF
 	const field = useRef<HTMLTextAreaElement>(null);
 	const titleId = useId(), nameId = useId();
 	const dirty = editing && text !== (savedText ?? source);
-	const title = !editing ? "View default" : savedText === null ? "Add override" : "Edit override";
+	const title = !editing ? t("settings.agent.promptDialog.viewDefault") : savedText === null ? t("settings.agent.promptDialog.addOverride") : t("settings.agent.promptDialog.editOverride");
 
 	useLayoutEffect(() => {
 		if (confirmDiscard) keepEditing.current?.focus();
@@ -75,8 +77,8 @@ export function PromptSegmentDialog({ name, source, override, mode, returnFocusF
 			else if (result === "activation-failed") {
 				setSavedText(text);
 				setActivationFailed(true);
-				setError("Override saved, but it couldn't be put in use. Retry activation below.");
-			} else setError("Couldn't save the override. Your edits are still here.");
+				setError(t("settings.agent.promptDialog.activationFailed"));
+			} else setError(t("settings.agent.promptDialog.saveFailed"));
 		} finally {
 			pending.current = false;
 			setBusy(null);
@@ -91,8 +93,8 @@ export function PromptSegmentDialog({ name, source, override, mode, returnFocusF
 		try {
 			const result = await onDelete();
 			if (result === "deleted") onClose();
-			else if (result === "settings-busy") setError("Settings is still saving. Try deleting the override again after the save finishes.");
-			else setError("Couldn't delete the override.");
+			else if (result === "settings-busy") setError(t("settings.agent.promptDialog.settingsBusy"));
+			else setError(t("settings.agent.promptDialog.deleteFailed"));
 		} finally {
 			pending.current = false;
 			setBusy(null);
@@ -107,8 +109,8 @@ export function PromptSegmentDialog({ name, source, override, mode, returnFocusF
 				<h2 id={titleId} className="text-sm font-semibold">{title}</h2>
 				<p id={nameId} className="mt-0.5 font-prose text-(length:--lh-prose-size) text-muted-foreground">{name}</p>
 			</div>
-			<SettingsSegmentedControl label="Prompt display" disabled={confirmDiscard}
-				options={[{ value: "markdown", label: "Markdown" }, { value: "preview", label: "Preview" }]}
+			<SettingsSegmentedControl label={t("settings.agent.promptDisplay")} disabled={confirmDiscard}
+				options={[{ value: "markdown", label: t("settings.agent.markdown") }, { value: "preview", label: t("settings.agent.preview") }]}
 				value={preview ? "preview" : "markdown"} onChange={next => setPreview(next === "preview")} />
 		</header>
 		<div className="flex min-h-0 flex-1 flex-col px-4 pt-4" inert={confirmDiscard}>
@@ -117,17 +119,17 @@ export function PromptSegmentDialog({ name, source, override, mode, returnFocusF
 		<footer className="flex shrink-0 flex-col gap-2 px-4 py-3">
 			{error && <p role="alert" className="text-xs text-error">{error}</p>}
 			{confirmDiscard ? <div className="flex flex-wrap items-center justify-between gap-2">
-				<p role="status" className="text-xs">Discard unsaved changes?</p>
+				<p role="status" className="text-xs">{t("settings.agent.promptDialog.discardTitle")}</p>
 				<div className="ml-auto flex gap-2">
-					<Button ref={keepEditing} type="button" variant="outline" size="sm" onClick={resumeEditing}>Keep editing</Button>
-					<Button type="button" variant="destructive" size="sm" onClick={onClose}>Discard changes</Button>
+					<Button ref={keepEditing} type="button" variant="outline" size="sm" onClick={resumeEditing}>{t("settings.agent.promptDialog.keepEditing")}</Button>
+					<Button type="button" variant="destructive" size="sm" onClick={onClose}>{t("settings.agent.promptDialog.discardChanges")}</Button>
 				</div>
 			</div> : <div className="flex flex-wrap items-center justify-between gap-2">
-				{editing && savedText !== null && <button type="button" className="rounded-sm border border-destructive/50 bg-destructive/10 px-3 py-1.5 text-xs text-destructive transition-colors hover:bg-destructive/20 disabled:opacity-40" disabled={busy !== null || dirty} onClick={() => void remove()}>{busy === "delete" ? "Deleting…" : "Delete override"}</button>}
+				{editing && savedText !== null && <button type="button" className="rounded-sm border border-destructive/50 bg-destructive/10 px-3 py-1.5 text-xs text-destructive transition-colors hover:bg-destructive/20 disabled:opacity-40" disabled={busy !== null || dirty} onClick={() => void remove()}>{busy === "delete" ? t("common.deleting") : t("settings.agent.promptDialog.deleteOverride")}</button>}
 				<div className="ml-auto flex gap-2">
-					<Button ref={closeButton} type="button" variant="ghost" size="sm" disabled={busy !== null} onClick={requestClose}>Close</Button>
+					<Button ref={closeButton} type="button" variant="ghost" size="sm" disabled={busy !== null} onClick={requestClose}>{t("common.close")}</Button>
 					{editing && <Button type="button" size="sm" disabled={busy !== null || (!dirty && !activationFailed)} onClick={() => void save()}>
-						{busy === "save" ? "Saving…" : activationFailed && !dirty ? "Retry activation" : "Save and activate"}
+						{busy === "save" ? t("settings.plugins.saving") : activationFailed && !dirty ? t("settings.agent.promptDialog.retryActivation") : t("settings.agent.promptDialog.saveAndActivate")}
 					</Button>}
 				</div>
 			</div>}

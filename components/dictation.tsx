@@ -345,6 +345,7 @@ export function useDictation({ append, destination = "primary", disabled = false
 	disabled?: boolean;
 }): Dictation {
 	const primary = destination === "primary";
+	const t = useT();
 	const owner = useRef(Symbol("dictation")).current;
 	const { getLanguage } = useDictationLanguage();
 	const [phase, setPhaseState] = useState<DictationPhase>("idle");
@@ -443,7 +444,7 @@ export function useDictation({ append, destination = "primary", disabled = false
 			if (endGen !== genRef.current) return;
 			appendPendingRef.current = false;
 			appendFailureRef.current = failed;
-			if (failed) setError(failed.error instanceof Error ? failed.error.message : "Dictation transcript could not be applied");
+			if (failed) setError(failed.error instanceof Error ? failed.error.message : t("dictation.transcriptApplyFailed"));
 			if (recordingOwner === owner) {
 				recordingOwner = null;
 				recordingTarget = null;
@@ -518,12 +519,12 @@ export function useDictation({ append, destination = "primary", disabled = false
 						})
 						.catch(() => {
 							if (gen === genRef.current) {
-								setError("Deepgram reconnect failed");
+								setError(t("dictation.reconnectFailed"));
 								cleanup();
 							}
 						});
 				} else {
-					setError(`Deepgram connection lost (${ev.code})`);
+					setError(t("dictation.connectionLost", { code: ev.code }));
 					cleanup();
 				}
 			});
@@ -555,7 +556,7 @@ export function useDictation({ append, destination = "primary", disabled = false
 			language = await getLanguage();
 		} catch (e) {
 			if (gen !== genRef.current) return;
-			setError(e instanceof Error ? e.message : "Dictation language unavailable");
+			setError(e instanceof Error ? e.message : t("dictation.languageUnavailable"));
 			cleanup();
 			return;
 		}
@@ -616,10 +617,10 @@ export function useDictation({ append, destination = "primary", disabled = false
 			if (gen !== genRef.current) return;
 			const msg =
 				e instanceof DOMException && (e.name === "NotAllowedError" || e.name === "SecurityError")
-					? "Microphone permission denied"
+					? t("dictation.micDenied")
 					: e instanceof Error
 						? e.message
-						: "mic unavailable";
+						: t("dictation.micUnavailable");
 			setError(msg);
 			cleanup();
 			return;
@@ -630,7 +631,7 @@ export function useDictation({ append, destination = "primary", disabled = false
 			token = await tokenPromise;
 		} catch (e) {
 			if (gen !== genRef.current) return;
-			setError(e instanceof Error ? e.message : "token unavailable");
+			setError(e instanceof Error ? e.message : t("dictation.tokenUnavailable"));
 			cleanup();
 			return;
 		}
@@ -766,6 +767,7 @@ export function DictationBar({ dictation, disabled = false }: { dictation: Dicta
 	 *  the error — the surface is clean when the user returns. Any other
 	 *  error keeps the old behavior (click = retry, which clears). */
 	const keyless = error === DICTATION_KEYLESS;
+	const errorText = error === DICTATION_KEYLESS ? t("dictation.needsKey") : error === DICTATION_ACTIVE_ELSEWHERE ? t("dictation.activeElsewhere") : error;
 	const [levels, setLevels] = useState<number[]>(() => new Array(METER_CELLS).fill(0));
 	/** Adaptive cell count (owner round 2): derived from the meter's
 	 *  measured width — narrow rows show fewer bars instead of
@@ -811,7 +813,7 @@ export function DictationBar({ dictation, disabled = false }: { dictation: Dicta
 		return (
 			<Hint
 				// The error line truncates in the button; its tooltip reveals it.
-				label={error ?? t("dictation.dictate")}
+				label={errorText ?? t("dictation.dictate")}
 				action={error ? undefined : "toggle-dictation"}
 				side="top"
 			>
@@ -826,12 +828,12 @@ export function DictationBar({ dictation, disabled = false }: { dictation: Dicta
 						}
 					}}
 					disabled={disabled || blocked}
-					aria-label={error ? t("dictation.failed", { error }) : t("dictation.start")}
+					aria-label={error ? t("dictation.failed", { error: errorText }) : t("dictation.start")}
 					data-testid="dictation-toggle"
 					className="flex h-7 w-full items-center justify-center gap-1.5 rounded-md border border-border/50 bg-card/50 text-xs text-muted-foreground/70 shadow-lg backdrop-blur transition-colors hover:border-border hover:text-muted-foreground"
 				>
 					<MicIcon className="size-3.5" />
-					<span className="max-w-full truncate">{error ?? t("dictation.dictate")}</span>
+					<span className="max-w-full truncate">{errorText ?? t("dictation.dictate")}</span>
 				</button>
 			</Hint>
 		);

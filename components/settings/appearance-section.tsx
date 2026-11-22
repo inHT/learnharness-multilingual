@@ -362,9 +362,9 @@ export function AppearanceSection({
 			<div data-testid="group-colors" className="mt-5 flex flex-col gap-2">
 				<div className="flex items-end justify-between gap-4">
 					<p className="text-xs uppercase tracking-widest text-muted-foreground">
-						Colors{" "}
+						{t("settings.appearance.colorsHeading")}{" "}
 						<span className="normal-case tracking-normal text-muted-foreground/70">
-							· overrides on top of the theme, kept when you switch
+							{t("settings.appearance.colorsHint")}
 						</span>
 					</p>
 					<button
@@ -438,9 +438,9 @@ export function AppearanceSection({
 										? undefined
 										: localFonts === null
 											? enumEmpty
-												? "Common families — installed fonts could not be read"
-												: "Common families — your installed list needs the desktop app"
-											: "Your installed fonts"
+												? t("settings.appearance.fontsUnreadable")
+												: t("settings.appearance.fontsDesktop")
+											: t("settings.appearance.fontsInstalled")
 								}
 							/>
 						</MenuShell>
